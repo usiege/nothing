@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="opengles,GLKit," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Summary:本篇是对OpenGLES_Ch2_1中的缓存管理代码的简单重用和重构，用以加深对GLKView的理解。苹果的GLKit框架封装了gl的具体实现，以便使用gl的用户减少编写gl的代码量以及避免不必要的错误。">
+<meta name="keywords" content="opengles,GLKit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于GLKit的推断">
+<meta property="og:url" content="http://charlesblog.site/2016/05/09/关于GLKit的推断/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary:本篇是对OpenGLES_Ch2_1中的缓存管理代码的简单重用和重构，用以加深对GLKView的理解。苹果的GLKit框架封装了gl的具体实现，以便使用gl的用户减少编写gl的代码量以及避免不必要的错误。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.735Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="关于GLKit的推断">
+<meta name="twitter:description" content="Summary:本篇是对OpenGLES_Ch2_1中的缓存管理代码的简单重用和重构，用以加深对GLKView的理解。苹果的GLKit框架封装了gl的具体实现，以便使用gl的用户减少编写gl的代码量以及避免不必要的错误。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/05/09/关于GLKit的推断/"/>
+
+
+
+
+
+  <title>关于GLKit的推断 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/05/09/关于GLKit的推断/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">关于GLKit的推断</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-09T22:00:00+08:00">
+                2016-05-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary:本篇是对OpenGLES_Ch2_1中的缓存管理代码的简单重用和重构，用以加深对GLKView的理解。苹果的GLKit框架封装了gl的具体实现，以便使用gl的用户减少编写gl的代码量以及避免不必要的错误。</p>
+<a id="more"></a>
+<p>本文介绍两个封装类，<code>AGLKContext</code>和<code>AGLKVertexAttribArrayBuffer</code>，前者是内建的<code>EAGLContext</code>的简单子类，后者封装了使用OpenGLES2.0顶点属性数组缓存的7个步骤；</p>
+<h2 id="AGLKContext-m"><a href="#AGLKContext-m" class="headerlink" title="AGLKContext.m"></a><code>AGLKContext.m</code></h2><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This method sets the clear (background) RGBA color.</span></span><br><span class="line"><span class="comment">// The clear color is undefined until this method is called.</span></span><br><span class="line">- (<span class="keyword">void</span>)setClearColor:(GLKVector4)clearColorRGBA</span><br><span class="line">&#123;</span><br><span class="line">   clearColor = clearColorRGBA;</span><br><span class="line">    </span><br><span class="line">   NSAssert(self == [[self class] currentContext],</span><br><span class="line">      @<span class="string">"Receiving context required to be current context"</span>);</span><br><span class="line">      </span><br><span class="line">   glClearColor(</span><br><span class="line">      clearColorRGBA.r, </span><br><span class="line">      clearColorRGBA.g, </span><br><span class="line">      clearColorRGBA.b, </span><br><span class="line">      clearColorRGBA.a);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/////////////////////////////////////////////////////////////////</span></span><br><span class="line"><span class="comment">// This method instructs OpenGL ES to set all data in the</span></span><br><span class="line"><span class="comment">// current Context's Render Buffer(s) identified by mask to</span></span><br><span class="line"><span class="comment">// colors (values) specified via -setClearColor: and/or</span></span><br><span class="line"><span class="comment">// OpenGL ES functions for each Render Buffer type.</span></span><br><span class="line">- (<span class="keyword">void</span>)clear:(GLbitfield)mask</span><br><span class="line">&#123;</span><br><span class="line">   NSAssert(self == [[self class] currentContext],</span><br><span class="line">      @<span class="string">"Receiving context required to be current context"</span>);</span><br><span class="line">      </span><br><span class="line">   glClear(mask);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>函数原型: <code>void glClear(GLbitfield mask);</code><br>参数说明：<br>GLbitfield：可以使用 | 运算符组合不同的缓冲标志位，表明需要清除的缓冲，例如glClear（GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT）表示要清除颜色缓冲以及深度缓冲，可以使用以下标志位    </p>
+</blockquote>
+<pre><code>GL_COLOR_BUFFER_BIT:    当前可写的颜色缓冲
+GL_DEPTH_BUFFER_BIT:    深度缓冲
+GL_ACCUM_BUFFER_BIT:    累积缓冲    
+GL_STENCIL_BUFFER_BIT:  模板缓冲
+</code></pre><p>函数说明：<br>glClear()函数的作用是用当前缓冲区清除值，也就是glClearColor或者glClearDepth、glClearIndex、glClearStencil、glClearAccum等函数所指定的值来清除指定的缓冲区，也可以使用glDrawBuffer一次清除多个颜色缓存。</p>
+<p>以上两个函数的封装为渲染提供背景，并且利用glClearColor()将上下文帧缓存中的每个像素颜色设置为该颜色值；该类中的其他函数是OpenGL的相关函数，留着以后再研究；</p>
+<h2 id="AGLKVertexAttribArrayBuffer-m"><a href="#AGLKVertexAttribArrayBuffer-m" class="headerlink" title="AGLKVertexAttribArrayBuffer.m"></a><code>AGLKVertexAttribArrayBuffer.m</code></h2><p>接下来我们说一下在开篇中谈到的7个步骤；</p>
+<ul>
+<li><p>NSParameterAssert<br>有的方法的条件可以满足可以不满足，都不影响执行。但如果你希望程序在某些条件不满足的时候产生错误告诉你，就用nsparameterassert让程序崩溃。</p>
+</li>
+<li><p>glGenBuffers  </p>
+</li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// This method creates a vertex attribute array buffer in</span></span><br><span class="line"><span class="comment">// the current OpenGL ES context for the thread upon which this </span></span><br><span class="line"><span class="comment">// method is called.</span></span><br><span class="line">- (id)initWithAttribStride:(GLsizei)aStride</span><br><span class="line">   numberOfVertices:(GLsizei)count</span><br><span class="line">   bytes:(<span class="keyword">const</span> GLvoid *)dataPtr</span><br><span class="line">   usage:(GLenum)usage;</span><br><span class="line">&#123;</span><br><span class="line">   NSParameterAssert(<span class="number">0</span> &lt; aStride);</span><br><span class="line">   NSAssert((<span class="number">0</span> &lt; count &amp;&amp; <span class="literal">NULL</span> != dataPtr) ||</span><br><span class="line">      (<span class="number">0</span> == count &amp;&amp; <span class="literal">NULL</span> == dataPtr),</span><br><span class="line">      @<span class="string">"data must not be NULL or count &gt; 0"</span>);</span><br><span class="line">      </span><br><span class="line">   <span class="keyword">if</span>(nil != (self = [super init]))</span><br><span class="line">   &#123;</span><br><span class="line">      stride = aStride;</span><br><span class="line">      bufferSizeBytes = stride * count;</span><br><span class="line">      </span><br><span class="line">      glGenBuffers(<span class="number">1</span>,                <span class="comment">// STEP 1</span></span><br><span class="line">         &amp;name);</span><br><span class="line">      glBindBuffer(GL_ARRAY_BUFFER,  <span class="comment">// STEP 2</span></span><br><span class="line">         self.name); </span><br><span class="line">      glBufferData(                  <span class="comment">// STEP 3</span></span><br><span class="line">         GL_ARRAY_BUFFER,  <span class="comment">// Initialize buffer contents</span></span><br><span class="line">         bufferSizeBytes,  <span class="comment">// Number of bytes to copy</span></span><br><span class="line">         dataPtr,          <span class="comment">// Address of bytes to copy</span></span><br><span class="line">         usage);           <span class="comment">// Hint: cache in GPU memory</span></span><br><span class="line">         </span><br><span class="line">      NSAssert(<span class="number">0</span> != name, @<span class="string">"Failed to generate name"</span>);</span><br><span class="line">   &#125;</span><br><span class="line">   <span class="keyword">return</span> self;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>glGenBuffers()创建缓存对象并且返回缓存对象的标示符。它需要2个参数：第一个为需要创建的缓存数量，第二个为用于存储单一ID或多个ID的GLuint变量或数组的地址。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glGenBuffers</span><span class="params">(GLsizei n, GLuint *buffers)</span></span>;</span><br><span class="line"><span class="comment">//在buffers数组中返回当前n个未使用的名称，表示缓冲区对象</span></span><br><span class="line"><span class="function">GLboolean <span class="title">glIsBuffer</span><span class="params">(GLuint buffer)</span></span>;</span><br><span class="line"><span class="comment">//判断是否是缓冲区对象</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>glBindBuffer  </li>
+</ul>
+<p>当缓存对象创建之后，在使用缓存对象之前，我们需要将缓存对象连接到相应的缓存上。<br>glBindBuffer()有2个参数：target与buffer。    </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">void glBindBuffer(GLenum target, GLuint buffer)</span><br></pre></td></tr></table></figure>
+<p>target告诉顶点缓存对象(VBO)该缓存对象将保存顶点数组数据还是索引数组数据：GL_ARRAY_BUFFER或GL_ELEMENT_ARRAY。任何顶点属性，如顶点坐标、纹理坐标、法线与颜色分量数组都使用GL_ARRAY_BUFFER。用于glDraw[Range]Elements()的索引数据需要使用GL_ELEMENT_ARRAY绑定。注意，target标志帮助VBO确定缓存对象最有效的位置，如有些系统将索引保存AGP或系统内存中，将顶点保存在显卡内存中。<br>当第一次调用glBindBuffer()，VBO用0大小的内存缓存初始化该缓存，并且设置VBO的初始状态，如用途与访问属性。</p>
+<ul>
+<li>glBufferData   </li>
+</ul>
+<p>当缓存初始化之后，你可以使用glBufferData()将数据拷贝到缓存对象。    </p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glBufferData</span><span class="params">(GLenum target，GLsizeiptr size, <span class="keyword">const</span> GLvoid* data, GLenum usage)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>第一个参数target可以为GL_ARRAY_BUFFER或GL_ELEMENT_ARRAY。size为待传递数据字节数量。第三个参数为源数据数组指针，如data为NULL，则VBO仅仅预留给定数据大小的内存空间。最后一个参数usage标志位VBO的另一个性能提示，它提供缓存对象将如何使用：static、dynamic或stream、与read、copy或draw。<br>VBO为usage标志指定9个枚举值：<br>GL_STATIC_DRAW<br>GL_STATIC_READ<br>GL_STATIC_COPY<br>GL_DYNAMIC_DRAW<br>GL_DYNAMIC_READ<br>GL_DYNAMIC_COPY<br>GL_STREAM_DRAW<br>GL_STREAM_READ<br>GL_STREAM_COPY<br>”static“表示VBO中的数据将不会被改动（一次指定多次使用），”dynamic“表示数据将会被频繁改动（反复指定与使用），”stream“表示每帧数据都要改变（一次指定一次使用）。”draw“表示数据将被发送到GPU以待绘制（应用程序到GL），”read“表示数据将被客户端程序读取（GL到应用程序），”copy“表示数据可用于绘制与读取（GL到GL）。</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// A vertex attribute array buffer must be prepared when your </span></span><br><span class="line"><span class="comment">// application wants to use the buffer to render any geometry. </span></span><br><span class="line"><span class="comment">// When your application prepares an buffer, some OpenGL ES state</span></span><br><span class="line"><span class="comment">// is altered to allow bind the buffer and configure pointers.</span></span><br><span class="line">- (<span class="keyword">void</span>)prepareToDrawWithAttrib:(GLuint)index</span><br><span class="line">   numberOfCoordinates:(GLint)count</span><br><span class="line">   attribOffset:(GLsizeiptr)offset</span><br><span class="line">   shouldEnable:(BOOL)shouldEnable</span><br><span class="line">&#123;</span><br><span class="line">   NSParameterAssert((<span class="number">0</span> &lt; count) &amp;&amp; (count &lt; <span class="number">4</span>));</span><br><span class="line">   NSParameterAssert(offset &lt; self.stride);</span><br><span class="line">   NSAssert(<span class="number">0</span> != name, @<span class="string">"Invalid name"</span>);</span><br><span class="line">	</span><br><span class="line">   glBindBuffer(GL_ARRAY_BUFFER,     <span class="comment">// STEP 2</span></span><br><span class="line">      self.name);</span><br><span class="line">	</span><br><span class="line">   <span class="keyword">if</span>(shouldEnable)</span><br><span class="line">   &#123;</span><br><span class="line">      glEnableVertexAttribArray(     <span class="comment">// Step 4</span></span><br><span class="line">         index); </span><br><span class="line">   &#125;</span><br><span class="line">	</span><br><span class="line">   glVertexAttribPointer(            <span class="comment">// Step 5</span></span><br><span class="line">      index,               <span class="comment">// Identifies the attribute to use</span></span><br><span class="line">      count,               <span class="comment">// number of coordinates for attribute</span></span><br><span class="line">      GL_FLOAT,            <span class="comment">// data is floating point</span></span><br><span class="line">      GL_FALSE,            <span class="comment">// no fixed point scaling</span></span><br><span class="line">      (self.stride),       <span class="comment">// total num bytes stored per vertex</span></span><br><span class="line">      <span class="literal">NULL</span> + offset);      <span class="comment">// offset from start of each vertex to </span></span><br><span class="line">                           <span class="comment">// first coord for attribute</span></span><br><span class="line">	<span class="meta">#<span class="meta-keyword">ifdef</span> DEBUG</span></span><br><span class="line">	   &#123;  <span class="comment">// Report any errors </span></span><br><span class="line">	      GLenum error = glGetError();</span><br><span class="line">	      <span class="keyword">if</span>(GL_NO_ERROR != error)</span><br><span class="line">	      &#123;</span><br><span class="line">	         NSLog(@<span class="string">"GL Error: 0x%x"</span>, error);</span><br><span class="line">	      &#125;</span><br><span class="line">	   &#125;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>glEnableVertexAttribArray    </li>
+</ul>
+<p>第4步和第5步理解起来有点困难，暂时放下，之后研究OpenGL的时候细研究，这里给出原书中的摘录；</p>
+<blockquote>
+<p>在第4步中，通过调用glEnableVertexAttribArray()来启动顶点缓存渲染操作；OpenGLES所支持的每一个渲染操作都可以单独地使用保存在当前OpenGLES上下文中的设置来开启或关闭。<br>在第5步中，glVertexAttribPointer()告诉OpenGLES顶点数据在哪里，以及怎么解释为每个顶点保存的数据。第一个参数指示当前绑定的缓存包含每个顶点的位置信息；第二个参数指示每个位置有3个部分；第三个参数告诉OpenGLES每个部分都保存为一个浮点类型的值；第四个参数告诉OpenGLES小数点固定数据是否可以被改变；第五个参数叫做“步幅”，它指定了每个顶点的保存需要多少个字节，换句话说，步幅指定了GPU从一个顶点的内存开始位置转到下一个顶点的内存开始位置需要跳过多少字节,sizeof(GLKVector3)指示在缓存中没有额外的字节，即顶点位置数据是密封的，在一个顶点缓存中保存除了每个顶点位置的X Y Z坐标之外的其他数据也是可能的；</p>
+</blockquote>
+<ul>
+<li>glVertexAttribPointer </li>
+</ul>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">glVertexAttribPointer</span><span class="params">( GLuint index, GLint size, GLenum type, GLboolean normalized, GLsizei stride,<span class="keyword">const</span> GLvoid * pointer)</span></span>;</span><br></pre></td></tr></table></figure>
+<p>参数：<br><em>index</em><br>指定要修改的顶点属性的索引值<br><em>size</em><br>指定每个顶点属性的组件数量。必须为1、2、3或者4。初始值为4。（如position是由3个（x,y,z）组成，而颜色是4个（r,g,b,a））<br><em>type</em><br>指定数组中每个组件的数据类型。可用的符号常量有GL_BYTE, GL_UNSIGNED_BYTE, GL_SHORT,GL_UNSIGNED_SHORT, GL_FIXED, 和 GL_FLOAT，初始值为GL_FLOAT。<br><em>normalized</em><br>指定当被访问时，固定点数据值是否应该被归一化（GL_TRUE）或者直接转换为固定点值（GL_FALSE）。<br><em>stride</em><br>指定连续顶点属性之间的偏移量。如果为0，那么顶点属性会被理解为：它们是紧密排列在一起的。初始值为0。<br><em>pointer</em><br>指定第一个组件在数组的第一个顶点属性中的偏移量。该数组与GL_ARRAY_BUFFER绑定，储存于缓冲区中。初始值为0；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Submits the drawing command identified by mode and instructs</span></span><br><span class="line"><span class="comment">// OpenGL ES to use count vertices from the buffer starting from</span></span><br><span class="line"><span class="comment">// the vertex at index first. Vertex indices start at 0.</span></span><br><span class="line">- (<span class="keyword">void</span>)drawArrayWithMode:(GLenum)mode</span><br><span class="line">   startVertexIndex:(GLint)first</span><br><span class="line">   numberOfVertices:(GLsizei)count</span><br><span class="line">&#123;</span><br><span class="line">   NSAssert(self.bufferSizeBytes &gt;= </span><br><span class="line">      ((first + count) * self.stride),</span><br><span class="line">      @<span class="string">"Attempt to draw more vertex data than available."</span>);</span><br><span class="line">      </span><br><span class="line">   glDrawArrays(mode, first, count); <span class="comment">// Step 6</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>glDrawArrays</li>
+</ul>
+<p>glDrawArrays()第一个参数会告诉GPU怎么处理在绑定的顶点缓存内的顶点数据；第二个参数和第三个参数分别指定缓存内的需要渲染的第一个顶点的位置和需要渲染的顶点的数量；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// This method deletes the receiver&apos;s buffer from the current</span><br><span class="line">// Context when the receiver is deallocated.</span><br><span class="line">- (void)dealloc</span><br><span class="line">&#123;</span><br><span class="line">    // Delete buffer from current context</span><br><span class="line">    if (0 != name)</span><br><span class="line">    &#123;</span><br><span class="line">        glDeleteBuffers(1, &amp;name); // Step 7 </span><br><span class="line">        name = 0;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>glDeleteBuffers</li>
+</ul>
+<p>删除不需再需要的顶点缓存和上下文，该方法保证Cocoa Touch收回上下文使用的内存和其他资源。</p>
+<p><a href="https://github.com/usiege/OpenGLES/tree/master/OpenGLES_Ch_2_GL/OpenGLES_Ch2_3" target="_blank" rel="noopener">本例的代码下载链接</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/opengles/" rel="tag"># opengles</a>
+          
+            <a href="/tags/GLKit/" rel="tag"># GLKit</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/07/GLKView是如何工作的/" rel="next" title="GLKView是如何工作的">
+                <i class="fa fa-chevron-left"></i> GLKView是如何工作的
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/21/iOS 作为Central蓝牙连接外围（上）/" rel="prev" title="iOS 作为Central蓝牙连接外围（上）">
+                iOS 作为Central蓝牙连接外围（上） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#AGLKContext-m"><span class="nav-number">1.</span> <span class="nav-text">AGLKContext.m</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#AGLKVertexAttribArrayBuffer-m"><span class="nav-number">2.</span> <span class="nav-text">AGLKVertexAttribArrayBuffer.m</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

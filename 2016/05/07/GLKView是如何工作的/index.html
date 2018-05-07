@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="opengles," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Summary: 本篇通过一个AGLKView的示例来深入了解一下上篇中GLKView的工作原理，目的是为了消除GLKView、Core Animation、OpenGLES间交互的神秘感；">
+<meta name="keywords" content="opengles">
+<meta property="og:type" content="article">
+<meta property="og:title" content="GLKView是如何工作的">
+<meta property="og:url" content="http://charlesblog.site/2016/05/07/GLKView是如何工作的/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary: 本篇通过一个AGLKView的示例来深入了解一下上篇中GLKView的工作原理，目的是为了消除GLKView、Core Animation、OpenGLES间交互的神秘感；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="GLKView是如何工作的">
+<meta name="twitter:description" content="Summary: 本篇通过一个AGLKView的示例来深入了解一下上篇中GLKView的工作原理，目的是为了消除GLKView、Core Animation、OpenGLES间交互的神秘感；">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/05/07/GLKView是如何工作的/"/>
+
+
+
+
+
+  <title>GLKView是如何工作的 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/05/07/GLKView是如何工作的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">GLKView是如何工作的</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-07T01:04:00+08:00">
+                2016-05-07
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary: 本篇通过一个AGLKView的示例来深入了解一下上篇中GLKView的工作原理，目的是为了消除GLKView、Core Animation、OpenGLES间交互的神秘感；<br><a id="more"></a></p>
+<p>本例位于<a href="https://github.com/usiege/OpenGLES/tree/master/OpenGLES_Ch2/OpenGLES_Ch2_2" target="_blank" rel="noopener">点击此处下载本文例子</a>，建议将例子下下来，边看本文解析，边自己实现该例子；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">+ (Class)layerClass</span><br><span class="line">&#123;</span><br><span class="line">   return [CAEAGLLayer class];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>每个UIView都有一个相关联的Core Animation层；Cocoa Touch会调用该方法决定生成一个什么样的层;<br>CAEAGLLayer会与一个OGE帧缓存共享它的像素仓库；CAEAGLLayer是Core Animation提供的标准层之一；</p>
+<blockquote>
+<p>串行化(Serialization)是计算机科学中的一个概念，它是指将对象存储到介质（如文件、内存缓冲区等）中或是以二进制方式通过网络传输，在iOS中也叫做归档。</p>
+</blockquote>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">- (id)initWithCoder:(NSCoder*)coder</span><br><span class="line">&#123;    </span><br><span class="line">   if ((self = [super initWithCoder:coder]))</span><br><span class="line">   &#123;</span><br><span class="line">      CAEAGLLayer *eaglLayer = (CAEAGLLayer *)self.layer;      </span><br><span class="line">      eaglLayer.drawableProperties = </span><br><span class="line">         [NSDictionary dictionaryWithObjectsAndKeys:</span><br><span class="line">             [NSNumber numberWithBool:NO], </span><br><span class="line">             kEAGLDrawablePropertyRetainedBacking, </span><br><span class="line">             kEAGLColorFormatRGBA8, </span><br><span class="line">             kEAGLDrawablePropertyColorFormat, </span><br><span class="line">             nil];          </span><br><span class="line">   &#125;</span><br><span class="line">   return self;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>该方法是Cocoa Touch用于初始化对象的标准方法之一，Cocoa Touch会自动调用该方法，这是反归档先前归档入一个文件的对象过程的一部分；本例中AGLKView从storyboard文件中加载过程就是反归档；若用代码的话应该是调用<em>“-initWithFrame:context:”</em>方法；<br>在这两个方法中，kEAGLDrawablePropertyRetainedBacking == NO 表示不使用保留背景，告诉Core Animation层任何部分需要在屏幕上显示的时候都需要绘制整个层的内容；kEAGLColorFormatRGBA8 使用8位来保存每个像素每个颜色的值；这段代码告诉Core Animation不要试图保留任何以前绘制的图像留作以后重用；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br></pre></td><td class="code"><pre><span class="line">// This method sets the receiver&apos;s OpenGL ES Context. If the </span><br><span class="line">// receiver already has a different Context, this method deletes</span><br><span class="line">// OpenGL ES Frame Buffer resources in the old Context and the </span><br><span class="line">// recreates them in the new Context.</span><br><span class="line">- (void)setContext:(EAGLContext *)aContext</span><br><span class="line">&#123;</span><br><span class="line">   if(context != aContext)</span><br><span class="line">   &#123;  // Delete any buffers previously created in old Context</span><br><span class="line">      [EAGLContext setCurrentContext:context];</span><br><span class="line">      </span><br><span class="line">      if (0 != defaultFrameBuffer)</span><br><span class="line">      &#123;</span><br><span class="line">         glDeleteFramebuffers(1, &amp;defaultFrameBuffer); // Step 7</span><br><span class="line">         defaultFrameBuffer = 0;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      if (0 != colorRenderBuffer)</span><br><span class="line">      &#123;</span><br><span class="line">         glDeleteRenderbuffers(1, &amp;colorRenderBuffer); // Step 7</span><br><span class="line">         colorRenderBuffer = 0;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      if (0 != depthRenderBuffer)</span><br><span class="line">      &#123;</span><br><span class="line">         glDeleteRenderbuffers(1, &amp;depthRenderBuffer); // Step 7</span><br><span class="line">         depthRenderBuffer = 0;</span><br><span class="line">      &#125;</span><br><span class="line">      </span><br><span class="line">      context = aContext;</span><br><span class="line">   </span><br><span class="line">      if(nil != context)</span><br><span class="line">      &#123;  // Configure the new Context with required buffers</span><br><span class="line">         context = aContext;</span><br><span class="line">         [EAGLContext setCurrentContext:context];</span><br><span class="line">                   </span><br><span class="line">         glGenFramebuffers(1, &amp;defaultFrameBuffer);    // Step 1</span><br><span class="line">         glBindFramebuffer(                            // Step 2</span><br><span class="line">            GL_FRAMEBUFFER,             </span><br><span class="line">            defaultFrameBuffer);</span><br><span class="line"></span><br><span class="line">         glGenRenderbuffers(1, &amp;colorRenderBuffer);    // Step 1</span><br><span class="line">         glBindRenderbuffer(                           // Step 2</span><br><span class="line">            GL_RENDERBUFFER, </span><br><span class="line">            colorRenderBuffer);</span><br><span class="line">         </span><br><span class="line">         // Attach color render buffer to bound Frame Buffer</span><br><span class="line">         glFramebufferRenderbuffer(</span><br><span class="line">            GL_FRAMEBUFFER, </span><br><span class="line">            GL_COLOR_ATTACHMENT0, </span><br><span class="line">            GL_RENDERBUFFER, </span><br><span class="line">            colorRenderBuffer);</span><br><span class="line"></span><br><span class="line">         // Create any additional render buffers based on the</span><br><span class="line">         // drawable size of defaultFrameBuffer</span><br><span class="line">         [self layoutSubviews];</span><br><span class="line">      &#125;</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>修改视图的上下文会导致先前创建的所有缓存全部失效，需要配置新的缓存；glFramebufferRenderbuffer()用来配置当前绑定的帧缓存以便在colorRenderBuffer中保存渲染的像素颜色；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">// Calling this method tells the receiver to redraw the contents </span><br><span class="line">// of its associated OpenGL ES Frame Buffer. This method </span><br><span class="line">// configures OpenGL ES and then calls -drawRect:</span><br><span class="line">- (void)display</span><br><span class="line">&#123;</span><br><span class="line">   [EAGLContext setCurrentContext:self.context];</span><br><span class="line">   glViewport(0, 0, (GLint)self.drawableWidth, (GLint)self.drawableHeight);</span><br><span class="line"></span><br><span class="line">   [self drawRect:[self bounds]];</span><br><span class="line">   </span><br><span class="line">   [self.context presentRenderbuffer:GL_RENDERBUFFER];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// This method is called automatically whenever the receiver</span><br><span class="line">// needs to redraw the contents of its associated OpenGL ES</span><br><span class="line">// Frame Buffer. This method should not be called directly. Call</span><br><span class="line">// -display instead which configures OpenGL ES before calling</span><br><span class="line">// -drawRect:</span><br><span class="line">- (void)drawRect:(CGRect)rect</span><br><span class="line">&#123;</span><br><span class="line">   if(delegate)</span><br><span class="line">   &#123;</span><br><span class="line">      [self.delegate glkView:self drawInRect:[self bounds]];</span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>设置视图的上下文为当前上下文，告诉OGE让渲染填满整个帧缓存，调用“-drawRect:”进行真正给图，然后让上下文调整外观使用Core Animation合成器把帧缓存的像素颜色渲染缓存与其他相关层混合起来；<br>glViewport()可以控制渲染至帧缓存的子集；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line">- (void)layoutSubviews</span><br><span class="line">&#123;</span><br><span class="line">   CAEAGLLayer 	*eaglLayer = (CAEAGLLayer *)self.layer;</span><br><span class="line">   </span><br><span class="line">   // Make sure our context is current</span><br><span class="line">   [EAGLContext setCurrentContext:self.context];</span><br><span class="line"></span><br><span class="line">   // Initialize the current Frame Buffer’s pixel color buffer </span><br><span class="line">   // so that it shares the corresponding Core Animation Layer’s</span><br><span class="line">   // pixel color storage.</span><br><span class="line">   [self.context renderbufferStorage:GL_RENDERBUFFER </span><br><span class="line">      fromDrawable:eaglLayer];</span><br><span class="line">      </span><br><span class="line">   </span><br><span class="line">   if (0 != depthRenderBuffer)</span><br><span class="line">   &#123;</span><br><span class="line">      glDeleteRenderbuffers(1, &amp;depthRenderBuffer); // Step 7</span><br><span class="line">      depthRenderBuffer = 0;</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   GLint currentDrawableWidth = (GLint)self.drawableWidth;</span><br><span class="line">   GLint currentDrawableHeight = (GLint)self.drawableHeight;</span><br><span class="line">   </span><br><span class="line">   if(self.drawableDepthFormat != </span><br><span class="line">      AGLKViewDrawableDepthFormatNone &amp;&amp;</span><br><span class="line">      0 &lt; currentDrawableWidth &amp;&amp;</span><br><span class="line">      0 &lt; currentDrawableHeight)</span><br><span class="line">   &#123;</span><br><span class="line">      glGenRenderbuffers(1, &amp;depthRenderBuffer); // Step 1</span><br><span class="line">      glBindRenderbuffer(GL_RENDERBUFFER,        // Step 2</span><br><span class="line">         depthRenderBuffer);</span><br><span class="line">      glRenderbufferStorage(GL_RENDERBUFFER,     // Step 3 </span><br><span class="line">         GL_DEPTH_COMPONENT16, </span><br><span class="line">         currentDrawableWidth, </span><br><span class="line">         currentDrawableHeight);</span><br><span class="line">      glFramebufferRenderbuffer(GL_FRAMEBUFFER,  // Step 4 </span><br><span class="line">         GL_DEPTH_ATTACHMENT, </span><br><span class="line">         GL_RENDERBUFFER, </span><br><span class="line">         depthRenderBuffer);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   // Check for any errors configuring the render buffer   </span><br><span class="line">   GLenum status = glCheckFramebufferStatus(</span><br><span class="line">      GL_FRAMEBUFFER) ;</span><br><span class="line">     </span><br><span class="line">   if(status != GL_FRAMEBUFFER_COMPLETE) &#123;</span><br><span class="line">       NSLog(@&quot;failed to make complete frame buffer object %x&quot;, status);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   // Make the Color Render Buffer the current buffer for display</span><br><span class="line">   glBindRenderbuffer(GL_RENDERBUFFER, colorRenderBuffer);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>任何在接收到重新调整大小的消息时，Cocoa Touch都会调用下面的layoutSubviews；上下文的”renderbufferStorage:fromDrawable”方法会调整视图的缓存尺寸以匹配层的新尺寸；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">// This method returns the width in pixels of current context&apos;s</span><br><span class="line">// Pixel Color Render Buffer</span><br><span class="line">- (NSInteger)drawableWidth;</span><br><span class="line">&#123;</span><br><span class="line">   GLint          backingWidth;</span><br><span class="line"></span><br><span class="line">   glGetRenderbufferParameteriv(</span><br><span class="line">      GL_RENDERBUFFER, </span><br><span class="line">      GL_RENDERBUFFER_WIDTH, </span><br><span class="line">      &amp;backingWidth);</span><br><span class="line">      </span><br><span class="line">   return (NSInteger)backingWidth;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">/////////////////////////////////////////////////////////////////</span><br><span class="line">// This method returns the height in pixels of current context&apos;s</span><br><span class="line">// Pixel Color Render Buffer</span><br><span class="line">- (NSInteger)drawableHeight;</span><br><span class="line">&#123;</span><br><span class="line">   GLint          backingHeight;</span><br><span class="line"></span><br><span class="line">   glGetRenderbufferParameteriv(</span><br><span class="line">      GL_RENDERBUFFER, </span><br><span class="line">      GL_RENDERBUFFER_HEIGHT, </span><br><span class="line">      &amp;backingHeight);</span><br><span class="line">      </span><br><span class="line">   return (NSInteger)backingHeight;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>通过OpenGLES的glGetRenderbufferParameteriv()方法获取和返回当前上下文的帧缓存的像素颜色渲染缓存尺寸;</p>
+<p>接下来要说说<em>AGLKViewController</em>,它使用一个CADisplayLink对象来调度和执行与控制器相关联的视力的周期性的重绘；<br>CADisplayLink本质上是一个用于显示更新的同步计时器，它能够被设置用来在每个显示更新或者其他更新时发送一个消息；<br>显示更新频率通常是由嵌入设备硬件决定的，它代表一个帧缓存的内容每秒最多能够被在屏幕上通过的像素显示出来的次数；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/opengles/" rel="tag"># opengles</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/06/Python抓取One网页上的内容/" rel="next" title="Python抓取One网页上的内容">
+                <i class="fa fa-chevron-left"></i> Python抓取One网页上的内容
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/09/关于GLKit的推断/" rel="prev" title="关于GLKit的推断">
+                关于GLKit的推断 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

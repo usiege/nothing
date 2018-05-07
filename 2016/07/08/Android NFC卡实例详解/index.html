@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android,NFC," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="公司最近在做一个NFC卡片的工程，经过几天的时间，终于写了一个Demo出来，在此记录下在此过程中遇到的问题。由于之前本人是做iOS的，Android写起来并不是那么的顺手，其中有一些比较基础的问题也会做出解答，水平不高，唯愿不被吐槽。另外最近写java发现，不得不说java还是比较好写的，不用考虑循环引用的问题，而且没有指针的存在理解起来也不是很费劲，内部类用起来的便捷性，底层库也比较好用，下面直">
+<meta name="keywords" content="Android,NFC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android NFC卡实例详解">
+<meta property="og:url" content="http://charlesblog.site/2016/07/08/Android NFC卡实例详解/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="公司最近在做一个NFC卡片的工程，经过几天的时间，终于写了一个Demo出来，在此记录下在此过程中遇到的问题。由于之前本人是做iOS的，Android写起来并不是那么的顺手，其中有一些比较基础的问题也会做出解答，水平不高，唯愿不被吐槽。另外最近写java发现，不得不说java还是比较好写的，不用考虑循环引用的问题，而且没有指针的存在理解起来也不是很费劲，内部类用起来的便捷性，底层库也比较好用，下面直">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.728Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android NFC卡实例详解">
+<meta name="twitter:description" content="公司最近在做一个NFC卡片的工程，经过几天的时间，终于写了一个Demo出来，在此记录下在此过程中遇到的问题。由于之前本人是做iOS的，Android写起来并不是那么的顺手，其中有一些比较基础的问题也会做出解答，水平不高，唯愿不被吐槽。另外最近写java发现，不得不说java还是比较好写的，不用考虑循环引用的问题，而且没有指针的存在理解起来也不是很费劲，内部类用起来的便捷性，底层库也比较好用，下面直">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/07/08/Android NFC卡实例详解/"/>
+
+
+
+
+
+  <title>Android NFC卡实例详解 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/07/08/Android NFC卡实例详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Android NFC卡实例详解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-07-08T11:08:00+08:00">
+                2016-07-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>公司最近在做一个NFC卡片的工程，经过几天的时间，终于写了一个Demo出来，在此记录下在此过程中遇到的问题。由于之前本人是做iOS的，Android写起来并不是那么的顺手，其中有一些比较基础的问题也会做出解答，水平不高，唯愿不被吐槽。另外最近写java发现，不得不说java还是比较好写的，不用考虑循环引用的问题，而且没有指针的存在理解起来也不是很费劲，内部类用起来的便捷性，底层库也比较好用，下面直接进入Demo吧；<br><a id="more"></a></p>
+<p>项目地址：<a href="https://github.com/usiege/Android_S/tree/NFC-master/NFCDemo" target="_blank" rel="noopener">NFCDemo</a></p>
+<h2 id="NFC"><a href="#NFC" class="headerlink" title="NFC"></a>NFC</h2><p>由于本篇主要讲的是Android手机对NFC卡片的处理，所以先来介绍几个NFC的概念，定义并不完全，如需了解更多请自行谷歌；</p>
+<blockquote>
+<blockquote>
+<p>NFC,全称是近场通信（Near Field Communication）,是一种短距离无线技术；</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>一个带有NFC支持的android设备通常是一个发起者。也可以作为NFC的读写设备。他将检测NFC tags并且打开一个Activity来处理. Android 2.3.3还有支持有限的P2P。;</p>
+</blockquote>
+<blockquote>
+<p>Android NFC同时支持三个主要的操作模式:</p>
+</blockquote>
+<blockquote>
+<p><strong>设备读/写模式，允许NFC设备的读/写NFC目标设备</strong>(本例中我们用的是这种操作模式);</p>
+</blockquote>
+<blockquote>
+<p>P2P模式，使NFC设备与其他NFC节点交换数据；这种运作模式被使用在Android Beam中;</p>
+</blockquote>
+<blockquote>
+<p>卡仿真模式，使NFC设备本身作为一个NFC卡。然后模拟NFC卡可以通过一个外部的NFC读写访问，如销售终端NFC点。</p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>NDEF(NFC data exchange format)</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>为实现NFC标签、NFC设备以及NFC设备之间的交互通信，NFC论坛(NFC Forum)定义了称为NFC数据交换格式（NDEF）的通用数据格式;</p>
+</blockquote>
+<blockquote>
+<p>NDEF是轻量级的紧凑的二进制格式，可带有URL，vCard和NFC定义的各种数据类型;</p>
+</blockquote>
+<blockquote>
+<p>NDEF使NFC的各种功能更加容易的使用各种支持的标签类型进行数据传输，因为NDEF已经封装了NFC标签的种类细节信息，使得应用不用关心是在与何种标签通信;</p>
+</blockquote>
+<blockquote>
+<p><strong>大致可以理解为就是NFC通信用的一种传输格式；</strong></p>
+</blockquote>
+<blockquote>
+<blockquote>
+<p>Android Beam</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>Android Beam是一个基于近场通信所做的新功能，这个功能可以为其他手机分享你正在使用的功能。 Android升级到4.1后，Android Beam现在可以在两台支持NFC的Android设备间分享照片和视频，还可以与支持NFC的蓝牙设备相连。</p>
+</blockquote>
+<blockquote>
+<p><em>？这里有一个标签的概念比较模糊，原文是“当Android设备扫描包含NDEF格式数据的NFC标签，它对消息进行解析，试图找出其中的数据的MIME类型或URI标识”，从该句可看，所谓的标签就是基于NDEF格式的捆绑数据，从标签可获取到NFC设备数据；这里有待确认！</em></p>
+</blockquote>
+<h2 id="NFC逻辑封装"><a href="#NFC逻辑封装" class="headerlink" title="NFC逻辑封装"></a>NFC逻辑封装</h2><p>由于NFC相关是独立于Activity的，所以将NFC的逻辑全部封装在了一个叫做<code>NfcManager</code>的类中，注意该类并不需要做成一个单例；</p>
+<ul>
+<li>获取权限</li>
+</ul>
+<p>在<code>AndroidManifest.xml</code>文件中添加NFC权限：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&lt;uses-permission android:name=&quot;android.permission.NFC&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>另外获取NFC设备数据需要在<code>&lt;activity/&gt;</code>内添加如下内容：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">&lt;intent-filter&gt;</span><br><span class="line">    &lt;action android:name=&quot;android.nfc.action.TECH_DISCOVERED&quot;/&gt;</span><br><span class="line">&lt;/intent-filter&gt;</span><br><span class="line"></span><br><span class="line">&lt;meta-data</span><br><span class="line">	android:name=&quot;android.nfc.action.TECH_DISCOVERED&quot;</span><br><span class="line">	android:resource=&quot;@xml/nfc_tech_filter&quot;/&gt;</span><br></pre></td></tr></table></figure>
+<p>上面的<code>nfc_tech_filter</code>是在res/xml文件下的自定义xml文件，用于对NFC服务的筛选：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot;?&gt;</span><br><span class="line"></span><br><span class="line">&lt;resources&gt;</span><br><span class="line">    &lt;tech-list&gt;</span><br><span class="line">        &lt;tech&gt;android.nfc.tech.IsoDep&lt;/tech&gt;</span><br><span class="line">    &lt;/tech-list&gt;</span><br><span class="line">    &lt;tech-list&gt;</span><br><span class="line">        &lt;tech&gt;android.nfc.tech.NfcA&lt;/tech&gt;</span><br><span class="line">    &lt;/tech-list&gt;</span><br><span class="line">&lt;/resources&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Intent</li>
+</ul>
+<blockquote>
+<blockquote>
+<p>Intent是Android中的一个用于传递信息的封装类，可以理解为不同组件通信的媒介或者信使。</p>
+</blockquote>
+</blockquote>
+<blockquote>
+<p>在进行<code>Intent</code>的查询过程中了解到Android开发的四大组件，分别是<em>Activity</em>,<em>Service</em>,<em>Broadcast</em>,<em>ContentProvider</em>，而<code>Intent</code>可作为前三者的传递者；</p>
+</blockquote>
+<blockquote>
+<p>在SDK中给出了Intent作用的表现形式为：</p>
+</blockquote>
+<blockquote>
+<ul>
+<li>通过Context.startActivity() orActivity.startActivityForResult() 启动一个Activity；</li>
+</ul>
+</blockquote>
+<blockquote>
+<ul>
+<li>通过 Context.startService() 启动一个服务，或者通过Context.bindService() 和后台服务交互；</li>
+<li>通过广播方法(比如 Context.sendBroadcast(),Context.sendOrderedBroadcast(),  Context.sendStickyBroadcast()) 发给broadcast receivers。</li>
+</ul>
+</blockquote>
+<p>本例中，我们的NFC卡片信息就是从Intent中读取到的；</p>
+<ul>
+<li>初始化NFC</li>
+</ul>
+<p>自定义<code>NFCActivity</code>，并在其中声明并定义一个实例变量：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">NfcManager  nfcManager_  = new NfcManager();</span><br></pre></td></tr></table></figure>
+<p>这里要说一下从谷歌开源项目风格中吸收到的一种命名规则，私有实例变量会在名称后加下划线，而OC的风格是在前面加，不管哪种命名风格，都会有可能性的增加程序的易读性，易用，宜用；</p>
+<p>接下来初始化nfc模块，在<code>onCreat()</code>函数中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">nfcManager_.initAdapter(this);</span><br></pre></td></tr></table></figure>
+<p><code>NFCManager</code>声明：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class NfcManager&#123;</span><br><span class="line"></span><br><span class="line">	//NFC</span><br><span class="line">    private NfcAdapter nfcAdapter_;</span><br><span class="line">    private PendingIntent pendingIntent_;</span><br><span class="line">    private NFCActivity activity_;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">	//初始化</span><br><span class="line">    public void initAdapter(NFCActivity activity)&#123;</span><br><span class="line"></span><br><span class="line">        System.out.println (&quot;初始化NFC&quot;);</span><br><span class="line">        //初始化nfc适配器</span><br><span class="line">        nfcAdapter_ = NfcAdapter.getDefaultAdapter(activity);</span><br><span class="line">        //初始化卡片信息</span><br><span class="line">        pendingIntent_ = PendingIntent.getActivity(activity, 0,</span><br><span class="line">                            new Intent(activity, activity.getClass()).addFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP), 0);</span><br><span class="line">        //保留外部变量</span><br><span class="line">        activity_ = activity;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这里可以看到，<code>NFCActivity</code>保留了<code>NfcManager</code>的实例变量，而反过来<code>NfcManager</code>也保留了<code>NFCActivity</code>的实例变量，这如果是在OC中会造成循环引用问题的；</p>
+<ul>
+<li>接收Intent</li>
+</ul>
+<p>同样，在<code>onCreat()</code>中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">onNewIntent (getIntent ());</span><br></pre></td></tr></table></figure>
+<p>这里这个貌似不用主动调用，<code>onNewIntent()</code>方法也会初调用；这个<code>onNewIntent()</code>是<code>Activity</code>的重写方法，Activity检测到有新的Intent时就会调用该方法，我们的NFC事件也是通过这个方法被传送回来的。</p>
+<p>接下来：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">//处理NFC触发</span><br><span class="line">    @Override</span><br><span class="line">    protected void onNewIntent(Intent intent) &#123;</span><br><span class="line">        //读取数据</span><br><span class="line">        nfcManager_.readData(intent);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<p>我们再来看看这个<code>readData()</code>：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">private IsoDep isodep_; //ISO14443-4 NFC操作</span><br><span class="line">//从Intent中读卡</span><br><span class="line">  public void readData(Intent intent)&#123;</span><br><span class="line"></span><br><span class="line">      if (!NfcAdapter.ACTION_TECH_DISCOVERED.equals(intent.getAction()))&#123;</span><br><span class="line">      		//这里我们做了一个判断，即如果返回的不是NFC事件，直接返回，不做处理；</span><br><span class="line">          return;</span><br><span class="line">      &#125;</span><br><span class="line"></span><br><span class="line">      System.out.println (&quot;从intent中获取标签信息！&quot;);</span><br><span class="line">      </span><br><span class="line">      //从intent中获取标签信息</span><br><span class="line">      Parcelable p = intent.getParcelableExtra(NfcAdapter.EXTRA_TAG);</span><br><span class="line">      if (p != null) &#123;</span><br><span class="line">          Tag tag = (Tag) p;</span><br><span class="line">          isodep_ = IsoDep.get(tag);</span><br><span class="line">          if (isodep_ != null)&#123;</span><br><span class="line">              readData();</span><br><span class="line">          &#125;</span><br><span class="line">      &#125;else &#123;</span><br><span class="line">          //那么这里就是没有获取到Intent喽</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  private void readData() &#123;</span><br><span class="line">  	//毫无疑问，这里就是读卡的操作了</span><br><span class="line">  	//如果想要了解读卡的具体细节，那么这就与外围的NFC设备有关了，Tag里的逻辑将是由NFC设备厂商定义</span><br><span class="line">  	//本工程中的是调用NFC卡厂商的sdk进行读卡的，在实际工程中具体问题需要具体分析，本文中只讨论过程</span><br><span class="line">  	//如果读者有兴趣，稍后会贴出本工程git地址，本例读卡写卡处理sdk为 package com.broadstar.nfccardsdk;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<p>另外在activity生命周期函数内：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">//程序恢复</span><br><span class="line">   @Override</span><br><span class="line">   protected void onResume() &#123;</span><br><span class="line">       super.onResume();</span><br><span class="line">       nfcManager_.enableForegroundDispatch(this);</span><br><span class="line">   &#125;</span><br><span class="line"></span><br><span class="line">   //程序暂停</span><br><span class="line">   @Override</span><br><span class="line">   protected void onPause() &#123;</span><br><span class="line">       super.onPause();</span><br><span class="line">       nfcManager_.disableForegroundDispatch(this);</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>同样<code>NfcManager</code>内部实现：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">public static String[][] TECHLISTS; //NFC技术列表</span><br><span class="line">  public static IntentFilter[] FILTERS; //过滤器</span><br><span class="line"></span><br><span class="line">  static &#123;</span><br><span class="line">      try &#123;</span><br><span class="line">          TECHLISTS = new String[][] &#123; &#123; IsoDep.class.getName() &#125;, &#123; NfcA.class.getName() &#125; &#125;;</span><br><span class="line"></span><br><span class="line">          FILTERS = new IntentFilter[] &#123; new IntentFilter(NfcAdapter.ACTION_TECH_DISCOVERED, &quot;*/*&quot;) &#125;;</span><br><span class="line">      &#125; catch (Exception ignored) &#123;</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;	</span><br><span class="line">  </span><br><span class="line">  public void enableForegroundDispatch(NFCActivity activity)&#123;</span><br><span class="line">      if (nfcAdapter_ != null) &#123;</span><br><span class="line">          nfcAdapter_.enableForegroundDispatch(activity, pendingIntent_, FILTERS, TECHLISTS);</span><br><span class="line">      &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  public void disableForegroundDispatch(NFCActivity activity)&#123;</span><br><span class="line">      if (nfcAdapter_ != null)</span><br><span class="line">          nfcAdapter_.disableForegroundDispatch(activity);</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="一些其他的问题"><a href="#一些其他的问题" class="headerlink" title="一些其他的问题"></a>一些其他的问题</h2><ul>
+<li>String parseInt(,)</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str=&quot;123&quot;;</span><br><span class="line">int i = Integer.parseInt(str,8);</span><br></pre></td></tr></table></figure>
+<p><code>parseInt(,)</code>后面的参数表示当str被看作是多少进制时，i所得到的值(i 是10进制)</p>
+<ul>
+<li>instanceOf关键字</li>
+</ul>
+<p>判断某个子类对象是否属于某个子类的方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">public class CardInfo&#123;&#125;</span><br><span class="line">public class ReadCardInfo extends CardInfo&#123;&#125;</span><br><span class="line"></span><br><span class="line">public void someMethod(CardInfo info) &#123;</span><br><span class="line">    if (info instanceof ReadCardInfo) &#123;</span><br><span class="line">    	//是否是ReadCardInfo的实例</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>手机访问网络权限</li>
+</ul>
+<p>出现java.net.SocketException: socket failed: EACCES (Permission denied)抱错时，AndroidManifest.xml中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">&lt;!--网络访问权限--&gt;</span><br><span class="line">&lt;uses-permission android:name=&quot;android.permission.INTERNET&quot; /&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>Android Studio第三方Sdk无法识别的问题</li>
+</ul>
+<p>安卓工程的第三方sdk都是放在libs文件夹下的，当无法识别时，点击工程树目录处点击Project，右键libs里的jar包，点击Add as a library，然后再点击同步工程即可解决；</p>
+<ul>
+<li>不要在子线程中更新UI，切记，网上有方法可以调用，如果想这样做，那么请自行研究</li>
+</ul>
+<ul>
+<li>外部类中new另外一个类的内部类</li>
+</ul>
+<p>例如本例中，<code>NFCActivity</code>中有一个<code>CardHandler</code>的实例：</p>
+<p><code>CardHandler</code>中有一个内部公共类：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">public class CardHandler&#123;</span><br><span class="line"></span><br><span class="line">	//内部类</span><br><span class="line">	public class sendCommand implements Runnable &#123;</span><br><span class="line">	</span><br><span class="line">        private Map&lt;String, Object&gt; param_ = null;</span><br><span class="line">        private Message msg = null;</span><br><span class="line"></span><br><span class="line">        public sendCommand(Map&lt;String, Object&gt; param) &#123;</span><br><span class="line">            sendCommand.this.param_ = param;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        //子线程中不可以操作UI，使用Handler进行消息传递</span><br><span class="line">        @Override</span><br><span class="line">        public void run() &#123;</span><br><span class="line">            </span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>NFCActivity</code>中<code>operateCard()</code>函数想要实例化一个<code>sendCommand</code>的内部类对象，那么：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CardHandler cardHandler_ = new CardHandler(this,nfcManager_);</span><br><span class="line">private void operateCard(Map&lt;String, Object&gt; param) &#123;</span><br><span class="line">        //内部类的用法</span><br><span class="line">        ThreadPoolUtils.execute(cardHandler_.new sendCommand(param));</span><br><span class="line">        //上面的这个方法把sendCommnad操作放在了子线程中</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android/" rel="tag"># Android</a>
+          
+            <a href="/tags/NFC/" rel="tag"># NFC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/06/15/OpenGL-初识/" rel="next" title="OpenGL-初识">
+                <i class="fa fa-chevron-left"></i> OpenGL-初识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/07/10/OpenGL-由实例理解概念/" rel="prev" title="OpenGL-由实例理解概念">
+                OpenGL-由实例理解概念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#NFC"><span class="nav-number">1.</span> <span class="nav-text">NFC</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#NFC逻辑封装"><span class="nav-number">2.</span> <span class="nav-text">NFC逻辑封装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#一些其他的问题"><span class="nav-number">3.</span> <span class="nav-text">一些其他的问题</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

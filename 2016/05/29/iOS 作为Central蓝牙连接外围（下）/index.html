@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS,bluetooth," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Summary: 仍然是公司蓝牙卡项目，搞了两周，现在大致搞定，作一个总结；首先要把上篇遗留下来的蓝牙外围设备写数据等问题解决下…">
+<meta name="keywords" content="iOS,bluetooth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 作为Central蓝牙连接外围（下）">
+<meta property="og:url" content="http://charlesblog.site/2016/05/29/iOS 作为Central蓝牙连接外围（下）/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary: 仍然是公司蓝牙卡项目，搞了两周，现在大致搞定，作一个总结；首先要把上篇遗留下来的蓝牙外围设备写数据等问题解决下…">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.733Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 作为Central蓝牙连接外围（下）">
+<meta name="twitter:description" content="Summary: 仍然是公司蓝牙卡项目，搞了两周，现在大致搞定，作一个总结；首先要把上篇遗留下来的蓝牙外围设备写数据等问题解决下…">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/05/29/iOS 作为Central蓝牙连接外围（下）/"/>
+
+
+
+
+
+  <title>iOS 作为Central蓝牙连接外围（下） | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/05/29/iOS 作为Central蓝牙连接外围（下）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 作为Central蓝牙连接外围（下）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-29T20:48:00+08:00">
+                2016-05-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary: 仍然是公司蓝牙卡项目，搞了两周，现在大致搞定，作一个总结；首先要把上篇遗留下来的蓝牙外围设备写数据等问题解决下…<br><a id="more"></a></p>
+<h2 id="解决蓝牙写数据等问题"><a href="#解决蓝牙写数据等问题" class="headerlink" title="解决蓝牙写数据等问题"></a>解决蓝牙写数据等问题</h2><h3 id="更正读数据的一个问题"><a href="#更正读数据的一个问题" class="headerlink" title="更正读数据的一个问题"></a>更正读数据的一个问题</h3><p>更正一个问题，就是读数据时notify和read的两个回调，本人实测回调notification只是在之后回调一次，而不论读数据采用以上哪种，updataValue方法总是会执行，而且有时还不只是一次；</p>
+<p>总结：</p>
+<p>1.read方法时，回调updataValue；nofify时，notification回调一次后，updataValue再开始调，且不只一次；</p>
+<p>2.接收 characteristic 数据的方式有两种：</p>
+<p>在需要接收数据的时候，调用 readValueForCharacteristic:，这种是需要主动去接收的。<br>用 setNotifyValue:forCharacteristic: 方法订阅，当有数据发送时，可以直接在回调中接收。</p>
+<h3 id="向-characteristic-写数据"><a href="#向-characteristic-写数据" class="headerlink" title="向 characteristic 写数据"></a>向 characteristic 写数据</h3><p>写数据其实是一个很常见的需求，如果 characteristic 可写，你可以通过CBPeripheral类的writeValue:forCharacteristic:type:方法来向设备写入NSData数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[peripheral writeValue:dataToWrite forCharacteristic:characteristic type:CBCharacteristicWriteWithResponse];</span><br></pre></td></tr></table></figure>
+<p>上面的那个type参数是表示是否需要在写入后进行回调，这里的意思是需要回调，那么将在下面这个函数回调:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheral:(CBPeripheral *)peripheral</span><br><span class="line">didWriteValueForCharacteristic:(CBCharacteristic *)characteristic</span><br><span class="line">             error:(NSError *)error &#123;</span><br><span class="line"> </span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;Error writing characteristic value: %@&quot;, [error localizedDescription]);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="读写补充"><a href="#读写补充" class="headerlink" title="读写补充"></a>读写补充</h3><p>在不用和 peripheral 通信的时候，应当将连接断开，这也对节能有好处。在以下两种情况下，连接应该被断开：</p>
+<p>当 characteristic 不再发送数据时。（可以通过 isNotifying 属性来判断）<br>你已经接收到了你所需要的所有数据时。<br>以上两种情况，都需要先结束订阅，然后断开连接。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[peripheral setNotifyValue:NO forCharacteristic:characteristic];</span><br><span class="line">[myCentralManager cancelPeripheralConnection:peripheral];</span><br></pre></td></tr></table></figure>
+<p><strong>cancelPeripheralConnection:</strong> 是非阻塞性的，如果在 peripheral 挂起的状态去尝试断开连接，那么这个断开操作可能执行，也可能不会。因为可能还有其他的 central 连着它，所以取消连接并不代表底层连接也断开。从 app 的层面来讲，在 peripheral 决定断开的时候，会调用 <strong>CBCentralManagerDelegate</strong>  的 <strong>centralManager:didDisconnectPeripheral:error:</strong> 方法。</p>
+<p>另外关于蓝牙重连等的相关东西，这里就不一一说了，有兴趣的还是到本文参考文章中去找答案吧！再次感谢广大的代码工作者们！</p>
+<hr>
+<h1 id="项目总结"><a href="#项目总结" class="headerlink" title="项目总结"></a>项目总结</h1><h2 id="关于结构方面的"><a href="#关于结构方面的" class="headerlink" title="关于结构方面的"></a>关于结构方面的</h2><p>这一点呢是个人习惯的问题，我们一般在工作中会接手到一些别人做了一半的任务，只有部分功能被实现的很好，那么这时就需要大量改动代码了。个人的建议是，不要在原来的模块中做修改，而是添加一个中间层，新实现的功能封装在新的类中，等到所有功能全部实现，再进行项目整合，因为这个时候对项目基本上能算作是了解，重构的时候也相对容易些。</p>
+<p>第二点是关于iOS block与delegate选择上的意见，上面一点中说的中间层最好选用block，因为在逻辑上真的是很好理解，而且不容易出错，少写很多代码；而代理的话适合暴露出去，被其他人使用，这样调用你代码的人会在结构上相对好把握，自由度要大些。</p>
+<p>PS:既然说到了block，我们补充一点，如果你想让自己的block失效，ARC下只要让他的指针置空就可以了，当然如果你只是对它进行了第二次赋值，那么之前指针所指向的block块是没有被失效的。</p>
+<h2 id="说说写代码的一些"><a href="#说说写代码的一些" class="headerlink" title="说说写代码的一些"></a>说说写代码的一些</h2><p>1.就像本项目中用到的蓝牙，这些都是不需要在主线程中做的事情，诸如此类的相关还有网络连接，喇叭，话筒等（），将它们扔在后台线程中，任务完成之后回到主线程中修改UI;</p>
+<p>2.一些超时操作，我们需要的把它也扔在后台线程中，你可以用:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^&#123;</span><br><span class="line">            _scanTimer = [NSTimer scheduledTimerWithTimeInterval:seconds target:self selector:@selector(scanTimeoutHandler:) userInfo:nil repeats:NO];</span><br><span class="line">            &#125;);</span><br></pre></td></tr></table></figure>
+<p>也可以这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[self performSelector:@selector(scanTimeoutHandler:) withObject:nil afterDelay:seconds inModes:@[NSDefaultRunLoopMode]];</span><br></pre></td></tr></table></figure>
+<p>或者直接把它加到你的一个runloop中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[[NSRunLoop currentRunLoop] addTimer:timer forMode:NSRunLoopCommonModes];</span><br></pre></td></tr></table></figure>
+<p>否则它一直占用着当前的线程会给你带来很大的困扰；</p>
+<p>3.NSStream Socket网络编程</p>
+<p>NSStream很简单，用到的东西并不是很多就可以做一个简单的socket；NSStreamDelegate,NSInputStream,NSOutStream，一个代理和两个对象，连接的时候像这样：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">- (void)connectToHostUseStreamWithIP:(NSString *)host port:(int)port data:(NSData *)data&#123;</span><br><span class="line">    // 1.建立连接</span><br><span class="line">    // 定义C语言输入输出流</span><br><span class="line">    CFReadStreamRef readStream;</span><br><span class="line">    CFWriteStreamRef writeStream;</span><br><span class="line">    CFStreamCreatePairWithSocketToHost(NULL, (__bridge CFStringRef)host, port, &amp;readStream, &amp;writeStream);</span><br><span class="line">    </span><br><span class="line">    // 把C语言的输入输出流转化成OC对象</span><br><span class="line">    _inputStream = (__bridge NSInputStream *)(readStream);</span><br><span class="line">    _outputStream = (__bridge NSOutputStream *)(writeStream);</span><br><span class="line">    </span><br><span class="line">    // 设置代理</span><br><span class="line">    _inputStream.delegate = self;</span><br><span class="line">    _outputStream.delegate = self;</span><br><span class="line">    </span><br><span class="line">    // 把输入输入流添加到运行循环</span><br><span class="line">    [_inputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">    [_outputStream scheduleInRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">    </span><br><span class="line">    // 打开输入输出流</span><br><span class="line">    [_inputStream open];</span><br><span class="line">    [_outputStream open];</span><br><span class="line">    </span><br><span class="line">    //发送数据</span><br><span class="line">    [[NSRunLoop currentRunLoop] run];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>断开时候：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">- (void)stopConnect&#123;</span><br><span class="line">    // 从运行循环移除</span><br><span class="line">    [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">    [_outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">    // 关闭输入输出流</span><br><span class="line">    [_inputStream close];</span><br><span class="line">    [_outputStream close];</span><br><span class="line">    </span><br><span class="line">    _inputStream = nil;</span><br><span class="line">    _outputStream = nil;</span><br><span class="line">    </span><br><span class="line">    NSLog(@&quot;Socket 连接已断开！&quot;);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>代理只有一个回调函数，你所有的事情全部需要在这里面解决；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line">-(void)stream:(NSStream *)aStream handleEvent:(NSStreamEvent)eventCode&#123;</span><br><span class="line">    NSLog(@&quot;%@&quot;,[NSThread currentThread]);</span><br><span class="line">    //    NSStreamEventOpenCompleted = 1UL &lt;&lt; 0,//输入输出流打开完成</span><br><span class="line">    //    NSStreamEventHasBytesAvailable = 1UL &lt;&lt; 1,//有字节可读</span><br><span class="line">    //    NSStreamEventHasSpaceAvailable = 1UL &lt;&lt; 2,//可以发放字节</span><br><span class="line">    //    NSStreamEventErrorOccurred = 1UL &lt;&lt; 3,// 连接出现错误</span><br><span class="line">    //    NSStreamEventEndEncountered = 1UL &lt;&lt; 4// 连接结束</span><br><span class="line">    </span><br><span class="line">    switch (eventCode) &#123;</span><br><span class="line">        case NSStreamEventOpenCompleted:</span><br><span class="line">                NSLog(@&quot;输入输出流打开完成&quot;);</span><br><span class="line">                break;</span><br><span class="line">        case NSStreamEventHasBytesAvailable:</span><br><span class="line">                NSLog(@&quot;有字节可读&quot;);</span><br><span class="line">                [self readDataFromSocket];</span><br><span class="line">                break;</span><br><span class="line">        case NSStreamEventHasSpaceAvailable:</span><br><span class="line">                NSLog(@&quot;可以发送字节&quot;);</span><br><span class="line">            [self sendDataToSocket];</span><br><span class="line">                break;</span><br><span class="line">        case NSStreamEventErrorOccurred:</span><br><span class="line">                NSLog(@&quot;连接出现错误&quot;);</span><br><span class="line">                break;</span><br><span class="line">        case NSStreamEventEndEncountered:</span><br><span class="line">                NSLog(@&quot;连接结束&quot;);</span><br><span class="line">     </span><br><span class="line">     </span><br><span class="line">        // 从运行循环移除</span><br><span class="line">        [_inputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">        [_outputStream removeFromRunLoop:[NSRunLoop currentRunLoop] forMode:NSDefaultRunLoopMode];</span><br><span class="line">            </span><br><span class="line">            </span><br><span class="line">        // 关闭输入输出流</span><br><span class="line">        [_inputStream close];</span><br><span class="line">        [_outputStream close];</span><br><span class="line">                break;</span><br><span class="line">        default:</span><br><span class="line">                break;</span><br><span class="line">     &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>记住，一定是自己单独开一个线程，socket会一直占用着线程，如果你不把它自己关掉，那么它会无休止的连接着，你无法做一些其他的事情，所以，这一点很重要；</p>
+<p>另外，用完一定要关掉它，一定，一定，重要的事情多说几遍；</p>
+<p>4.状态机</p>
+<p>我们在项目中有时会遇到一些状态值，一般情况下枚举将会是个好选择，然而当你遇到的状态是多选择的就显得不那么好用了；于是本项目中我用到的option会是一个好的点子；我们先上代码，然后来解释；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">typedef NS_OPTIONS(NSUInteger,CardOperationState) &#123;</span><br><span class="line">    CardOperationState_idle = 0,</span><br><span class="line">    </span><br><span class="line">    CardOperationState_ReadCorrect = 1 &lt;&lt; 0, //读卡成功 1</span><br><span class="line">    CardOperationState_ReadWrong = 1 &lt;&lt; 1,   //读卡失败 2</span><br><span class="line">    </span><br><span class="line">    CardOperationState_Checkouted = 1 &lt;&lt; 2,      //已校验密码 4</span><br><span class="line">    CardOperationState_Written = 1 &lt;&lt; 3,         //数据已写入成功 8</span><br><span class="line">    CardOperationState_ChangedPass = 1 &lt;&lt; 4,     //已修改密码</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>举个例子，如果你要表示的状态是已校验，已写入，已修改，那你的这个状态应该是:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">state == CardOperationState_Checkouted | CardOperationState_Written| CardOperationState_ChangedPass</span><br></pre></td></tr></table></figure>
+<p>用枚举的话那要用好几个判断:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">state == CardOperationState_Checkouted &amp;&amp; state == CardOperationState_Written &amp;&amp; state == CardOperationState_ChangedPass</span><br></pre></td></tr></table></figure>
+<p>很明显，option少写了很多判断；</p>
+<p>当前状态添加一个状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">currentState = currentState | CardOperationState_Checkouted;//增加已校验状态</span><br></pre></td></tr></table></figure>
+<p>减少一个状态：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">currentState = currentState &amp; (~CardOperationState_ReadCorrect);</span><br></pre></td></tr></table></figure>
+<p>判断是否包含一个状态:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">currentState &amp; CardOperationState_Checkouted</span><br></pre></td></tr></table></figure>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/bluetooth/" rel="tag"># bluetooth</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/21/iOS 作为Central蓝牙连接外围（上）/" rel="next" title="iOS 作为Central蓝牙连接外围（上）">
+                <i class="fa fa-chevron-left"></i> iOS 作为Central蓝牙连接外围（上）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/04/OpenGLES-纹理的初步认识/" rel="prev" title="OpenGLES-纹理的初步认识">
+                OpenGLES-纹理的初步认识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#解决蓝牙写数据等问题"><span class="nav-number">1.</span> <span class="nav-text">解决蓝牙写数据等问题</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#更正读数据的一个问题"><span class="nav-number">1.1.</span> <span class="nav-text">更正读数据的一个问题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#向-characteristic-写数据"><span class="nav-number">1.2.</span> <span class="nav-text">向 characteristic 写数据</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#读写补充"><span class="nav-number">1.3.</span> <span class="nav-text">读写补充</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#项目总结"><span class="nav-number"></span> <span class="nav-text">项目总结</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#关于结构方面的"><span class="nav-number">1.</span> <span class="nav-text">关于结构方面的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说说写代码的一些"><span class="nav-number">2.</span> <span class="nav-text">说说写代码的一些</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

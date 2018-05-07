@@ -1,0 +1,850 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS,bluetooth," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Summary: 今天说一说iOS蓝牙相关的东西，本文背景是公司的蓝牙项目，项目要求是利用手机蓝牙模块与低功耗蓝牙卡进行通信，蓝牙卡信息解析由卡厂商提供，而我们先要做的就是建立手机与蓝牙卡的连接。">
+<meta name="keywords" content="iOS,bluetooth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="iOS 作为Central蓝牙连接外围（上）">
+<meta property="og:url" content="http://charlesblog.site/2016/05/21/iOS 作为Central蓝牙连接外围（上）/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary: 今天说一说iOS蓝牙相关的东西，本文背景是公司的蓝牙项目，项目要求是利用手机蓝牙模块与低功耗蓝牙卡进行通信，蓝牙卡信息解析由卡厂商提供，而我们先要做的就是建立手机与蓝牙卡的连接。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.733Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="iOS 作为Central蓝牙连接外围（上）">
+<meta name="twitter:description" content="Summary: 今天说一说iOS蓝牙相关的东西，本文背景是公司的蓝牙项目，项目要求是利用手机蓝牙模块与低功耗蓝牙卡进行通信，蓝牙卡信息解析由卡厂商提供，而我们先要做的就是建立手机与蓝牙卡的连接。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/05/21/iOS 作为Central蓝牙连接外围（上）/"/>
+
+
+
+
+
+  <title>iOS 作为Central蓝牙连接外围（上） | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/05/21/iOS 作为Central蓝牙连接外围（上）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">iOS 作为Central蓝牙连接外围（上）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-05-21T18:06:00+08:00">
+                2016-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary: 今天说一说iOS蓝牙相关的东西，本文背景是公司的蓝牙项目，项目要求是利用手机蓝牙模块与低功耗蓝牙卡进行通信，蓝牙卡信息解析由卡厂商提供，而我们先要做的就是建立手机与蓝牙卡的连接。<br><a id="more"></a></p>
+<p>今天说一说iOS蓝牙相关的东西，本文背景是公司的蓝牙项目，项目要求是利用手机蓝牙模块与低功耗蓝牙卡进行通信，蓝牙卡信息解析由卡厂商提供，而我们先要做的就是建立手机与蓝牙卡的连接。难点主要集中在与蓝牙卡连接断开部分，因为蓝牙卡是低能耗的，每开启蓝牙卡片蓝牙后它会在8秒后自动断开连接，所以在处理蓝牙连接的的部分逻辑较为复杂。接下来我们把重点放在与蓝牙建立连接的部分，Google之，先来搞清楚与iOS有关的蓝牙库。    </p>
+<p>先说一下蓝牙版本问题，如果你的设备支持的是蓝牙4.0之前的版本，那么会涉及到一个MFI的概念，MFI（Make For ipod/ipad/iphone）是苹果的一套认证，只有少数的硬件厂商才有苹果的MFI认证，做之前需要搞定这个认证。使用蓝牙4.0的话，由于4.0苹果开放了BLE（Bluetooth Low Energy）通道，就不会有认证的问题了，而且向下兼容。<br>我们用到的蓝牙库为CoreBluetooth，而蓝牙库中首先要介绍下两个概念Central和Peripheral；</p>
+<h1 id="Central-和-Peripheral-在蓝牙交互中的角色"><a href="#Central-和-Peripheral-在蓝牙交互中的角色" class="headerlink" title="Central 和 Peripheral 在蓝牙交互中的角色"></a>Central 和 Peripheral 在蓝牙交互中的角色</h1><blockquote>
+<font color="#C0C0C0" size="4">所有涉及蓝牙低功耗的交互中有两个主要的角色：中心Central和外围设备Perpheral。根据一些传统的客户端-服务端结构，Peripheral通常具有其他设备所需要的数据，而Central通常通过使用Perpheral的信息来实现一些特定的功能。</font>
+</blockquote>
+<p>这里我自己理解，如果你的设备连接的是本文这种蓝牙卡或者穿戴设备等，那么你的程序就是作为Central；如果你的设备是与另外一台iPhone设备，那么它既可以作为Central也可以作为Perpheral；</p>
+<p>想了解更详细请参照：<a href="http://www.jianshu.com/p/760f042a1d81" target="_blank" rel="noopener">iOS蓝牙编程指南 – 核心蓝牙概述</a></p>
+<h1 id="UUID"><a href="#UUID" class="headerlink" title="UUID"></a>UUID</h1><p>每个蓝牙4.0的设备都是通过服务和特征来展示自己的，一个设备必然包含一个或多个服务，每个服务下面又包含若干个特征。特征是与外界交互的最小单位。比如说，一台蓝牙4.0设备，用特征A来描述自己的出厂信息，用特征B来与收发数据等。</p>
+<p>服务和特征都是用UUID来唯一标识的，UUID的概念如果不清楚请自行google,国际蓝牙组织为一些很典型的设备(比如测量心跳和血压的设备)规定了标准的service UUID(特征的UUID比较多，这里就不列举了);        </p>
+<blockquote>
+<p><font color="#C0C0C0" size="2">UUID含义是通用唯一识别码 (Universally Unique Identifier)，这是一个软件建构的标准，也是被开源软件基金会 (Open Software Foundation, OSF) 的组织应用在分布式计算环境 (Distributed Computing Environment, DCE) 领域的一部分。<br>UUID是指在一台机器上生成的数字，它保证对在同一时空中的所有机器都是唯一的。通常平台会提供生成的API。按照开放软件基金会(OSF)制定的标准计算，用到了以太网卡地址、纳秒级时间、芯片ID码和许多可能的数字。</font></p>
+</blockquote>
+<blockquote>
+<p>UUID由以下几部分的组合：</p>
+</blockquote>
+<blockquote>
+<p>（1）当前日期和时间，UUID的第一个部分与时间有关，如果你在生成一个UUID之后，过几秒又生成一个UUID，则第一个部分不同，其余相同。</p>
+</blockquote>
+<blockquote>
+<p>（2）时钟序列。</p>
+</blockquote>
+<blockquote>
+<p>（3）全局唯一的IEEE机器识别号，如果有网卡，从网卡MAC地址获得，没有网卡以其他方式获得。<br>UUID的唯一缺陷在于生成的结果串会比较长。关于UUID这个标准使用最普遍的是微软的GUID(Globals Unique Identifiers)。在ColdFusion中可以用CreateUUID()函数很简单地生成UUID，其格式为：xxxxxxxx-xxxx- xxxx-xxxxxxxxxxxxxxxx(8-4-4-16)，其中每个 x 是 0-9 或 a-f 范围内的一个十六进制的数字。而标准的UUID格式为：xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx (8-4-4-4-12)，可以从cflib 下载CreateGUID() UDF进行转换。</p>
+</blockquote>
+<h1 id="BLE中心模式流程"><a href="#BLE中心模式流程" class="headerlink" title="BLE中心模式流程"></a>BLE中心模式流程</h1><p>1.建立中心角色    </p>
+<p>2.扫描外设(Discover Peripheral)    </p>
+<p>3.连接外设(Connect Peripheral)    </p>
+<p>4.扫描外设中的服务和特征(Discover Services And Characteristics)    </p>
+<p>5.利用特征与外设做数据交互(Explore And Interact)</p>
+<p>6.订阅Characteristic的通知</p>
+<p>7.断开连接(Disconnect)</p>
+<h1 id="代码说明"><a href="#代码说明" class="headerlink" title="代码说明"></a>代码说明</h1><h2 id="初始化-CBCentralManager"><a href="#初始化-CBCentralManager" class="headerlink" title="初始化 CBCentralManager"></a>初始化 CBCentralManager</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">dispatch_queue_t centralQ = dispatch_queue_create(BLUETOOCH_QUEUE_IDENTIFER, DISPATCH_QUEUE_CONCURRENT);</span><br><span class="line"> _centralManager = [[CBCentralManager alloc] initWithDelegate:self queue:centralQ];</span><br></pre></td></tr></table></figure>
+<p>上面的代码中，将self设置为代理，用于接收各种 central 事件。将queue设置为nil，则表示直接在主线程中运行，这里是我自己定义的任务队列。</p>
+<p>创建Central管理器时，管理器对象会调用代理对象的centralManagerDidUpdateState:方法。我们需要实现这个方法来确保本地设备支持BLE。</p>
+<p>初始化 central manager 之后，设置的代理会调用centralManagerDidUpdateState:方法，所以需要去遵循<cbcentralmanagerdelegate>协议。这个 did update state 的方法，能获得当前设备是否能作为 central。关于这个协议的实现和其他方法，接下来会讲到，也可以先看看<a href="https://developer.apple.com/library/ios/documentation/CoreBluetooth/Reference/CBCentralManagerDelegate_Protocol/index.html#//apple_ref/doc/uid/TP40011285" target="_blank" rel="noopener">官方API</a></cbcentralmanagerdelegate></p>
+<h2 id="搜索当前可用的-peripheral"><a href="#搜索当前可用的-peripheral" class="headerlink" title="搜索当前可用的 peripheral"></a>搜索当前可用的 peripheral</h2><p>可以使用<em>CBCentralManager的scanForPeripheralsWithServices:options:</em>方法来扫描周围正在发出广播的 Peripheral 设备。peripheral 每秒都在发送大量的数据包，<em>scanForPeripheralsWithServices:options:</em>方法会将同一 peripheral 发出的多个数据包合并为一个事件，然后每找到一个 peripheral  都会调用 <em>centralManager:didDiscoverPeripheral:advertisementData:RSSI:</em> 方法。另外，当已发现的 peripheral  发送的数据包有变化时，这个代理方法同样会调用。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">NSArray *services = @[[CBUUID UUIDWithString:BUSINESS_SERVICE_UUID_STRING]</span><br><span class="line">NSDictionary *scanOption = @&#123;CBCentralManagerScanOptionAllowDuplicatesKey:@(NO)&#125;;</span><br><span class="line">[_centralManager scanForPeripheralsWithServices:services options:scanOption];</span><br></pre></td></tr></table></figure>
+<p>这里的services是中心要扫描的蓝牙设备类型，表示只搜索当前数组包含的设备（每个 peripheral 的 service 都有唯一标识——UUID）；而scanOption中的<code>CBCentralManagerScanOptionAllowDuplicatesKey</code>设置以后，每收到广播，就会调用上面的回调（无论广播数据是否一样）。关闭默认行为一般用于以下场景：根据 peripheral 的距离来初始化连接（距离可用信号强度 RSSI 来判断）。设置这个 option 会对电池寿命和 app 的性能产生不利影响，所以一定要在必要的时候，再对其进行设置。</p>
+<p>在调用<code>scanForPeripheralsWithServices:options:</code>方法之后，找到可用设备，系统会回调（每找到一个都会回调）<code>centralManager:didDiscoverPeripheral:advertisementData:RSSI:</code>。该方法会已CBPeripheral返回找到的 peripheral，所以你可以使用数组将找到的 peripheral 存起来。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//扫描到蓝牙后的回调</span><br><span class="line">-(void)centralManager:(CBCentralManager *)central didDiscoverPeripheral:(CBPeripheral *)peripheral advertisementData:(NSDictionary *)advertisementData RSSI:(NSNumber *)RSSI&#123;</span><br><span class="line">    //RSSI(Received Signal Strength Indication接收的信号强度指示)   </span><br><span class="line">    printf(&quot;didDiscoverPeripheral\n&quot;);</span><br><span class="line">    NSLog(@&quot;advertisement data is :%@&quot;,advertisementData);</span><br><span class="line">    NSString* identifer = [peripheral.identifier UUIDString];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="连接-peripheral"><a href="#连接-peripheral" class="headerlink" title="连接 peripheral"></a>连接 peripheral</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">//连接外围设备</span><br><span class="line">[_centralManager connectPeripheral:peripheral options:nil];</span><br></pre></td></tr></table></figure>
+<p>当连接成功后，会回调方法<em>centralManager:didConnectPeripheral:</em>。在这个方法中，你可以去记录当前的连接状态等数据。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">-(void)centralManager:(CBCentralManager *)central didConnectPeripheral:(CBPeripheral *)peripheral&#123;</span><br><span class="line">    printf(&quot;已连接上设备：&quot;);</span><br><span class="line">    printf(&quot;name = %s\n&quot;,[peripheral.name UTF8String]);</span><br><span class="line">    </span><br><span class="line">    //连接到设备后要设置设备的代理，这样才可以接收到外围的服务与特性</span><br><span class="line">    peripheral.delegate = self;</span><br><span class="line">    </span><br><span class="line">    NSArray&lt;CBUUID*&gt;* uuids =@[</span><br><span class="line">	[CBUUID UUIDWithString:WRITE_CHARACTERISTIC_UUID_STRING],</span><br><span class="line">	[CBUUID UUIDWithString:READ_CHARACTERISTIC_UUID_STRING]];</span><br><span class="line">	//发现服务</span><br><span class="line">	[peripheral discoverServices:uuids];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果连接断开则会回调：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//断开回调处理</span><br><span class="line">- (void)centralManager:(CBCentralManager *)central didDisconnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error&#123;</span><br><span class="line">    printf(&quot;设备 %s 已断开！\n&quot;,[peripheral.name UTF8String]);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>失败的情况下则是： </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">//连接失败回调</span><br><span class="line">-(void)centralManager:(CBCentralManager *)central didFailToConnectPeripheral:(CBPeripheral *)peripheral error:(NSError *)error&#123;</span><br><span class="line">    NSLog(@&quot;didFailToConnectPeripheral error:%@&quot;,error);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="搜索-peripheral-的-service"><a href="#搜索-peripheral-的-service" class="headerlink" title="搜索 peripheral 的 service"></a>搜索 peripheral 的 service</h2><p>当与 peripheral 成功建立连接以后，就可以通信了。第一步是先找到当前 peripheral 提供的 service，因为 service 广播的数据有大小限制（貌似是 31 bytes），所以你实际找到的 service 的数量可能要比它广播时候说的数量要多。调用CBPeripheral的 <code>discoverServices:</code>方法可以找到当前 peripheral 的所有 service。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">//在搜索过程中，并不是所有的 service和characteristic 都是我们需要的,如果全部搜索，依然会造成不必要的资源浪费。</span><br><span class="line">//这里的uuids是我工程中用到的UUID</span><br><span class="line">NSArray&lt;CBUUID*&gt;* uuids =@[</span><br><span class="line">[CBUUID UUIDWithString:WRITE_CHARACTERISTIC_UUID_STRING],</span><br><span class="line">[CBUUID UUIDWithString:READ_CHARACTERISTIC_UUID_STRING]];</span><br><span class="line">//发现服务</span><br><span class="line">[peripheral discoverServices:uuids];</span><br></pre></td></tr></table></figure>
+<p>当找到特定的 Service 以后，会回调<cbperipheraldelegate>的<code>peripheral:didDiscoverServices:</code>方法。Core Bluetooth 提供了CBService类来表示 service，找到以后，它们以数组的形式存入了当前 peripheral 的services属性中，你可以在当前回调中遍历这个属性。</cbperipheraldelegate></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheral:(CBPeripheral *)peripheral didDiscoverServices:(NSError *)error&#123; </span><br><span class="line">    if(error)&#123;</span><br><span class="line">        NSLog(@&quot;发现服务错误：%@&quot;,error);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot;发现周边设备的服务:\n&quot;);</span><br><span class="line">    printf(&quot;==== didDiscoverServices ==== \n&quot;);</span><br><span class="line"> 	</span><br><span class="line">     //发现服务中的特性 </span><br><span class="line">    for (CBService *service in peripheral.services) &#123;</span><br><span class="line">        printf(&quot;-- service : %s\n&quot;,[[service.UUID UUIDString] UTF8String]);</span><br><span class="line">        [peripheral discoverCharacteristics:nil forService:service];</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="搜索-service-的-characteristic"><a href="#搜索-service-的-characteristic" class="headerlink" title="搜索 service 的 characteristic"></a>搜索 service 的 characteristic</h2><p>找到需要的 service 之后，下一步是找它所提供的 characteristic。如果搜索全部 characteristic，那调用CBPeripheral的<code>discoverCharacteristics:forService:</code>方法即可。如果是搜索当前service的characteristic，那还应该传入相应的CBService对象：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[peripheral discoverCharacteristics:nil forService:service];</span><br></pre></td></tr></table></figure>
+<p>找到所有 characteristic 之后，回调<code>peripheral:didDiscoverCharacteristicsForService:error:</code>方法，此时 Core Bluetooth 提供了CBCharacteristic类来表示characteristic。可以通过以下代码来遍历找到的 characteristic ：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">- (void)peripheral:(CBPeripheral *)peripheral didDiscoverCharacteristicsForService:(CBService *)service error:(NSError *)error&#123;</span><br><span class="line">    printf(&quot;发现服务 :(%s)\n&quot;,[[service.UUID UUIDString] UTF8String]);</span><br><span class="line">    </span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;There is a error in peripheral:didDiscoverCharacteristicsForService:error: which called:%@&quot;,error);</span><br><span class="line">        return;</span><br><span class="line">    &#125; </span><br><span class="line">    printf(&quot;开始读取服务数据...\n&quot;);</span><br><span class="line">    for (CBCharacteristic *characteristic in service.characteristics) &#123;</span><br><span class="line">        NSLog(@&quot;properties is %lu&quot;,characteristic.properties);</span><br><span class="line">        if (characteristic.properties &amp; CBCharacteristicPropertyNotify) &#123;</span><br><span class="line">//            [peripheral readValueForCharacteristic:characteristic];</span><br><span class="line">            [peripheral setNotifyValue:YES forCharacteristic:characteristic];</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="读取-characteristic-数据"><a href="#读取-characteristic-数据" class="headerlink" title="读取 characteristic 数据"></a>读取 characteristic 数据</h2><p>这里读取涉及到两个方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[peripheral readValueForCharacteristic:characteristic];</span><br><span class="line">[peripheral setNotifyValue:YES forCharacteristic:characteristic];</span><br></pre></td></tr></table></figure>
+<p>read这种方法是需要主动去接收的；notify方法订阅，当有数据发送时，可以直接在回调中接收,如果 characteristic 的数据经常变化，那么采用订阅的方式更好；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">//获取外设发来的数据，不论是read和notify,获取数据都是从这个方法中读取。</span><br><span class="line">- (void)peripheral:(CBPeripheral *)peripheral didUpdateValueForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error&#123;</span><br><span class="line">    if (error) &#123;</span><br><span class="line">        NSLog(@&quot;There is a error in peripheral:didUpdateValueForCharacteristic:error: which called:%@&quot;,error);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    NSLog(@&quot;characteristic data is:%@ &quot;,characteristic.value);</span><br><span class="line">    NSLog(@&quot;characteristic data length is %ld&quot;,characteristic.value.length);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>所以nofify可能会被调用多次，而且它获取的是实时数据，如果你接收蓝牙信息不是一次次接收的话，那么会用到它：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">//中心读取外设实时数据</span><br><span class="line">- (void)peripheral:(CBPeripheral *)peripheral didUpdateNotificationStateForCharacteristic:(CBCharacteristic *)characteristic error:(NSError *)error&#123;</span><br><span class="line">    printf(&quot;didUpdateNotificationStateForCharacteristic (%s)\n&quot;,[[characteristic.UUID UUIDString] UTF8String]);</span><br><span class="line">    if(error)&#123;</span><br><span class="line">        printf(&quot;error is : %s\n&quot;,[error.description UTF8String]);</span><br><span class="line">        return;</span><br><span class="line">    &#125;</span><br><span class="line">    printf(&quot; update notification success !!&quot;);</span><br><span class="line">    NSLog(@&quot;接收到的数据：%@&quot;,characteristic.value);</span><br><span class="line">    &#125;   </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="http://www.saitjr.com/ios/core-bluetooth-read-write-as-central-role.html" target="_blank" rel="noopener">本文参考</a>，之后会继续讲解写数据和重连等问题；</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/bluetooth/" rel="tag"># bluetooth</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/09/关于GLKit的推断/" rel="next" title="关于GLKit的推断">
+                <i class="fa fa-chevron-left"></i> 关于GLKit的推断
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/29/iOS 作为Central蓝牙连接外围（下）/" rel="prev" title="iOS 作为Central蓝牙连接外围（下）">
+                iOS 作为Central蓝牙连接外围（下） <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Central-和-Peripheral-在蓝牙交互中的角色"><span class="nav-number">1.</span> <span class="nav-text">Central 和 Peripheral 在蓝牙交互中的角色</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#UUID"><span class="nav-number">2.</span> <span class="nav-text">UUID</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#BLE中心模式流程"><span class="nav-number">3.</span> <span class="nav-text">BLE中心模式流程</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#代码说明"><span class="nav-number">4.</span> <span class="nav-text">代码说明</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#初始化-CBCentralManager"><span class="nav-number">4.1.</span> <span class="nav-text">初始化 CBCentralManager</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索当前可用的-peripheral"><span class="nav-number">4.2.</span> <span class="nav-text">搜索当前可用的 peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#连接-peripheral"><span class="nav-number">4.3.</span> <span class="nav-text">连接 peripheral</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索-peripheral-的-service"><span class="nav-number">4.4.</span> <span class="nav-text">搜索 peripheral 的 service</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#搜索-service-的-characteristic"><span class="nav-number">4.5.</span> <span class="nav-text">搜索 service 的 characteristic</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#读取-characteristic-数据"><span class="nav-number">4.6.</span> <span class="nav-text">读取 characteristic 数据</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

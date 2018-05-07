@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="opengles,texture," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Summary:  上周看书学习OpenGLES关于纹理的知识，云里雾里的，看完的感觉是好多东西都明白，涉及到许多opengl的内容，不过照着书里的内容运行了几个Demo，大致算是有些总结，现做一下回顾，上几个例子。不过这里有一点，这本书看完下一步还是要细研究一下opengl，初步决定从《计算机图形学》这本书入手。好了，之后的事情不多说，先做好当下的事情。">
+<meta name="keywords" content="opengles,texture">
+<meta property="og:type" content="article">
+<meta property="og:title" content="OpenGLES-纹理的初步认识">
+<meta property="og:url" content="http://charlesblog.site/2016/06/04/OpenGLES-纹理的初步认识/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary:  上周看书学习OpenGLES关于纹理的知识，云里雾里的，看完的感觉是好多东西都明白，涉及到许多opengl的内容，不过照着书里的内容运行了几个Demo，大致算是有些总结，现做一下回顾，上几个例子。不过这里有一点，这本书看完下一步还是要细研究一下opengl，初步决定从《计算机图形学》这本书入手。好了，之后的事情不多说，先做好当下的事情。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.731Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="OpenGLES-纹理的初步认识">
+<meta name="twitter:description" content="Summary:  上周看书学习OpenGLES关于纹理的知识，云里雾里的，看完的感觉是好多东西都明白，涉及到许多opengl的内容，不过照着书里的内容运行了几个Demo，大致算是有些总结，现做一下回顾，上几个例子。不过这里有一点，这本书看完下一步还是要细研究一下opengl，初步决定从《计算机图形学》这本书入手。好了，之后的事情不多说，先做好当下的事情。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/06/04/OpenGLES-纹理的初步认识/"/>
+
+
+
+
+
+  <title>OpenGLES-纹理的初步认识 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/06/04/OpenGLES-纹理的初步认识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">OpenGLES-纹理的初步认识</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-06-04T23:51:00+08:00">
+                2016-06-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary:  上周看书学习OpenGLES关于纹理的知识，云里雾里的，看完的感觉是好多东西都明白，涉及到许多opengl的内容，不过照着书里的内容运行了几个Demo，大致算是有些总结，现做一下回顾，上几个例子。<br>不过这里有一点，这本书看完下一步还是要细研究一下opengl，初步决定从《计算机图形学》这本书入手。好了，之后的事情不多说，先做好当下的事情。</p>
+<a id="more"></a>
+<h2 id="Demo-渲染图片Demo代码"><a href="#Demo-渲染图片Demo代码" class="headerlink" title="Demo:渲染图片Demo代码"></a>Demo:渲染图片<a href="https://github.com/usiege/OpenGLES/tree/master/OpenGLES_Ch_3_纹理/OpenGLES_Ch3_2" target="_blank" rel="noopener">Demo代码</a></h2><p>首先是关于纹理的一些概念:</p>
+<blockquote>
+<p>纹理是什么？纹理是一个用来保存图像的元素值的OGE缓存,就是颜色缓存；</p>
+</blockquote>
+<blockquote>
+<p>当用一个图像初始化一个纹理缓存后，每一个像素就变成了纹理中的纹素（texel）；</p>
+</blockquote>
+<blockquote>
+<p>像素通常表示屏幕上的一个实际的颜色点，纹素是在一个虚拟的坐标系中;</p>
+</blockquote>
+<blockquote>
+<p>GPU会转换OGE坐标系中的每个点为帧缓存中的真实像素坐标（视口viewport坐标）；</p>
+</blockquote>
+<blockquote>
+<p>转换几何形状数据为帧缓存中的颜色像素的过程叫做点阵化（rasterizing），每个颜色像素叫做片元（fragment）;</p>
+</blockquote>
+<blockquote>
+<p>纹素决定片元的对齐过程，叫做映射（mapping）；</p>
+</blockquote>
+<blockquote>
+<p>取样（sampling）是GPU从每个片元的U、V位置选择纹素的过程；</p>
+</blockquote>
+<blockquote>
+<p>MIP贴图是为一个纹理存储多个细节的技术，它通过减少GPU的取样来提高渲染的性能；</p>
+</blockquote>
+<p>下面的例子展示了使用一个图片渲染的图片缓存：</p>
+<p>在<code>GLKViewController</code>中，设置OGE的上下文：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">GLKView *view = (GLKView *)self.view;</span><br><span class="line">   view.backgroundColor = [UIColor whiteColor];</span><br><span class="line">  NSAssert([view isKindOfClass:[GLKView class]],</span><br><span class="line">     @&quot;View controller&apos;s view is not a GLKView&quot;);</span><br><span class="line">  </span><br><span class="line">  view.context = [[AGLKContext alloc] </span><br><span class="line">     initWithAPI:kEAGLRenderingAPIOpenGLES2];</span><br><span class="line">  </span><br><span class="line">  // Make the new context current</span><br><span class="line">  [AGLKContext setCurrentContext:view.context];</span><br></pre></td></tr></table></figure>
+<p>上面的<code>AGLKContext</code>是<code>EAGLContext</code>的子类，<code>setCurrentContext:</code>是继承自父类的方法，设备当前上下文；</p>
+<p>设置提供基础功能:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">// Create a base effect that provides standard OpenGL ES 2.0</span><br><span class="line">   // shading language programs and set constants to be used for </span><br><span class="line">   // all subsequent rendering</span><br><span class="line">   self.baseEffect = [[GLKBaseEffect alloc] init];</span><br><span class="line">   self.baseEffect.useConstantColor = GL_TRUE;</span><br><span class="line">   self.baseEffect.constantColor = GLKVector4Make(</span><br><span class="line">      1.0f, // Red</span><br><span class="line">      1.0f, // Green</span><br><span class="line">      1.0f, // Blue</span><br><span class="line">      1.0f);// Alpha</span><br></pre></td></tr></table></figure>
+<p>上面的这个constantColor,说是顶点缓冲，这里可能是顶点的颜色缓存，具体应该是与opengl相关的东西，这里这么用着，我改过这里的值，会修改渲染出来图的背景色，暂且认为是渲染用的一个底色吧；</p>
+<p>设置当前上下文的“清除颜色”：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Set the background color stored in the current context</span><br><span class="line">GLKVector4 clearColorRGBA = GLKVector4Make(</span><br><span class="line">      1.0f, // Red</span><br><span class="line">      1.0f, // Green</span><br><span class="line">      1.0f, // Blue</span><br><span class="line">      1.0f);// Alpha </span><br><span class="line">glClearColor(</span><br><span class="line">      clearColorRGBA.r, </span><br><span class="line">      clearColorRGBA.g, </span><br><span class="line">      clearColorRGBA.b, </span><br><span class="line">      clearColorRGBA.a);</span><br></pre></td></tr></table></figure>
+<p>接下来要进行渲染图片了，大致与渲染一个三角形的过程差不多，可对照<a href="http://uwuneng.com/opengles_start.html" target="_blank" rel="noopener">开始OpenGLES的探索</a>，同样也是6步：</p>
+<p>这里我们自定义了一个<code>AGLKVertexAttribArrayBuffer</code>封装了关于一些OGE的操作，来说明一下：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">// This data type is used to store information for each vertex</span><br><span class="line">//这个类型用来保存每个顶点的信息</span><br><span class="line"> typedef struct &#123;</span><br><span class="line">   GLKVector3  positionCoords;</span><br><span class="line">   GLKVector2  textureCoords;</span><br><span class="line">&#125;SceneVertex;</span><br><span class="line"></span><br><span class="line">// Define    data for a triangle to use in example</span><br><span class="line">//定义三角形顶点</span><br><span class="line">static const SceneVertex vertices[] = </span><br><span class="line">&#123;</span><br><span class="line">   &#123;&#123;-0.5f, -0.5f, 0.0f&#125;, &#123;0.0f, 0.0f&#125;&#125;, // lower left corner</span><br><span class="line">   &#123;&#123; 0.5f, -0.5f, 0.0f&#125;, &#123;1.0f, 0.0f&#125;&#125;, // lower right corner</span><br><span class="line">   &#123;&#123;-0.5f,  0.5f, 0.0f&#125;, &#123;0.0f, 1.0f&#125;&#125;, // upper left corner</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">// Create vertex buffer containing vertices to draw</span><br><span class="line">//这里是定义渲染区域</span><br><span class="line">   self.vertexBuffer = [[AGLKVertexAttribArrayBuffer alloc]</span><br><span class="line">      initWithAttribStride:sizeof(SceneVertex)</span><br><span class="line">      numberOfVertices:sizeof(vertices) / sizeof(SceneVertex)</span><br><span class="line">      bytes:vertices</span><br><span class="line">      usage:GL_STATIC_DRAW];</span><br><span class="line"></span><br><span class="line">self.baseEffect.texture2d0.name = textureInfo.name;</span><br><span class="line">self.baseEffect.texture2d0.target = textureInfo.target;</span><br></pre></td></tr></table></figure>
+<p>下面是init方法：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line">// This method creates a vertex attribute array buffer in</span><br><span class="line">// the current OpenGL ES context for the thread upon which this </span><br><span class="line">// method is called.</span><br><span class="line">- (id)initWithAttribStride:(GLsizei)aStride</span><br><span class="line">   numberOfVertices:(GLsizei)count</span><br><span class="line">   bytes:(const GLvoid *)dataPtr</span><br><span class="line">   usage:(GLenum)usage;</span><br><span class="line">&#123;</span><br><span class="line">   NSParameterAssert(0 &lt; aStride);</span><br><span class="line">   NSAssert((0 &lt; count &amp;&amp; NULL != dataPtr) ||</span><br><span class="line">      (0 == count &amp;&amp; NULL == dataPtr),</span><br><span class="line">      @&quot;data must not be NULL or count &gt; 0&quot;);</span><br><span class="line">      </span><br><span class="line">   if(nil != (self = [super init]))</span><br><span class="line">   &#123;</span><br><span class="line">      stride = aStride;</span><br><span class="line">      bufferSizeBytes = stride * count;</span><br><span class="line">      </span><br><span class="line">      glGenBuffers(1,                // STEP 1</span><br><span class="line">         &amp;name);</span><br><span class="line">      glBindBuffer(GL_ARRAY_BUFFER,  // STEP 2</span><br><span class="line">         self.name); </span><br><span class="line">      glBufferData(                  // STEP 3</span><br><span class="line">         GL_ARRAY_BUFFER,  // Initialize buffer contents</span><br><span class="line">         bufferSizeBytes,  // Number of bytes to copy</span><br><span class="line">         dataPtr,          // Address of bytes to copy</span><br><span class="line">         usage);           // Hint: cache in GPU memory</span><br><span class="line">         </span><br><span class="line">      NSAssert(0 != name, @&quot;Failed to generate name&quot;);</span><br><span class="line">   &#125;</span><br><span class="line">   </span><br><span class="line">   return self;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从这里可以看到图形渲染的前三步，生成缓存<code>glGenBuffers</code>，绑定缓存<code>glBindBuffer</code>，复制数据到缓存<code>glBufferData</code>；</p>
+<p>下面我们来进入今天的重点：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">// Setup texture</span><br><span class="line">CGImageRef imageRef = </span><br><span class="line">   [[UIImage imageNamed:@&quot;leaves.gif&quot;] CGImage];</span><br><span class="line">   </span><br><span class="line">AGLKTextureInfo *textureInfo = [AGLKTextureLoader </span><br><span class="line">   textureWithCGImage:imageRef </span><br><span class="line">   options:nil </span><br><span class="line">   error:NULL];</span><br><span class="line"></span><br><span class="line">self.baseEffect.texture2d0.name = textureInfo.name;</span><br><span class="line">self.baseEffect.texture2d0.target = textureInfo.target;</span><br></pre></td></tr></table></figure>
+<p><code>textureWithCGImage:</code>实现具体细节：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">// This method generates a new OpenGL ES texture buffer and </span><br><span class="line">// initializes the buffer contents using pixel data from the </span><br><span class="line">// specified Core Graphics image, cgImage. This method returns an</span><br><span class="line">// immutable AGLKTextureInfo instance initialized with </span><br><span class="line">// information about the newly generated texture buffer.</span><br><span class="line">//    The generated texture buffer has power of 2 dimensions. The</span><br><span class="line">// provided image data is scaled (re-sampled) by Core Graphics as</span><br><span class="line">// necessary to fit within the generated texture buffer.</span><br><span class="line"></span><br><span class="line">+ (AGLKTextureInfo *)textureWithCGImage:(CGImageRef)cgImage</span><br><span class="line">                                options:(NSDictionary *)options</span><br><span class="line">   error:(NSError **)outError;</span><br><span class="line">&#123;</span><br><span class="line">   // Get the bytes to be used when copying data into new texture</span><br><span class="line">   // buffer</span><br><span class="line">   size_t width;</span><br><span class="line">   size_t height;</span><br><span class="line">   NSData *imageData = AGLKDataWithResizedCGImageBytes(</span><br><span class="line">      cgImage,</span><br><span class="line">      &amp;width,</span><br><span class="line">      &amp;height);</span><br><span class="line">   </span><br><span class="line">   // Generation, bind, and copy data into a new texture buffer</span><br><span class="line">   GLuint      textureBufferID;</span><br><span class="line">   </span><br><span class="line">   glGenTextures(1, &amp;textureBufferID);                  // Step 1</span><br><span class="line">   glBindTexture(GL_TEXTURE_2D, textureBufferID);       // Step 2</span><br><span class="line">   </span><br><span class="line">    //该函数是OGE最复杂的函数</span><br><span class="line">   glTexImage2D(                                        // Step 3</span><br><span class="line">      GL_TEXTURE_2D, //用于2D纹理</span><br><span class="line">      0, //指定MIP帖图的初始细节级别</span><br><span class="line">      GL_RGBA, //指定每个纹素需要保存信息的数量</span><br><span class="line">      (GLuint)width,//</span><br><span class="line">      (GLuint)height,</span><br><span class="line">      0, //围绕纹素的边界的大小,总是被设置为0</span><br><span class="line">      GL_RGBA, </span><br><span class="line">      GL_UNSIGNED_BYTE, </span><br><span class="line">      [imageData bytes]);</span><br><span class="line">   </span><br><span class="line">   // Set parameters that control texture sampling for the bound</span><br><span class="line">   // texture</span><br><span class="line">  glTexParameteri(GL_TEXTURE_2D,</span><br><span class="line">     GL_TEXTURE_MIN_FILTER, </span><br><span class="line">     GL_LINEAR); </span><br><span class="line">   </span><br><span class="line">   // Allocate and initialize the AGLKTextureInfo instance to be</span><br><span class="line">   // returned</span><br><span class="line">   AGLKTextureInfo *result = [[AGLKTextureInfo alloc] </span><br><span class="line">      initWithName:textureBufferID</span><br><span class="line">      target:GL_TEXTURE_2D</span><br><span class="line">      width:(GLuint)width</span><br><span class="line">      height:(GLuint)height];</span><br><span class="line">   </span><br><span class="line">   return result;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>上面这个方法使用Core Graphics图像的像素数据生成一个新的OGE缓存并初始化它，此方法返回一个不变的AGLKtextureinfo实例。</p>
+<p>解释一下这个方法<code>glTexParameteri</code>，该方法为创建的纹理缓存设置OGE取样和循环模式。如果使用了MIP贴图，第二个参数会被设置成GL_LINEAR_MIPMAP_LINEAR，这会告诉OGE使用与被取样的S,T坐标最接近的纹素的线性插值取样两个最合适的MIP贴图图像尺寸。然后，来自MIP贴图的两个样本被线性差值来产生最终的片元颜色。这里涉及的两个概念需要对opengl进行深入了解。</p>
+<p>其中<code>AGLKDataWithResizedCGImageBytes</code>把指定的cgImmage拖入imageData提供的字节中，Core Graphics把cgImage拖入一个适当大小的Core Graphics上下文中，这个过程会把图像的尺寸调整为2的幂，图像在绘制的时候还会被上下翻转，这是因为OGE的原点在左下角而iOS的实现原点却是在左上角，翻转Y轴确保了图像字节拥有适用于纹理缓存的正确的方向。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br></pre></td><td class="code"><pre><span class="line">static NSData *AGLKDataWithResizedCGImageBytes(</span><br><span class="line">   CGImageRef cgImage,</span><br><span class="line">   size_t *widthPtr,</span><br><span class="line">   size_t *heightPtr)</span><br><span class="line">&#123;</span><br><span class="line">   NSCParameterAssert(NULL != cgImage);</span><br><span class="line">   NSCParameterAssert(NULL != widthPtr);</span><br><span class="line">   NSCParameterAssert(NULL != heightPtr);</span><br><span class="line">   </span><br><span class="line">   GLuint originalWidth = (GLuint)CGImageGetWidth(cgImage);</span><br><span class="line">   GLuint originalHeight = (GLuint)CGImageGetWidth(cgImage);</span><br><span class="line">   </span><br><span class="line">   NSCAssert(0 &lt; originalWidth, @&quot;Invalid image width&quot;);</span><br><span class="line">   NSCAssert(0 &lt; originalHeight, @&quot;Invalid image width&quot;);</span><br><span class="line">   </span><br><span class="line">   // Calculate the width and height of the new texture buffer</span><br><span class="line">   // The new texture buffer will have power of 2 dimensions.</span><br><span class="line">   GLuint width = AGLKCalculatePowerOf2ForDimension(</span><br><span class="line">      originalWidth);</span><br><span class="line">   GLuint height = AGLKCalculatePowerOf2ForDimension(</span><br><span class="line">      originalHeight);</span><br><span class="line">      </span><br><span class="line">      //注意这个函数AGLKCalculatePowerOf2ForDimension就是用来取整用的</span><br><span class="line">      </span><br><span class="line">   // Allocate sufficient storage for RGBA pixel color data with </span><br><span class="line">   // the power of 2 sizes specified</span><br><span class="line">   NSMutableData    *imageData = [NSMutableData dataWithLength:</span><br><span class="line">      height * width * 4];  // 4 bytes per RGBA pixel</span><br><span class="line"></span><br><span class="line">   NSCAssert(nil != imageData, </span><br><span class="line">      @&quot;Unable to allocate image storage&quot;);</span><br><span class="line">   </span><br><span class="line">   // Create a Core Graphics context that draws into the </span><br><span class="line">   // allocated bytes</span><br><span class="line">   CGColorSpaceRef colorSpace = CGColorSpaceCreateDeviceRGB();</span><br><span class="line">   CGContextRef cgContext = CGBitmapContextCreate( </span><br><span class="line">      [imageData mutableBytes], width, height, 8, </span><br><span class="line">      4 * width, colorSpace, </span><br><span class="line">      kCGImageAlphaPremultipliedLast);</span><br><span class="line">   CGColorSpaceRelease(colorSpace);</span><br><span class="line">   </span><br><span class="line">   // Flip the Core Graphics Y-axis for future drawing</span><br><span class="line">   CGContextTranslateCTM (cgContext, 0, height);</span><br><span class="line">   CGContextScaleCTM (cgContext, 1.0, -1.0);</span><br><span class="line">   </span><br><span class="line">   // Draw the loaded image into the Core Graphics context </span><br><span class="line">   // resizing as necessary</span><br><span class="line">   CGContextDrawImage(cgContext, CGRectMake(0, 0, width, height),</span><br><span class="line">      cgImage);</span><br><span class="line">   </span><br><span class="line">   CGContextRelease(cgContext);</span><br><span class="line">   </span><br><span class="line">   *widthPtr = width;</span><br><span class="line">   *heightPtr = height;</span><br><span class="line">   </span><br><span class="line">   return imageData;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最后在glk回调中实现真正画图：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">- (void)glkView:(GLKView *)view drawInRect:(CGRect)rect</span><br><span class="line">&#123;</span><br><span class="line">   [self.baseEffect prepareToDraw];</span><br><span class="line">   </span><br><span class="line">   // Clear back frame buffer (erase previous drawing)</span><br><span class="line">   [(AGLKContext *)view.context clear:GL_COLOR_BUFFER_BIT];</span><br><span class="line">   </span><br><span class="line">   [self.vertexBuffer prepareToDrawWithAttrib:GLKVertexAttribPosition</span><br><span class="line">      numberOfCoordinates:3</span><br><span class="line">      attribOffset:offsetof(SceneVertex, positionCoords)</span><br><span class="line">      shouldEnable:YES];</span><br><span class="line">   [self.vertexBuffer prepareToDrawWithAttrib:GLKVertexAttribTexCoord0</span><br><span class="line">      numberOfCoordinates:2</span><br><span class="line">      attribOffset:offsetof(SceneVertex, textureCoords)</span><br><span class="line">      shouldEnable:YES];</span><br><span class="line">      </span><br><span class="line">   // Draw triangles using the first three vertices in the </span><br><span class="line">   // currently bound vertex buffer</span><br><span class="line">   [self.vertexBuffer drawArrayWithMode:GL_TRIANGLES</span><br><span class="line">      startVertexIndex:0</span><br><span class="line">      numberOfVertices:3];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><code>glEnableVertexAttribArray</code>,</p>
+<p><code>glVertexAttribPointer</code>,</p>
+<p><code>glDrawArrays</code></p>
+<p>这里提前熟悉一下这些函数，虽然现在还是对它们不是太理解。</p>
+<p>后面的例子就不一一写了，过程笔记都在代码中，分别涉及到一些概念</p>
+<p><a href="https://github.com/usiege/OpenGLES_iOS/tree/master/OpenGLES_Ch_3_纹理/OpenGLES_Ch3_3" target="_blank" rel="noopener">OpenGLES_Ch3_3取样循环等</a></p>
+<p><a href="https://github.com/usiege/OpenGLES_iOS/tree/master/OpenGLES_Ch_3_纹理/OpenGLES_Ch3_4" target="_blank" rel="noopener">OpenGLES_Ch3_4混合片元颜色</a></p>
+<p><a href="https://github.com/usiege/OpenGLES_iOS/tree/master/OpenGLES_Ch_3_纹理/OpenGLES_Ch3_5" target="_blank" rel="noopener">OpenGLES_Ch3_5多重纹理</a></p>
+<p><a href="https://github.com/usiege/OpenGLES_iOS/tree/master/OpenGLES_Ch_3_纹理/OpenGLES_Ch3_6" target="_blank" rel="noopener">OpenGLES_Ch3_6自定义纹理</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/opengles/" rel="tag"># opengles</a>
+          
+            <a href="/tags/texture/" rel="tag"># texture</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/05/29/iOS 作为Central蓝牙连接外围（下）/" rel="next" title="iOS 作为Central蓝牙连接外围（下）">
+                <i class="fa fa-chevron-left"></i> iOS 作为Central蓝牙连接外围（下）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/06/15/OpenGL-初识/" rel="prev" title="OpenGL-初识">
+                OpenGL-初识 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#Demo-渲染图片Demo代码"><span class="nav-number">1.</span> <span class="nav-text">Demo:渲染图片Demo代码</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

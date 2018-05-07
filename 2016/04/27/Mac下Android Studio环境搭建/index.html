@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Android Studio,mac," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="本篇还原了本人在Macbook pro上安装Android Studio2.0的过程，安装环境是OS X EI Capitan 10.11.4；">
+<meta name="keywords" content="Android Studio,mac">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mac下Android Studio环境搭建">
+<meta property="og:url" content="http://charlesblog.site/2016/04/27/Mac下Android Studio环境搭建/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="本篇还原了本人在Macbook pro上安装Android Studio2.0的过程，安装环境是OS X EI Capitan 10.11.4；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-80f5a33c449dec04?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-be1726d680728df3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-ec89f55cd82937b3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-76fee3c672cffe2b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-a4f081f44e57151c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-769d654f67efd23f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-08a78264896a3537?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.730Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Mac下Android Studio环境搭建">
+<meta name="twitter:description" content="本篇还原了本人在Macbook pro上安装Android Studio2.0的过程，安装环境是OS X EI Capitan 10.11.4；">
+<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429775-80f5a33c449dec04?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/04/27/Mac下Android Studio环境搭建/"/>
+
+
+
+
+
+  <title>Mac下Android Studio环境搭建 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/04/27/Mac下Android Studio环境搭建/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mac下Android Studio环境搭建</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-04-27T08:25:00+08:00">
+                2016-04-27
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>本篇还原了本人在Macbook pro上安装Android Studio2.0的过程，安装环境是OS X EI Capitan 10.11.4；<br><a id="more"></a></p>
+<p>下载Java SDK包，Android Studio安装包，android SDK包，这些资源在<a href="http://www.android-studio.org/index.php/download这个网站上都可以找到；" target="_blank" rel="noopener">http://www.android-studio.org/index.php/download这个网站上都可以找到；</a></p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-80f5a33c449dec04?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="网站标题"></p>
+<p>首先安装Java SDK包，这个安装的时候比较容易，直接双击点开的包就可以了；</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-be1726d680728df3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="JDK"></p>
+<p>安装Android Studio，打开安装包装包拖入到自己Applications中，</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-ec89f55cd82937b3?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDK"></p>
+<p>安装完成后双击，它会提示你要不要打开，这个时候先不要打开，在Applications中右击显示包内容，在Contents/bin下打开idea.properties文件，在文件末尾添加一行：</p>
+<p><code>disable.android.first.run=true</code></p>
+<p>这是因为Android Studio会去获取 android sdk 组件信息，这个过程相当慢，还经常加载失败，导致Android Studio启动不起开。解决办法就是不去获取android sdk 组件信息。这个慢的原因，是因为android网站被墙了，必须翻墙才能访问到！所以如果你的电脑已经翻墙了，那么完全可以跳过这一步。</p>
+<p>接下来点打开，如果是先打开后修改的话它会提示你的包已经损坏，并让你删除；</p>
+<p>然后就是配置android SDK的目录了，我们把下载下来的包放到一个不经常修改的目录下，然后记住它的目录，我的是</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-76fee3c672cffe2b?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="SDK放在这里"></p>
+<p>Android SDK Location就写你的SDK放置的路径，</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-a4f081f44e57151c?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>然后点Next就可以了，点完之后电脑会反应一会，时间会比较长，不要以为它什么都没有在干，等一会就好了。</p>
+<p>下一步我们来安装SDK，进入到设置好的SDK目录下，使用命令行进入tools目录，输入<code>./android sdk</code>请出SDK Manager图形界面，点击顶部菜单栏Android SDK Manager -&gt; Preferences…</p>
+<p>进入配置页面，http proxy server这里填写： mirrors.neusoft.edu.cn （感谢东软搭建国内的镜像服务器，为广大程序员造福无数），如果以上填写的不能下载，也可以试着填写mirrors.opencas.ac.cn（这个也是从网上找的，感谢这些人的贡献）</p>
+<p>端口填写80，然后把Force https:// 前的勾勾上，然后点击mac顶部菜单Tools-&gt;Manage Add-on Site，把下面这堆网址：</p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/addon-6.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/addon-6.xml</a></p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/addon.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/addon.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/extras/intel/addon.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/extras/intel/addon.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/sys-img/android-tv/sys-img.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/sys-img/android-tv/sys-img.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/sys-img/android-wear/sys-img.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/sys-img/android-wear/sys-img.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/sys-img/android/sys-img.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/sys-img/android/sys-img.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/sys-img/google_apis/sys-img.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/sys-img/google_apis/sys-img.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/sys-img/x86/addon-x86.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/sys-img/x86/addon-x86.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/addons_list-2.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/addons_list-2.xml</a> </p>
+<p><a href="http://mirrors.neusoft.edu.cn/android/repository/repository-10.xml" target="_blank" rel="noopener">http://mirrors.neusoft.edu.cn/android/repository/repository-10.xml</a></p>
+<p>全手动New加进去，然后就可以下载了</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-769d654f67efd23f?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="image"></p>
+<p>接下来点击安装，下面是我安装过程中截的图：</p>
+<p><img src="http://upload-images.jianshu.io/upload_images/1429775-08a78264896a3537?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="等待良人归来那一秒。。。"></p>
+<p>接下来，你需要的是漫长的等待。。。。。。</p>
+<p>你的Android Studio就安装完成了。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Android-Studio/" rel="tag"># Android Studio</a>
+          
+            <a href="/tags/mac/" rel="tag"># mac</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2016/03/01/开始OpenGLES的探索/" rel="next" title="开始OpenGLES的探索">
+                <i class="fa fa-chevron-left"></i> 开始OpenGLES的探索
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/05/06/Python抓取One网页上的内容/" rel="prev" title="Python抓取One网页上的内容">
+                Python抓取One网页上的内容 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">41</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">30</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="30" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>
