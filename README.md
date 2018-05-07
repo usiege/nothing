@@ -2,7 +2,7 @@
 github personal pages
 
 # 2018.05.07
-使用新站点[charlesblog.site](http://charlesblog.site)
+使用新站点 [charlesblog.site](http://charlesblog.site)
 
 # 2018.05.04
 改版声明，博客原使用Python/Pelican进行发布；
