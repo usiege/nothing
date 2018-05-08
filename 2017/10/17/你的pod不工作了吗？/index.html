@@ -390,29 +390,29 @@
       
 
       
-        <p>最近公司的项目需要添加几个依赖库，用pod更新的时候发现一直卡在了<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Setting up CocoaPods master repo</span><br></pre></td></tr></table></figure></p>
+        <p>最近公司的项目需要添加几个依赖库，用pod更新的时候发现一直卡在了<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Setting up CocoaPods <span class="keyword">master</span> <span class="title">repo</span></span><br></pre></td></tr></table></figure></p>
 <a id="more"></a>
 <p>继而是漫长的等待，在这个期间我不知道它发生了什么。</p>
 <p>在这种等待中，程序员一般会选择做一些别的事情。于是我上网验证了一下我的行为，结论告诉我：</p>
 <p>1.我要开个VPN；</p>
 <p>2.我需要重新安装一下pod，因为它已经不工作了；</p>
 <p>首先要先检查一下ruby源：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">gem sources -l</span><br></pre></td></tr></table></figure>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">gem sources -l</span></span><br></pre></td></tr></table></figure>
 <p>返回的结果是<a href="https://rubygems.org/，如果你在网上找到过其他源并且修改过它，并且你不确定你的源是否可以使用的话，那么请修改回来，买个VPN，这会让你节省很多不必要的劳动，你可以用以下代码修改源：" target="_blank" rel="noopener">https://rubygems.org/，如果你在网上找到过其他源并且修改过它，并且你不确定你的源是否可以使用的话，那么请修改回来，买个VPN，这会让你节省很多不必要的劳动，你可以用以下代码修改源：</a></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">#移除旧源</span><br><span class="line">gem sources --remove 旧源址</span><br><span class="line">#添加新源</span><br><span class="line">gem sources -a https://rubygems.org/</span><br></pre></td></tr></table></figure>
+<figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#移除旧源</span></span><br><span class="line">gem sources <span class="comment">--remove 旧源址</span></span><br><span class="line"><span class="comment">#添加新源</span></span><br><span class="line">gem sources -<span class="keyword">a</span> <span class="keyword">https</span>://rubygems.org/</span><br></pre></td></tr></table></figure>
 <p>PS:请确保你的源可用！！！</p>
 <p>接着如果你没有安装pod，请执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem install cocoapods</span><br></pre></td></tr></table></figure>
+<figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem <span class="keyword">install</span> cocoapods</span><br></pre></td></tr></table></figure>
 <p>如果你已经安装pod，请执行：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod setup</span><br></pre></td></tr></table></figure>
+<figure class="highlight arduino"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod <span class="built_in">setup</span></span><br></pre></td></tr></table></figure>
 <p>这个操作结束之后，又重现了一个漫长的等待过程，那么我们要清楚它是否在认真工作，请打开另外一个终端，我们要检查一下进度：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">#进入到pod目录</span><br><span class="line">cd ~/.cocoapods</span><br><span class="line"></span><br><span class="line">#检查当前文件下所有文件的大小，此后如果你不放心，可以分时段检查一下</span><br><span class="line">du -sh *</span><br></pre></td></tr></table></figure>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入到pod目录</span></span><br><span class="line"><span class="keyword">cd</span> ~<span class="string">/.cocoapods</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#检查当前文件下所有文件的大小，此后如果你不放心，可以分时段检查一下</span></span><br><span class="line">du -sh *</span><br></pre></td></tr></table></figure>
 <p>这个过程会很漫长，取决于你VPN的速度，最后我这边出结果会反馈绿色的文字，Setup completed!文件总大小是1.2G，所以还是耐心的等待吧。。。</p>
-<p>另外还有一点，如果上述<code>pod setup</code>出现红色的错误信息，也有可能是gem没有到最新版本，那么你还需要用你的VPN更新一下gem到最新；<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem update --system</span><br></pre></td></tr></table></figure></p>
-<p>PS:顺便记一下寻找库代码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pod search AFNetworking</span><br></pre></td></tr></table></figure></p>
-<p>这个时候会遇到这样的提示：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[!] Unable to find a pod with name, author, summary, or descriptionmatching `AFNetworking`</span><br></pre></td></tr></table></figure></p>
-<p>你需要做如下操作，再进行搜索：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm ~/Library/Caches/CocoaPods/search_index.json</span><br></pre></td></tr></table></figure></p>
-<p>最后你将如愿以偿，感谢亲人：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Creating search index for spec repo &apos;master&apos;.. Done!</span><br></pre></td></tr></table></figure></p>
+<p>另外还有一点，如果上述<code>pod setup</code>出现红色的错误信息，也有可能是gem没有到最新版本，那么你还需要用你的VPN更新一下gem到最新；<br><figure class="highlight n1ql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo gem <span class="keyword">update</span> --<span class="keyword">system</span></span><br></pre></td></tr></table></figure></p>
+<p>PS:顺便记一下寻找库代码<br><figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">pod search AFNetworking</span></span><br></pre></td></tr></table></figure></p>
+<p>这个时候会遇到这样的提示：<br><figure class="highlight sqf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[!] Unable <span class="keyword">to</span> <span class="built_in">find</span> a pod <span class="keyword">with</span> <span class="built_in">name</span>, author, summary, <span class="built_in">or</span> descriptionmatching `AFNetworking`</span><br></pre></td></tr></table></figure></p>
+<p>你需要做如下操作，再进行搜索：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rm ~<span class="regexp">/Library/</span>Caches<span class="regexp">/CocoaPods/</span>search_index.json</span><br></pre></td></tr></table></figure></p>
+<p>最后你将如愿以偿，感谢亲人：<br><figure class="highlight gams"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="title">Creating</span></span> search index <span class="keyword">for</span> spec repo <span class="string">'master'</span>.. Done!</span><br></pre></td></tr></table></figure></p>
 
       
     </div>
@@ -519,7 +519,7 @@
                 alt="Charles" />
             
               <p class="site-author-name" itemprop="name">Charles</p>
-              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,everything is permitted.</p>
           </div>
 
           <nav class="site-state motion-element">

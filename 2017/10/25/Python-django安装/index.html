@@ -401,18 +401,18 @@
 <li><p>于是查了下更新pip的方法： </p>
 </li>
 </ol>
-<p>查看pip版本<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip -version</span><br></pre></td></tr></table></figure></p>
-<p>升级方法<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install -U pip</span><br></pre></td></tr></table></figure></p>
-<p>如果pip出现有问题，或者你花了很长的时间想用pip安装，例如使用下面这种方式：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install Django==1.8.16</span><br></pre></td></tr></table></figure></p>
+<p>查看pip版本<br><figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip -<span class="built_in">version</span></span><br></pre></td></tr></table></figure></p>
+<p>升级方法<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip <span class="keyword">install</span> -U pip</span><br></pre></td></tr></table></figure></p>
+<p>如果pip出现有问题，或者你花了很长的时间想用pip安装，例如使用下面这种方式：<br><figure class="highlight lsl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip install Django==<span class="number">1.8</span><span class="number">.16</span></span><br></pre></td></tr></table></figure></p>
 <p>如果你刚好安装成功，那么恭喜你；如果不是，那么我们就要使用另外一种方法； </p>
 <ol start="3">
 <li>下载安装</li>
 </ol>
 <p><a href="https://github.com/django/django/archive/master.tar.gz" target="_blank" rel="noopener">gzip压缩包</a></p>
-<p>或者：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git clone https://github.com/django/django.git</span><br></pre></td></tr></table></figure></p>
-<p>下载完成之后：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf django-master.tar.gz</span><br><span class="line">cd django-master</span><br><span class="line">python setup.py install</span><br></pre></td></tr></table></figure></p>
-<p>会出现下面的问题：<br><img src="http://static.zybuluo.com/usiege/skgzjd12wfs2u973aidsrk7o/image_1bt9ib15m8juqh01adb1hlb154k9.png" alt="image_1bt9ib15m8juqh01adb1hlb154k9.png-97.5kB"><br>继续找：<br>Because you’re trying to install it on Python2, but the latest version of Django requires Python 3;<br>所以使用安装方法：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 install -e django</span><br></pre></td></tr></table></figure></p>
-<p>这个仍然是联网安装，但是貌似<code>pytz</code>并不能连接上，vpn也不行；<br>所以:<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cd django</span><br><span class="line">python3 setup.py install</span><br></pre></td></tr></table></figure></p>
+<p>或者：<br><figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git <span class="keyword">clone</span> <span class="title">https</span>://github.com/django/django.git</span><br></pre></td></tr></table></figure></p>
+<p>下载完成之后：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">tar -xvf django-master<span class="selector-class">.tar</span><span class="selector-class">.gz</span></span><br><span class="line">cd django-master</span><br><span class="line">python setup<span class="selector-class">.py</span> install</span><br></pre></td></tr></table></figure></p>
+<p>会出现下面的问题：<br><img src="http://static.zybuluo.com/usiege/skgzjd12wfs2u973aidsrk7o/image_1bt9ib15m8juqh01adb1hlb154k9.png" alt="image_1bt9ib15m8juqh01adb1hlb154k9.png-97.5kB"><br>继续找：<br>Because you’re trying to install it on Python2, but the latest version of Django requires Python 3;<br>所以使用安装方法：<br><figure class="highlight cmake"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pip3 <span class="keyword">install</span> -e django</span><br></pre></td></tr></table></figure></p>
+<p>这个仍然是联网安装，但是貌似<code>pytz</code>并不能连接上，vpn也不行；<br>所以:<br><figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">cd</span> django</span><br><span class="line"><span class="keyword">python3</span> setup.<span class="keyword">py</span> install</span><br></pre></td></tr></table></figure></p>
 <p>终于，你的django完成了；</p>
 <p>续：<br>隔天使用以上的所有方法均可以，可能是十九大开会期间被墙掉了吧。<br><img src="http://static.zybuluo.com/usiege/06h0phv3szekmv2l4x2cmurb/image_1btbid9ijfnd1q2i15npd78l9p9.png" alt="image_1btbid9ijfnd1q2i15npd78l9p9.png-253.6kB"></p>
 
@@ -523,7 +523,7 @@
                 alt="Charles" />
             
               <p class="site-author-name" itemprop="name">Charles</p>
-              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,everything is permitted.</p>
           </div>
 
           <nav class="site-state motion-element">

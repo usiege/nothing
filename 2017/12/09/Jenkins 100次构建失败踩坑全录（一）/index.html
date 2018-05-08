@@ -417,22 +417,22 @@
 <h2 id="关卡1-："><a href="#关卡1-：" class="headerlink" title="关卡1 ："></a>关卡1 ：</h2><p>安装Jenkins：首先你的电脑得有一个Java环境，接下来安装Jenkins。你可以直接去<a href="https://jenkins.io" target="_blank" rel="noopener">Jenkins入口</a>网站，查看安装方式；<br>当然你也可以使用以下方法：</p>
 <ul>
 <li><p>安装homebrew</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ruby -e &quot;$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)&quot;</span><br></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ruby -e <span class="string">"<span class="variable">$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)</span>"</span></span></span><br></pre></td></tr></table></figure>
 </li>
 <li><p>安装jenkins</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ brew install jenkins</span><br></pre></td></tr></table></figure>
+<figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">brew </span><span class="keyword">install </span><span class="keyword">jenkins</span></span><br></pre></td></tr></table></figure>
 </li>
 </ul>
 <p>安装成功后需要开启jenkins服务；</p>
-<h2 id="关卡2-："><a href="#关卡2-：" class="headerlink" title="关卡2 ："></a>关卡2 ：</h2><p>开启Jenkins服务：确认jenkins已安装，在终端进入到jenkins安装目录下，会有一个叫做jenkins.war的文件，<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java -jar jenkins.war</span><br></pre></td></tr></table></figure></p>
-<p>或者在终端输入：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ jenkins</span><br></pre></td></tr></table></figure></p>
+<h2 id="关卡2-："><a href="#关卡2-：" class="headerlink" title="关卡2 ："></a>关卡2 ：</h2><p>开启Jenkins服务：确认jenkins已安装，在终端进入到jenkins安装目录下，会有一个叫做jenkins.war的文件，<br><figure class="highlight mipsasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="keyword">java </span>-<span class="keyword">jar </span><span class="keyword">jenkins.war</span></span><br></pre></td></tr></table></figure></p>
+<p>或者在终端输入：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> jenkins</span></span><br></pre></td></tr></table></figure></p>
 <p>当出现：<br><img src="http://static.zybuluo.com/usiege/uowhxmph61xngu3l2t4hxamh/image_1c0ptnl2j13mh1mn2hmk18qf7usp.png" alt="image_1c0ptnl2j13mh1mn2hmk18qf7usp.png-188.1kB"></p>
 <p>服务已经就位，可以开始进行配置了；</p>
-<p>这里还有两个命令用于jenkins开启和停用（Mac上）：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo launchctl load /Library/LaunchDaemons/org.jenkins-ci.plist</span><br><span class="line">$ sudo launchctl unload /Library/LaunchDaemons/org.jenkins-ci.plist</span><br></pre></td></tr></table></figure></p>
-<p>如果是linux上也可以这样：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo systemctl status jenkins.service</span><br><span class="line">$ sudo systemctl start jenkins.service</span><br></pre></td></tr></table></figure></p>
+<p>这里还有两个命令用于jenkins开启和停用（Mac上）：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ sudo launchctl load /Library/LaunchDaemons/org<span class="selector-class">.jenkins-ci</span><span class="selector-class">.plist</span></span><br><span class="line">$ sudo launchctl unload /Library/LaunchDaemons/org<span class="selector-class">.jenkins-ci</span><span class="selector-class">.plist</span></span><br></pre></td></tr></table></figure></p>
+<p>如果是linux上也可以这样：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl status jenkins.service</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> sudo systemctl start jenkins.service</span></span><br></pre></td></tr></table></figure></p>
 <p>不过实际操作过程中，可能会出现停用失败的情况，我的做法是直接打开活动监视器，在里面搜java服务，强制关闭掉；这里需要注意，如果服务没有停止再进行jenkins开启是不成功的，提示会告诉你已经在用：</p>
 <p><img src="http://static.zybuluo.com/usiege/s46xl40yzd7t5gijpwdippc9/image_1c0pu09in491qq31bqs25f1hbg26.png" alt="image_1c0pu09in491qq31bqs25f1hbg26.png-222.9kB"></p>
-<p>如果你想查看是否jenkins在运行，使用命令查看：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ps aux | grep jenkins</span><br></pre></td></tr></table></figure></p>
+<p>如果你想查看是否jenkins在运行，使用命令查看：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> ps aux | grep jenkins</span></span><br></pre></td></tr></table></figure></p>
 <h2 id="关卡3-："><a href="#关卡3-：" class="headerlink" title="关卡3 ："></a>关卡3 ：</h2><p>安装并开启完成就可以在浏览器里输入<a href="localhost:8080" target="_blank" rel="noopener">localhost:8080</a>进行页面化配置了；<br>安装完成之后，Safari可能会自动打开，如果没有自动打开，打开浏览器，输入<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a><br><img src="http://static.zybuluo.com/usiege/fn2f1wx006r3chny2t5u9atc/image_1c0pvjgjqfbg3i01c371uhc1ves2j.png" alt="image_1c0pvjgjqfbg3i01c371uhc1ves2j.png-27.6kB"></p>
 <p>这个时候可能会报一个错误。如果出现了这面的问题。出现这个问题的原因就是Java环境有问题，重启Java环境即可。</p>
 <p>这个时候如果你重启电脑会发现Jenkins给你新增了一个用户，名字就叫Jenkins，不过这个时候你不知道密码。你可能会去试密码，肯定是是不对的，因为初始密码很复杂。这个时候正确做法是打开<a href="http://localhost:8080" target="_blank" rel="noopener">http://localhost:8080</a> 会出现下图的重设初始密码的界面。</p>
@@ -461,7 +461,7 @@
 <p>如果有多个，则点击Add Code Signing Identity添加；</p>
 <p>然后是PP文件，这些文件需要我们从系统PP文件夹下复制到Jenkins资源文件夹下，如下图两个路径：<br>这个是系统PP文件目录<br><img src="http://static.zybuluo.com/usiege/peonwampxc6wa9h3i2yuhfm5/image_1c0qkdte41j1rgq81k8v1bi19f4f5.png" alt="image_1c0qkdte41j1rgq81k8v1bi19f4f5.png-144.2kB"><br>这个是Jenkins PP文件目录<br><img src="http://static.zybuluo.com/usiege/v0firte6p13gwec9a133ixi1/image_1c0qkkk833p0nt18andthn9qfi.png" alt="image_1c0qkkk833p0nt18andthn9qfi.png-79.2kB"></p>
 <p>Provisioning Profiles Directory Path 填写成，注意替换为自己的username：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">/User/&#123;USERNAME&#125;/Library/MobileDevice/Provisioning Profiles</span><br></pre></td></tr></table></figure>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="regexp">/User/</span>&#123;USERNAME&#125;<span class="regexp">/Library/</span>MobileDevice<span class="regexp">/Provisioning Profiles</span></span><br></pre></td></tr></table></figure>
 <p>接着去你苹果帐号里去找你对应打包所需要的PP文件，然后点upload上传到Jenkins环境里；<br>以上，证书部分解决；</p>
 <h2 id="关卡-5"><a href="#关卡-5" class="headerlink" title="关卡 5"></a>关卡 5</h2><p>创建项目过程我们会对各个需要的项进行逐个描述：<br>点新建项目，输入项目名称，选择 构建一个自由风格的软件项目，然后确定，进入配置页面。<br><img src="http://static.zybuluo.com/usiege/1ytel52lwidafke7uv5rmgb0/image_1c0ql3ppk1bht1b5ms4hcui1jpjfv.png" alt="image_1c0ql3ppk1bht1b5ms4hcui1jpjfv.png-8.2kB"></p>
 <ul>
@@ -471,11 +471,11 @@
 <ul>
 <li>源码管理<br>这里我选的Git，<strong>Repository URL</strong>填你工程的git地址，选用帐号密码的形式应该是以http或https开头的，<strong>Credentials</strong>填你在上一步中新建好的，<br><img src="http://static.zybuluo.com/usiege/bzufeuzktht55r97i2bsem18/image_1c0qlt20313duogl2g51hp11nqsgp.png" alt="image_1c0qlt20313duogl2g51hp11nqsgp.png-73kB"><br><strong>Branch Specifier (blank for ‘any’)</strong>    填你要进行构建的分支，我这里是<code>*/release</code>；</li>
 </ul>
-<p>这里我们PS一个隐藏BOSS：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">returned status code 143 jenkins</span><br><span class="line">ERROR: Error fetching remote repo ‘origin’</span><br></pre></td></tr></table></figure></p>
+<p>这里我们PS一个隐藏BOSS：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">returned status code 143 jenkins</span><br><span class="line"><span class="keyword">ERROR: </span>Error fetching remote repo ‘origin’</span><br></pre></td></tr></table></figure></p>
 <p>这个报错是工程配置结束后进行构建后提示的，我当时搞这个发现远程代码明明是已经拉取到本地的，只是在拉取过程中会发生中断，本人在进行了将近50次试错后发现这个拉取到本地的代码率是变化的，先前以为是SSH帐号的问题，于是转头花了一天的时间搞了下SSH，后来SSH搞通后发现该问题仍然存在，后来终于在经历百度，谷歌，搜狗也用上的（不得不说有时候百度搜不出来的搜狗能搜到），发现了几篇有用的，后来解决，也算是不负辛苦，后面有踩坑的伙伴多注意，前车之鉴后事之师；</p>
 <p><a href="http://blog.sina.com.cn/s/blog_72ef7bea0102vo9w.html" target="_blank" rel="noopener">http://blog.sina.com.cn/s/blog_72ef7bea0102vo9w.html</a><br><a href="https://issues.jenkins-ci.org/browse/JENKINS-20445" target="_blank" rel="noopener">https://issues.jenkins-ci.org/browse/JENKINS-20445</a><br><a href="https://stackoverflow.com/questions/35069079/jenkins-git-plugin-timeout-when-try-to-pull-repositoty-using-ssh" target="_blank" rel="noopener">https://stackoverflow.com/questions/35069079/jenkins-git-plugin-timeout-when-try-to-pull-repositoty-using-ssh</a></p>
 <p>解决方案就在于这个<strong>Timeout</strong>，相信你看了这个单词就知道是怎么回事了：<br><img src="http://static.zybuluo.com/usiege/firl86lawiru1uvz1jhelb28/image_1c0qmnlafh2p1j571b4ettv1ncah6.png" alt="image_1c0qmnlafh2p1j571b4ettv1ncah6.png-74.3kB"></p>
-<p>另顺便粘一个code 128的链接，是个与该问题相关的问题，因为这些问题关键字有的重复，所以搜出来的文章有时会误导，所以请仔细辨别：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">returned status code 128 jenkins</span><br><span class="line">ERROR: Error cloning remote repo &apos;origin&apos;</span><br><span class="line">stderr: Permission denied (publickey).</span><br></pre></td></tr></table></figure></p>
+<p>另顺便粘一个code 128的链接，是个与该问题相关的问题，因为这些问题关键字有的重复，所以搜出来的文章有时会误导，所以请仔细辨别：<br><figure class="highlight subunit"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">returned status code 128 jenkins</span><br><span class="line"><span class="keyword">ERROR: </span>Error cloning remote repo 'origin'</span><br><span class="line">stderr: Permission denied (publickey).</span><br></pre></td></tr></table></figure></p>
 <p><a href="http://wantcoding.com/?p=293" target="_blank" rel="noopener">http://wantcoding.com/?p=293</a><br><a href="http://www.cnblogs.com/EasonJim/p/6266892.html" target="_blank" rel="noopener">这个链接是附送的，进去多看看你会有惊喜，还有QQ群哦</a></p>
 
       
@@ -592,7 +592,7 @@
                 alt="Charles" />
             
               <p class="site-author-name" itemprop="name">Charles</p>
-              <p class="site-description motion-element" itemprop="description">Nothing is true,every is permitted.</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true,everything is permitted.</p>
           </div>
 
           <nav class="site-state motion-element">
