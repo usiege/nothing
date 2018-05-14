@@ -90,7 +90,7 @@
 <meta property="og:description" content="OpenMP在Mac上的安装，涉及到一些编译器的历史。。。">
 <meta property="og:locale" content="zh-CN">
 <meta property="og:image" content="http://static.zybuluo.com/usiege/voi9cducaj6qxf9gyj22j7o5/image_1cdaaol7q1a32nov11t4108hg4vm.png">
-<meta property="og:updated_time" content="2018-05-14T03:05:05.142Z">
+<meta property="og:updated_time" content="2018-05-14T03:19:31.502Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Mac下安装OpenMP并完成编译">
 <meta name="twitter:description" content="OpenMP在Mac上的安装，涉及到一些编译器的历史。。。">
@@ -397,7 +397,7 @@
 <h2 id="安装错误"><a href="#安装错误" class="headerlink" title="安装错误"></a>安装错误</h2><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Problem: No available formula <span class="keyword">with</span> the name <span class="string">"clang-omp"</span></span><br><span class="line"></span><br><span class="line">ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span> &lt; <span class="regexp">/dev/</span><span class="literal">null</span> <span class="number">2</span>&gt; <span class="regexp">/dev/</span><span class="literal">null</span></span><br></pre></td></tr></table></figure>
 <p><a href="http://macappstore.org/clang-omp/" target="_blank" rel="noopener">安装错误参考</a>，用以上方法发现未解决问题；</p>
 <blockquote>
-<p>fatal: unable to access ‘<a href="https://github.com/Homebrew/homebrew-core/&#39;" target="_blank" rel="noopener">https://github.com/Homebrew/homebrew-core/&#39;</a>: LibreSSL SSL_read: SSL_ERROR_SYSCALL, errno 54<br>Error: Fetching /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core failed!<br>Error: Could not link:<br>/usr/local/share/man/man1/brew.1</p>
+<p>fatal: unable to access <a href="https://github.com/Homebrew/homebrew-core/" target="_blank" rel="noopener">https://github.com/Homebrew/homebrew-core</a>:<br>LibreSSL SSL_read: SSL_ERROR_SYSCALL, errno 54<br>Error: Fetching /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core failed!<br>Error: Could not link:<br>/usr/local/share/man/man1/brew.1</p>
 </blockquote>
 <blockquote>
 <p>Please delete these paths and run <code>brew update</code>.<br>Error: Could not link:<br>/usr/local/share/doc/homebrew</p>
