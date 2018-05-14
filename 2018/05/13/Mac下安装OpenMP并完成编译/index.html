@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="Mac,OpenMP," />
 
 
 
@@ -81,20 +81,20 @@
 
 
 
-<meta name="description" content="图为古时维京人，可能与魔兽早期人类的原型有关，此篇不讨论。">
-<meta name="keywords" content="NOTHING">
+<meta name="description" content="OpenMP在Mac上的安装，涉及到一些编译器的历史。。。">
+<meta name="keywords" content="Mac,OpenMP">
 <meta property="og:type" content="article">
-<meta property="og:title" content="人类是如何产生的？魔兽告诉你">
-<meta property="og:url" content="http://charlesblog.site/2016/08/18/人类是如何产生的？魔兽告诉你/index.html">
+<meta property="og:title" content="Mac下安装OpenMP并完成编译">
+<meta property="og:url" content="http://charlesblog.site/2018/05/13/Mac下安装OpenMP并完成编译/index.html">
 <meta property="og:site_name" content="NOTHING">
-<meta property="og:description" content="图为古时维京人，可能与魔兽早期人类的原型有关，此篇不讨论。">
+<meta property="og:description" content="OpenMP在Mac上的安装，涉及到一些编译器的历史。。。">
 <meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://upload-images.jianshu.io/upload_images/1429775-bc7aca2399e81c44.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
-<meta property="og:updated_time" content="2018-05-07T02:17:42.734Z">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/voi9cducaj6qxf9gyj22j7o5/image_1cdaaol7q1a32nov11t4108hg4vm.png">
+<meta property="og:updated_time" content="2018-05-14T03:05:05.142Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="人类是如何产生的？魔兽告诉你">
-<meta name="twitter:description" content="图为古时维京人，可能与魔兽早期人类的原型有关，此篇不讨论。">
-<meta name="twitter:image" content="http://upload-images.jianshu.io/upload_images/1429775-bc7aca2399e81c44.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta name="twitter:title" content="Mac下安装OpenMP并完成编译">
+<meta name="twitter:description" content="OpenMP在Mac上的安装，涉及到一些编译器的历史。。。">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/voi9cducaj6qxf9gyj22j7o5/image_1cdaaol7q1a32nov11t4108hg4vm.png">
 
 
 
@@ -124,13 +124,13 @@
 
 
 
-  <link rel="canonical" href="http://charlesblog.site/2016/08/18/人类是如何产生的？魔兽告诉你/"/>
+  <link rel="canonical" href="http://charlesblog.site/2018/05/13/Mac下安装OpenMP并完成编译/"/>
 
 
 
 
 
-  <title>人类是如何产生的？魔兽告诉你 | NOTHING</title>
+  <title>Mac下安装OpenMP并完成编译 | NOTHING</title>
   
 
 
@@ -270,7 +270,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/08/18/人类是如何产生的？魔兽告诉你/">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/05/13/Mac下安装OpenMP并完成编译/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Charles">
@@ -287,7 +287,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">人类是如何产生的？魔兽告诉你</h1>
+          <h1 class="post-title" itemprop="name headline">Mac下安装OpenMP并完成编译</h1>
         
 
         <div class="post-meta">
@@ -299,8 +299,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-08-18T08:46:00+08:00">
-                2016-08-18
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-13T00:47:28+08:00">
+                2018-05-13
               </time>
             
 
@@ -322,8 +322,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/Azeroth/" itemprop="url" rel="index">
-                    <span itemprop="name">Azeroth</span>
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
                   </a>
                 </span>
 
@@ -355,7 +355,7 @@
                   <span class="post-meta-item-text">Words count in article&#58;</span>
                 
                 <span title="Words count in article">
-                  738
+                  776
                 </span>
               
 
@@ -371,7 +371,7 @@
                   <span class="post-meta-item-text">Reading time &asymp;</span>
                 
                 <span title="Reading time">
-                  2
+                  4
                 </span>
               
             </div>
@@ -392,18 +392,50 @@
       
 
       
-        <p><img src="http://upload-images.jianshu.io/upload_images/1429775-bc7aca2399e81c44.jpg?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt=""></p>
-<p>图为古时维京人，可能与魔兽早期人类的原型有关，此篇不讨论。</p>
-<a id="more"></a>
-<p>今天我们要说的是，人类的崛起。</p>
-<p>前面我们说到奥丁被洛肯封印在了英灵殿中，而追随他的泰坦造物也被洛肯流放到了卡利姆多的北方。这些泰坦造物里主要有两个分支，一个是维库人，一个是土灵。他们各自分裂成一些小的派系，在北方的土地上过着严酷的游牧生活。同时他们也受到了尤格隆萨的“血肉诅咒”使得他们不再拥有泰坦造物原有的特征：钢铁皮肤与长生不老。</p>
-<p>接下来爆发了“冬履之战”，战斗主要涉及了洛肯嫡系部队火巨人沃坎及伊格尼斯，这两人在魔兽游戏里没有注意到，总之在魔兽编年史中的戏份不多，这里只是挑起了维库的冬履氏族和土灵人的战争，他们创造了熔火魔像和钢铁构造体，之后还奴役了元龙，冬履大战结束后却不知去向何处；接下来涉及到的是维库的冬履氏族和土灵，冬履氏族主动攻击了众多土灵，而土灵则请求守护者提尔的帮助；提尔后期又请求了五色元龙的援助，五色元龙参战。</p>
-<p>战争结果是，冬履氏族被全数催眠封印在地底，土灵只有一小部分存活，后也被封印在了奥达曼中，元龙依旧履行起了守护世界的职责。</p>
-<p>这样一来，在卡利姆多北方的土地上，只留下了部分的维库人氏族，其中最为强大的就是掠龙人氏族，而这个氏族，便是人类的祖先。</p>
-<p>维库人无法抵御血肉诅咒，新生儿瘦小而畸形，不再拥有以前青铜皮肤。国王伊米隆为保护血脉的正统，下令将所有畸形的新生儿杀掉，以保持血脉的纯正。少数掠龙人并没有听从国王的指挥，而是选择了流亡，带着他们的子嗣开始了向南方漫长的迁徙。这些迁徙后的维库人而后会在南方建立起早期的人类国度，人类诞生。</p>
-<p>总结一下，大致是一个不能称作为人类的种族在暴发了一系列战争之后逐渐可以被称作人类的漫长过程。</p>
-<p>同样受到血肉诅咒的泰坦造物们也有着相同的命运，侏儒，托维尔，魔古族，巨人，矮人相继出现。这些受血肉诅咒的泰坦造物们组成了我们如今的魔兽世界。</p>
-<p>从现在开始，泰坦与守护者将与我们远去，艾泽拉斯进入早期社会。</p>
+        <p>OpenMP在Mac上的安装，涉及到一些编译器的历史。。。<br><a id="more"></a></p>
+<h2 id="OpenMP环境添加-Mac"><a href="#OpenMP环境添加-Mac" class="headerlink" title="OpenMP环境添加(Mac)"></a>OpenMP环境添加(Mac)</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ brew reinstall gcc --without-multilib</span><br><span class="line"><span class="comment"># 安装支持openmp的clang</span></span><br><span class="line">$ brew install clang-omp <span class="comment">#有错</span></span><br></pre></td></tr></table></figure>
+<h2 id="安装错误"><a href="#安装错误" class="headerlink" title="安装错误"></a>安装错误</h2><figure class="highlight typescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"># Problem: No available formula <span class="keyword">with</span> the name <span class="string">"clang-omp"</span></span><br><span class="line"></span><br><span class="line">ruby -e <span class="string">"$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"</span> &lt; <span class="regexp">/dev/</span><span class="literal">null</span> <span class="number">2</span>&gt; <span class="regexp">/dev/</span><span class="literal">null</span></span><br></pre></td></tr></table></figure>
+<p><a href="http://macappstore.org/clang-omp/" target="_blank" rel="noopener">安装错误参考</a>，用以上方法发现未解决问题；</p>
+<blockquote>
+<p>fatal: unable to access ‘<a href="https://github.com/Homebrew/homebrew-core/&#39;" target="_blank" rel="noopener">https://github.com/Homebrew/homebrew-core/&#39;</a>: LibreSSL SSL_read: SSL_ERROR_SYSCALL, errno 54<br>Error: Fetching /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core failed!<br>Error: Could not link:<br>/usr/local/share/man/man1/brew.1</p>
+</blockquote>
+<blockquote>
+<p>Please delete these paths and run <code>brew update</code>.<br>Error: Could not link:<br>/usr/local/share/doc/homebrew</p>
+</blockquote>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 删除  /usr/<span class="built_in">local</span>/Homebrew/Library/Taps/homebrew/homebrew-core 文件夹</span></span><br><span class="line"></span><br><span class="line"><span class="meta">$</span><span class="bash"> brew update</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> brew install clang-omp</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>fatal: unable to access ‘<a href="https://github.com/Homebrew/homebrew-core/&#39;" target="_blank" rel="noopener">https://github.com/Homebrew/homebrew-core/&#39;</a>: LibreSSL SSL_read: SSL_ERROR_SYSCALL, errno 54<br>Error: Failure while executing: git clone <a href="https://github.com/Homebrew/homebrew-core" target="_blank" rel="noopener">https://github.com/Homebrew/homebrew-core</a> /usr/local/Homebrew/Library/Taps/homebrew/homebrew-core –depth=1<br>Error: Failure while executing: /usr/local/bin/brew tap homebrew/core</p>
+</blockquote>
+<figure class="highlight armasm"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">brew </span>doctor</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>Error: No available formula with the name “clang-omp”<br>==&gt; Searching for a previously deleted formula (in the last month)…<br>Warning: homebrew/core is shallow clone. To get complete history run:<br>  git -C “$(brew –repo homebrew/core)” fetch –unshallow</p>
+</blockquote>
+<blockquote>
+<p>Error: No previously deleted formula found.<br>==&gt; Searching for similarly named formulae…<br>==&gt; Searching local taps…<br>Error: No similarly named formulae found.<br>==&gt; Searching taps…<br>==&gt; Searching taps on GitHub…<br>Error: No formulae found in taps.</p>
+</blockquote>
+<figure class="highlight asciidoc"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">'''</span><br><span class="line">You need a recent version of llvm and libomp which you can get with</span><br><span class="line">'''</span><br><span class="line">$ brew install llvm</span><br><span class="line"># brew install libomp</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>On Apple Clang, you need to add several options to use OpenMP’s front end<br>instead of the standard driver option. This usually looks like<br>  -Xpreprocessor -fopenmp -lomp</p>
+</blockquote>
+<blockquote>
+<p>You might need to make sure the lib and include directories are discoverable<br>if /usr/local is not searched:<br>-L/usr/local/opt/libomp/lib -I/usr/local/opt/libomp/include</p>
+</blockquote>
+<blockquote>
+<p>For CMake, the following flags will cause the OpenMP::OpenMP_CXX target to<br>be set up correctly:<br>-DOpenMP_CXX_FLAGS=”-Xpreprocessor -fopenmp -I/usr/local/opt/libomp/include”<br>-DOpenMP_CXX_LIB_NAMES=”omp”<br>-DOpenMP_omp_LIBRARY=/usr/local/opt/libomp/lib/libomp.dylib</p>
+</blockquote>
+<p>接下来发现libomp已经在我的lib库里了，定位：<em>/usr/local/opt/libomp</em>；<br>下面要做的事情就是终端到你写的.c文件下，输入以下命令编译；<br><figure class="highlight crystal"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">clang -Xclang -fopenmp openmp_test.c -I /usr/local/opt/libom/<span class="keyword">include</span> -L /usr/local/opt/libomp/<span class="class"><span class="keyword">lib</span> -<span class="title">lomp</span></span></span><br></pre></td></tr></table></figure></p>
+<p>上面这个命令会链接头文件和动态库，我们想办法把这两个路径添加到环境变量里，每次都写路径很麻烦；</p>
+<h2 id="Compiler"><a href="#Compiler" class="headerlink" title="Compiler"></a>Compiler</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ <span class="built_in">export</span> OMP_NUM_THREADS=4</span><br><span class="line">$ gcc -fopenmp filename.c</span><br></pre></td></tr></table></figure>
+<p>因为我们要用clang来编译，所以上面的这个编译过程应该写为；</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">export</span> OMP_NUM_THREADS=4</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> clang -fopenmp filename.c -o filename</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#</span><span class="bash"> clang: error: unsupported option <span class="string">'-fopenmp'</span></span></span><br></pre></td></tr></table></figure>
+<p>最终解决方案，Homebrew安装的GCC存放在 /usr/local/bin/gcc-5 中（GCC5.2.0版）。此时，系统中依然有 /usr/bin/gcc ，然而这个GCC是clang的链接。所以在编译时，需要使用类似 gcc-5 xxx.c -o xxx -fopenmp 进行编译，而不是使用默认的gcc。</p>
+<p>所以只要我们用下面的编译方法就可以了：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> gcc-6 -fopenmp filename.c -o filename</span></span><br><span class="line"><span class="meta">$</span><span class="bash"> ./filename <span class="comment">#执行吧！</span></span></span><br></pre></td></tr></table></figure></p>
+<p>真的是绕了一圈，原来是llvm 与 gcc的历史问题；</p>
+<h2 id="PS"><a href="#PS" class="headerlink" title="PS"></a>PS</h2><p>附1：测试程序</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span> </span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="meta">#<span class="meta-keyword">pragma</span> omp parallel</span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"Hello from thread %d, nthreads %d\n"</span>, omp_get_thread_num(), omp_get_num_threads());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>附2： 继续找发现一个在Xcode上安装clang-omp安装的方法，未测试通过，慎用；</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">$ brew install llvm</span><br><span class="line">$ <span class="built_in">echo</span> <span class="string">'export PATH="/usr/local/opt/llvm/bin:$PATH"'</span> &gt;&gt; ~/.bash_profile</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.zybuluo.com/usiege/voi9cducaj6qxf9gyj22j7o5/image_1cdaaol7q1a32nov11t4108hg4vm.png" alt="image_1cdaaol7q1a32nov11t4108hg4vm.png-115.1kB"></p>
 
       
     </div>
@@ -419,6 +451,14 @@
 
     <footer class="post-footer">
       
+        <div class="post-tags">
+          
+            <a href="/tags/Mac/" rel="tag"># Mac</a>
+          
+            <a href="/tags/OpenMP/" rel="tag"># OpenMP</a>
+          
+        </div>
+      
 
       
       
@@ -428,8 +468,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2016/08/17/北欧神话拾遗：“奥丁”，“英灵殿”，“提尔”，“西芙”，这些名字你知道吗？/" rel="next" title="北欧神话拾遗：“奥丁”，“英灵殿”，“提尔”，“西芙”，这些名字你知道吗？">
-                <i class="fa fa-chevron-left"></i> 北欧神话拾遗：“奥丁”，“英灵殿”，“提尔”，“西芙”，这些名字你知道吗？
+              <a href="/2018/05/07/hello-world/" rel="next" title="Hello World">
+                <i class="fa fa-chevron-left"></i> Hello World
               </a>
             
           </div>
@@ -437,10 +477,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2016/08/25/wow插件的构成/" rel="prev" title="World of WarCarft插件的构成">
-                World of WarCarft插件的构成 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -494,8 +530,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -614,6 +659,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#OpenMP环境添加-Mac"><span class="nav-number">1.</span> <span class="nav-text">OpenMP环境添加(Mac)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#安装错误"><span class="nav-number">2.</span> <span class="nav-text">安装错误</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Compiler"><span class="nav-number">3.</span> <span class="nav-text">Compiler</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#PS"><span class="nav-number">4.</span> <span class="nav-text">PS</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
