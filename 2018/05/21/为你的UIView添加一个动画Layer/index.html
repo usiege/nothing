@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS,swift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="我想你一定用过UIView， 我想你也一定知道CALayer是什么，具体细节的东西请自行谷歌，我们今天要用Layer搞一点事情；">
+<meta name="keywords" content="iOS,swift">
+<meta property="og:type" content="article">
+<meta property="og:title" content="为你的UIView添加一个动画Layer">
+<meta property="og:url" content="http://charlesblog.site/2018/05/21/为你的UIView添加一个动画Layer/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="我想你一定用过UIView， 我想你也一定知道CALayer是什么，具体细节的东西请自行谷歌，我们今天要用Layer搞一点事情；">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/cy71tbwdl9q3ckokbr8hbqhb/image_1ce1gopv01m4lbd41tjr1nel6e39.png">
+<meta property="og:updated_time" content="2018-05-22T01:28:27.385Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="为你的UIView添加一个动画Layer">
+<meta name="twitter:description" content="我想你一定用过UIView， 我想你也一定知道CALayer是什么，具体细节的东西请自行谷歌，我们今天要用Layer搞一点事情；">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/cy71tbwdl9q3ckokbr8hbqhb/image_1ce1gopv01m4lbd41tjr1nel6e39.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2018/05/21/为你的UIView添加一个动画Layer/"/>
+
+
+
+
+
+  <title>为你的UIView添加一个动画Layer | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/05/21/为你的UIView添加一个动画Layer/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">为你的UIView添加一个动画Layer</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-21T22:37:00+08:00">
+                2018-05-21
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,580
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我想你一定用过UIView， 我想你也一定知道CALayer是什么，具体细节的东西请自行谷歌，我们今天要用Layer搞一点事情；</p>
+<a id="more"></a>
+<p>[TOC]</p>
+<h2 id="总结几点性质"><a href="#总结几点性质" class="headerlink" title="总结几点性质"></a>总结几点性质</h2><blockquote>
+<ol>
+<li>UIView继承自<code>UIResponder</code>，用于交互，那么这么看来师承自事件流，属于动作学派；</li>
+<li>UIView有一个<code>CALayer</code>的属性，且CALayer继承自<code>NSObject</code>，并且根据苹果文档描述”The base layer class”，看来应该是一个layer体系，且layer用于渲染，属于CA阵营，属于图像学派；</li>
+<li>layer的代理是view，这样看来真正用于显示的应该是CALayer，鬼知道CALayer是不是跟OpenGL有关系；</li>
+<li>所以如果你要是想做动画，那我给你的建议就是，最好在layer层上做；</li>
+<li>对于，你知道layer是有个叫做<code>anchorPoint</code>属性的，做过cocos2dx的应该知道，你说layer的display里难道没有点opengl的痕迹？</li>
+<li>还记得仿射变换吗，平移+线性变换，layer完全是可以做到的；</li>
+<li>layer自身是有绘制能力的，只不过不支持事件响应，但有一点它可以做的到：layer遵从了一个<code>CAMediaTiming</code>的协议，而这个协议就厉害了，配合<code>CACurrentMediaTime</code>，跟系统时钟挂上勾，CPU的时钟周期<code>mach_absolute_time</code>转化成秒数的结果，是一个绝对时间；</li>
+</ol>
+</blockquote>
+<h2 id="上面的结论是瞎扯淡"><a href="#上面的结论是瞎扯淡" class="headerlink" title="上面的结论是瞎扯淡"></a>上面的结论是瞎扯淡</h2><h2 id="我们来搞点看的见的"><a href="#我们来搞点看的见的" class="headerlink" title="我们来搞点看的见的"></a>我们来搞点看的见的</h2><ul>
+<li>声明一个View:</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CircleView</span>: <span class="title">UIView</span> </span>&#123;</span><br><span class="line">    <span class="comment">//我要做一个绕圈的动画</span></span><br><span class="line">    <span class="comment">//我不会告诉你我是谷歌过的</span></span><br><span class="line">    <span class="comment">//我觉得你也应该学会</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>添加两个Layer，如果不够，那就多来几个：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> backgroundLayer: <span class="type">CAShapeLayer</span>?</span><br><span class="line"><span class="keyword">var</span> animationLayer: <span class="type">CAShapeLayer</span>?</span><br><span class="line"><span class="comment">//我觉得你应该知道把它们放在哪</span></span><br><span class="line"><span class="comment">//好吧我还是给你代码对齐吧，这很python</span></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>工厂一个方法啊哟喂，设计模式就出来了：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//给我点颜色，我给你想要的</span></span><br><span class="line"><span class="comment">//当然，我给你的并不多；</span></span><br><span class="line"><span class="comment">//我只是一个CAShapeLayer，有形状的框框；</span></span><br><span class="line"><span class="comment">//有边，有填充；</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">layer</span><span class="params">(lineColor: UIColor)</span></span> -&gt; <span class="type">CAShapeLayer</span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> layer = <span class="type">CAShapeLayer</span>()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> lineWidth: <span class="type">CGFloat</span> = <span class="number">5</span></span><br><span class="line">    <span class="keyword">let</span> rect = <span class="type">CGRect</span>(x: <span class="number">0</span>, y: <span class="number">0</span>, width: <span class="keyword">self</span>.bounds.width, height: <span class="keyword">self</span>.bounds.height)</span><br><span class="line">    layer.bounds = rect</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//这是个圆</span></span><br><span class="line">    <span class="keyword">let</span> path = <span class="type">UIBezierPath</span>(roundedRect: rect, cornerRadius: rect.width / <span class="number">2</span>)</span><br><span class="line">    layer.lineWidth = lineWidth</span><br><span class="line">    layer.position = <span class="type">CGPoint</span>(x: rect.width / <span class="number">2</span>, y: rect.height / <span class="number">2</span>)</span><br><span class="line">    </span><br><span class="line">    layer.path = path.cgPath</span><br><span class="line">    layer.fillColor = <span class="type">UIColor</span>.clear.cgColor</span><br><span class="line">    layer.strokeColor = lineColor.cgColor</span><br><span class="line">    </span><br><span class="line">    layer.strokeStart = <span class="number">0</span></span><br><span class="line">    layer.strokeEnd = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">return</span> layer</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>加到view上来</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">override</span> <span class="keyword">init</span>(frame: <span class="type">CGRect</span>) &#123;</span><br><span class="line">    <span class="keyword">super</span>.<span class="keyword">init</span>(frame: frame)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> bgLayer = <span class="keyword">self</span>.layer(lineColor: <span class="type">UIColor</span>.green)</span><br><span class="line">    <span class="keyword">self</span>.layer.addSublayer(bgLayer)</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.backgroundLayer = bgLayer</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> animationLayer = <span class="keyword">self</span>.layer(lineColor: <span class="type">UIColor</span>.orange)</span><br><span class="line">    <span class="keyword">self</span>.layer.addSublayer(animationLayer)</span><br><span class="line">    animationLayer.isHidden = <span class="literal">true</span></span><br><span class="line">    <span class="comment">//关于这个层，我们呆会还要做点其他事情；</span></span><br><span class="line">    <span class="comment">//暂时，它是不被看的到的；</span></span><br><span class="line">    <span class="comment">//所以你可以看到，一个View上是可以添加好多层的；</span></span><br><span class="line">    <span class="comment">//如果你把这些层分区块排列出来，那么我便不加那么多view了；</span></span><br><span class="line">    <span class="comment">//哈哈哈，上面这行我开个玩笑；</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.animationLayer = animationLayer</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.backgroundColor = <span class="type">UIColor</span>.black</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</span><br><span class="line">    <span class="built_in">fatalError</span>(<span class="string">"init(coder:) has not been implemented"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h2 id="我们来加一个动画吧！"><a href="#我们来加一个动画吧！" class="headerlink" title="我们来加一个动画吧！"></a>我们来加一个动画吧！</h2><ul>
+<li>添加动画</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> <span class="type">PLAY_ANIMATION_KEY</span> = <span class="string">"animation_key"</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">startAnimation</span><span class="params">(totalTime: CGFloat)</span></span> &#123;</span><br><span class="line">    <span class="keyword">guard</span> totalTime &gt; <span class="number">0</span> <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">guard</span> ((<span class="keyword">self</span>.animationLayer?.animation(forKey: <span class="type">PLAY_ANIMATION_KEY</span>)) == <span class="literal">nil</span>) <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">let</span> animation = <span class="type">CABasicAnimation</span>(keyPath: <span class="string">"strokeEnd"</span>)</span><br><span class="line">    animation.duration = <span class="type">CFTimeInterval</span>(totalTime)</span><br><span class="line">    </span><br><span class="line">    animation.delegate = <span class="keyword">self</span>   <span class="comment">//转到它开始动了</span></span><br><span class="line">    </span><br><span class="line">    animation.fromValue = <span class="number">0</span></span><br><span class="line">    animation.toValue = <span class="number">1</span></span><br><span class="line">    </span><br><span class="line">    animation.isRemovedOnCompletion = <span class="literal">true</span></span><br><span class="line">    animation.fillMode = kCAFillModeForwards</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.add(animation, forKey: <span class="type">PLAY_ANIMATION_KEY</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>上面的我们解释一下，首先我们说一个动画是有名字的，用key表示，像上面的<code>PLAY_ANIMATION_KEY</code>；</li>
+<li>layer添加的动画是<code>CAAnimation</code>类型的，就是说，所有它的子类都可以添加为layer的动画，你可以去挖掘一下<code>CAAnimation</code>一族；</li>
+<li><code>CABasicAnimation</code>添加的动画是需要一个<code>keyPath</code>的，你还需要通过-setFromValue 和-setToValue 来指定一个开始值和结束值，这有点像一个补间动画，输入了起始帧和结束帧，其它马由动画帮你；<blockquote>
+<p><img src="http://static.zybuluo.com/usiege/cy71tbwdl9q3ckokbr8hbqhb/image_1ce1gopv01m4lbd41tjr1nel6e39.png" alt="image_1ce1gopv01m4lbd41tjr1nel6e39.png-165.6kB"></p>
+</blockquote>
+</li>
+<li>我们可以指定CALayer的某个属性名为keyPath，并且对CALayer的这个属性的值进行修改，达到相应的动画效果，随着动画的进行，在长度为duration的持续时间内，keyPath相应属性的值从fromValue渐渐地变为toValue，keyPath内容是CALayer的可动画Animatable属性，关于这个可动画属性，我觉得我还可以去谷歌一车，回头再说吧；</li>
+<li>如果<code>fillMode == kCAFillModeForwards</code>同时<code>removedOnComletion == false</code>，那么在动画执行完毕后，图层会保持显示动画执行后的状态。但在实质上，图层的属性值还是动画执行前的初始值，并没有真正被改变；</li>
+</ol>
+<h2 id="它开始动了"><a href="#它开始动了" class="headerlink" title="它开始动了"></a>它开始动了</h2><p>加入到layer中它会自动开始，并且这开始和结束都有回调哦；<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">CircleView</span>: <span class="title">CAAnimationDelegate</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">animationDidStart</span><span class="params">(<span class="number">_</span> anim: CAAnimation)</span></span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.startTime = <span class="type">CACurrentMediaTime</span>()</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">animationDidStop</span><span class="params">(<span class="number">_</span> anim: CAAnimation, finished flag: Bool)</span></span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="暂停和恢复"><a href="#暂停和恢复" class="headerlink" title="暂停和恢复"></a>暂停和恢复</h2><p>我们来记录两个时间：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> startTime: <span class="type">CFTimeInterval</span>!  <span class="comment">//动画开始时系统时钟</span></span><br><span class="line"><span class="keyword">var</span> pastTime: <span class="type">CFTimeInterval</span>!   <span class="comment">//动画运行过的时间（除去暂停的时间）</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>暂停一下<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">pauseAnimation</span><span class="params">(layer: CALayer)</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> pausetime = layer.convertTime(<span class="type">CACurrentMediaTime</span>(), from: <span class="literal">nil</span>)</span><br><span class="line">    layer.timeOffset = pausetime</span><br><span class="line">    layer.speed = <span class="number">0</span></span><br><span class="line">    </span><br><span class="line">    <span class="built_in">print</span>(#function)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"start time: <span class="subst">\(startTime)</span>"</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"pause time: <span class="subst">\(pausetime)</span>"</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"系统时钟： <span class="subst">\(CACurrentMediaTime()</span>)"</span>)</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"以GMT为标准的，2001年一月一日00：00：00这一刻的时间绝对值: <span class="subst">\(CFAbsoluteTimeGetCurrent()</span>)"</span>)</span><br><span class="line">    <span class="keyword">let</span> pasttime = pausetime - startTime</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"past time: <span class="subst">\(pasttime)</span>"</span>)</span><br><span class="line">    <span class="keyword">self</span>.pastTime = pasttime</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>所以你只需要搞清楚<code>timeOffset</code>，<code>speed</code>以及<code>convertTime</code>就可以了；<br>按我说的做，自己跑一跑，对比下时间，马上清楚，不要再记些什么公式了；</p>
+<ul>
+<li>恢复动画<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">func resumeAnimation(layer: CALayer) &#123;</span><br><span class="line">    let pausetime = layer.timeOffset</span><br><span class="line">    </span><br><span class="line">    layer.timeOffset = 0</span><br><span class="line">    layer.beginTime = 0</span><br><span class="line">    layer.speed = 1</span><br><span class="line">    </span><br><span class="line">    let begintime = layer.convertTime(CACurrentMediaTime(), to: nil) - pausetime</span><br><span class="line">    layer.beginTime = begintime</span><br><span class="line">    </span><br><span class="line">    print(#function)</span><br><span class="line">    print(&quot;系统时钟： \(CACurrentMediaTime())&quot;)</span><br><span class="line">    print(&quot;begin time: \(begintime)&quot;)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>那么上面说的需要知道的属性还需要添加一个<code>beginTime</code>；</p>
+<ul>
+<li>最后你需要把动画移除掉吗？<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">stopAnimation</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="keyword">guard</span> <span class="keyword">self</span>.animationLayer?.animation(forKey: <span class="type">PLAY_ANIMATION_KEY</span>) != <span class="literal">nil</span> <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="type">CATransaction</span>.begin()</span><br><span class="line">    <span class="type">CATransaction</span>.setDisableActions(<span class="literal">true</span>)</span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.timeOffset = <span class="number">0</span></span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.speed = <span class="number">1</span></span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.beginTime = <span class="type">CACurrentMediaTime</span>()</span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.strokeStart = <span class="number">0</span></span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.strokeEnd = <span class="number">1</span></span><br><span class="line">    <span class="type">CATransaction</span>.commit()</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.animationLayer?.removeAnimation(forKey: <span class="type">PLAY_ANIMATION_KEY</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>移除我们能看的懂，那么<code>CATransaction</code>呢？</p>
+<h2 id="CATransaction？"><a href="#CATransaction？" class="headerlink" title="CATransaction？"></a>CATransaction？</h2><p>再去谷歌一车吧！！！</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/16/我们来探讨一下函数式编程/" rel="next" title="我们来探讨一下函数式编程">
+                <i class="fa fa-chevron-left"></i> 我们来探讨一下函数式编程
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">44</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#总结几点性质"><span class="nav-number">1.</span> <span class="nav-text">总结几点性质</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#上面的结论是瞎扯淡"><span class="nav-number">2.</span> <span class="nav-text">上面的结论是瞎扯淡</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们来搞点看的见的"><span class="nav-number">3.</span> <span class="nav-text">我们来搞点看的见的</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们来加一个动画吧！"><span class="nav-number">4.</span> <span class="nav-text">我们来加一个动画吧！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#它开始动了"><span class="nav-number">5.</span> <span class="nav-text">它开始动了</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#暂停和恢复"><span class="nav-number">6.</span> <span class="nav-text">暂停和恢复</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#CATransaction？"><span class="nav-number">7.</span> <span class="nav-text">CATransaction？</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>
