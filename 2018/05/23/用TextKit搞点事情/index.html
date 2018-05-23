@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="iOS,swift," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="搞事情，就是要搞事情！">
+<meta name="keywords" content="iOS,swift">
+<meta property="og:type" content="article">
+<meta property="og:title" content="用TextKit搞点事情">
+<meta property="og:url" content="http://charlesblog.site/2018/05/23/用TextKit搞点事情/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="搞事情，就是要搞事情！">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/0fsowyqvltk65wv4jw6ry9nv/image_1ce2rdqtlc7enklrrs1qacqu19.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/c3g4vjcpthekoavncaatrqxg/image_1ce2riahv1fl7186h1elefbfebsm.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/gu22cm1i3tmchnk0amc0c9qg/image_1ce2t9vjp4o4roq1nj61m6h1kra13.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/9fk86ry3v21fqmc33y91p9xu/image_1ce5b0af015ldu4f476hvv1bhn2g.png">
+<meta property="og:updated_time" content="2018-05-23T02:46:22.637Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="用TextKit搞点事情">
+<meta name="twitter:description" content="搞事情，就是要搞事情！">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/0fsowyqvltk65wv4jw6ry9nv/image_1ce2rdqtlc7enklrrs1qacqu19.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2018/05/23/用TextKit搞点事情/"/>
+
+
+
+
+
+  <title>用TextKit搞点事情 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/05/23/用TextKit搞点事情/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">用TextKit搞点事情</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-23T10:00:00+08:00">
+                2018-05-23
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,522
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>搞事情，就是要搞事情！</p>
+<a id="more"></a>
+<p>[toc]</p>
+<h2 id="先搞清楚族谱"><a href="#先搞清楚族谱" class="headerlink" title="先搞清楚族谱"></a>先搞清楚族谱</h2><blockquote>
+<p><img src="http://static.zybuluo.com/usiege/0fsowyqvltk65wv4jw6ry9nv/image_1ce2rdqtlc7enklrrs1qacqu19.png" alt="TextKit WWDC2013 Session 210"></p>
+</blockquote>
+<h2 id="再搞清楚架构"><a href="#再搞清楚架构" class="headerlink" title="再搞清楚架构"></a>再搞清楚架构</h2><blockquote>
+<p><img src="http://static.zybuluo.com/usiege/c3g4vjcpthekoavncaatrqxg/image_1ce2riahv1fl7186h1elefbfebsm.png" alt="重要的几个类"></p>
+</blockquote>
+<blockquote>
+<ol>
+<li>TextKit框架主要的几个View，主要包括<code>UILabel</code>, <code>UITextView</code>, <code>UITextField</code>;</li>
+<li>TextKit是NS一支的，所以不光只在iOS中使用；</li>
+<li>Text container对应<code>NSTextContainer</code>，它定义了文本排版区域，很明显，文字是在这个区域中被管理的；</li>
+<li>Text storage对应<code>NSTextStorage</code>，继承自<code>NSMutableAttributedString</code>，用于存储文本字形和相关属性；</li>
+<li>Layout manager对应<code>NSLayoutManager</code>，负责对文字进行编辑排版处理，在上面第4条中的类保存的数据可以通过本条中的类转换显示到视图中，其中这个单词字形(glyphs)需注意；</li>
+</ol>
+</blockquote>
+<h2 id="这张图很直观"><a href="#这张图很直观" class="headerlink" title="这张图很直观"></a>这张图很直观</h2><blockquote>
+<p><img src="http://static.zybuluo.com/usiege/gu22cm1i3tmchnk0amc0c9qg/image_1ce2t9vjp4o4roq1nj61m6h1kra13.png" alt="UITextView composition"></p>
+</blockquote>
+<h2 id="我们来做点事情"><a href="#我们来做点事情" class="headerlink" title="我们来做点事情"></a>我们来做点事情</h2><p>首先我们需要一个自定义类型的<code>UITextView</code>，用它来对我们的文字内容进行自定义修改；<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">ProblemView</span>: <span class="title">UITextView</span> </span>&#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">init</span>(frame: <span class="type">CGRect</span>, textContainer: <span class="type">NSTextContainer</span>?) &#123;</span><br><span class="line">        <span class="keyword">super</span>.<span class="keyword">init</span>(frame: frame, textContainer: textContainer)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">required</span> <span class="keyword">init</span>?(coder aDecoder: <span class="type">NSCoder</span>) &#123;</span><br><span class="line">        <span class="built_in">fatalError</span>(<span class="string">"init(coder:) has not been implemented"</span>)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/usiege/9fk86ry3v21fqmc33y91p9xu/image_1ce5b0af015ldu4f476hvv1bhn2g.png" alt="image_1ce5b0af015ldu4f476hvv1bhn2g.png-114.8kB"></p>
+<p><code>UITextView</code>的初始化方法中有一个<code>textContainer</code>参数，很明显是我们上面提到的，且如图中三种颜色的框框所示，是我们上面提到的管理类，且全部为只读属性；<br>并且就上面的三种类之前的管理，如果我们要自己管理的话，应该也是一个树型的结构；</p>
+<p>接下来我们要配合<code>NSAttributedString</code>添加显示强大的富文本；</p>
+<h3 id="NSAttributedString"><a href="#NSAttributedString" class="headerlink" title="NSAttributedString"></a>NSAttributedString</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span>(<span class="keyword">set</span>) <span class="keyword">var</span> attributedProblem: <span class="type">NSAttributedString</span> = <span class="type">NSAttributedString</span>.<span class="keyword">init</span>()</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">willSet</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.text = newValue.string</span><br><span class="line">        <span class="keyword">self</span>.font = font    <span class="comment">//字体是会影响宽度的，所以该项如果是在外部设置的话，应该提前修改</span></span><br><span class="line">        </span><br><span class="line">        <span class="keyword">self</span>.textContainer.lineBreakMode = .byWordWrapping</span><br><span class="line">        <span class="keyword">self</span>.textStorage.replaceCharacters(<span class="keyword">in</span>: <span class="type">NSRange</span>(location: <span class="number">0</span>, length: newValue.length), with: newValue)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">let</span> size = <span class="keyword">self</span>.sizeThatFits(<span class="type">CGSize</span>(width: <span class="keyword">self</span>.bounds.width, height: <span class="type">CGFloat</span>(<span class="type">MAXFLOAT</span>)))</span><br><span class="line">        <span class="keyword">self</span>.textContainer.size = size</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">didSet</span> &#123;</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我们需要一个具有计算属性的变量，当我们在内部修改该变量时做一些操作；上面的代码解释几点：</p>
+<ul>
+<li>我们需要在替换textview内容的时候重新计算内部空间，所以必须要在计算前将内容复制下来；上面代码第4行；</li>
+<li>第7行中我们给出了一个示范，在这里可以修改与<code>NSTextContainer</code>相关的属性；</li>
+<li>第8行我们开始进行文本替换，替换的内容为设置的新的富文本内容，范围则是该文本的<code>NSRange</code>；</li>
+<li>接下来我们需要重新计算内部大小，这个内容大小就类似于<code>ScrollView</code>的<code>contentSize</code>，计算的过程中我们要指定它的宽度，令高为最大值，结果会根据宽度计算出相应的文本需要高度；最后将size设置为<code>textContainer</code>的size，这里一定要注意；</li>
+<li>这里如果是<code>self.sizeToFit()</code>方法，则<code>textView</code>的size会根据内容变大，而不是内部空间变大，这是与上面一条的区别；</li>
+</ul>
+<h3 id="那传一段文本进来吧"><a href="#那传一段文本进来吧" class="headerlink" title="那传一段文本进来吧"></a>那传一段文本进来吧</h3><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//设置题目文字属性</span></span><br><span class="line">func setupSubject(text: String, <span class="attribute">font</span>: UIFont) &#123;</span><br><span class="line">    </span><br><span class="line">    let changeString = NSMutableAttributedString.init(string: text)</span><br><span class="line">    let desTextRange = NSRange(location: <span class="number">0</span>, length: text.count)</span><br><span class="line">    changeString.addAttribute(NSAttributedStringKey<span class="selector-class">.font</span>, value: <span class="attribute">font</span>, range: desTextRange)</span><br><span class="line">    changeString.addAttribute(NSAttributedStringKey<span class="selector-class">.foregroundColor</span>, value: UIColor<span class="selector-class">.blue</span>, range: desTextRange)</span><br><span class="line">    </span><br><span class="line">    self<span class="selector-class">.font</span> = <span class="attribute">font</span></span><br><span class="line"></span><br><span class="line">    self<span class="selector-class">.attributedProblem</span> = changeString</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果你以前用过富文本，那这个方法看起来没什么，无非就是做了两件事：</p>
+<ol>
+<li>生成一个富文本；（有关于富文本的内容，可以自行谷歌一车）</li>
+<li>将文本设置到我们的textview里；</li>
+</ol>
+<h3 id="我想改变一段文字"><a href="#我想改变一段文字" class="headerlink" title="我想改变一段文字"></a>我想改变一段文字</h3><p>如果我们想修改某一截文字的属性，那么我们只需要将保存的富文本取出，然后截取位置，替换掉原先的富文本，然后重新设置到属性中去，如下:<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//当前要发生替换的区域</span></span><br><span class="line"><span class="keyword">private</span>(<span class="keyword">set</span>) <span class="keyword">var</span> optionsRange: <span class="type">NSRange</span>?</span><br><span class="line"><span class="comment">//替换选项文字</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">replaceOption</span><span class="params">(options: String, replaceOptions: String, font: UIFont)</span></span> &#123;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//给选项添加属性</span></span><br><span class="line">    <span class="keyword">let</span> changeString = <span class="type">NSMutableAttributedString</span>.<span class="keyword">init</span>(attributedString: <span class="keyword">self</span>.attributedProblem)</span><br><span class="line">    <span class="keyword">let</span> optionString = <span class="keyword">self</span>.textOptions(text: replaceOptions, font: font)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//选项最终位置</span></span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">let</span> optionsRange = changeString.string.range(of: options) &#123;</span><br><span class="line">        <span class="keyword">let</span> range = <span class="type">NSRange</span>(optionsRange, <span class="keyword">in</span>: options)</span><br><span class="line">        changeString.replaceCharacters(<span class="keyword">in</span>: range, with: optionString)</span><br><span class="line">        <span class="keyword">self</span>.optionsRange = range</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="keyword">self</span>.optionsRange = <span class="type">NSRange</span>(location: <span class="number">0</span>, length: <span class="number">0</span>)</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    <span class="keyword">self</span>.attributedProblem = changeString</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>当然我们要替换的文本当然也可以是富文本；<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//上面的第8行中的方法</span></span><br><span class="line">    <span class="comment">//给选项添加属性</span></span><br><span class="line">    <span class="function"><span class="keyword">func</span> <span class="title">textOptions</span><span class="params">(text: String, font: UIFont)</span></span> -&gt; <span class="type">NSAttributedString</span> &#123;</span><br><span class="line">        <span class="comment">//选项左右添加空格</span></span><br><span class="line">        <span class="keyword">let</span> addSpace = <span class="string">"  "</span> + text + <span class="string">"  "</span></span><br><span class="line">        </span><br><span class="line">        <span class="comment">//选项文字属性</span></span><br><span class="line">        <span class="keyword">let</span> optionString = <span class="type">NSMutableAttributedString</span>(string: addSpace)</span><br><span class="line">        <span class="keyword">let</span> optionRange = <span class="type">NSRange</span>(location: <span class="number">2</span>, length: text.<span class="built_in">count</span>)</span><br><span class="line">        </span><br><span class="line">        optionString.addAttribute(<span class="type">NSAttributedStringKey</span>.font, value: font.withSize(<span class="number">20</span>), range: optionRange)</span><br><span class="line">        optionString.addAttribute(<span class="type">NSAttributedStringKey</span>.foregroundColor, value: <span class="type">UIColor</span>.red, range: optionRange)</span><br><span class="line">        optionString.addAttribute(<span class="type">NSAttributedStringKey</span>.strokeColor, value: <span class="type">UIColor</span>.white, range: optionRange)</span><br><span class="line">        optionString.addAttribute(<span class="type">NSAttributedStringKey</span>.strokeWidth, value: -<span class="number">3</span>, range: optionRange)</span><br><span class="line">        optionString.addAttribute(<span class="type">NSAttributedStringKey</span>.underlineStyle, value: <span class="number">1</span>, range: optionRange)</span><br><span class="line">        </span><br><span class="line">        <span class="keyword">return</span> optionString</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>这里需要注意的就是swift-<code>Range</code>与oc-<code>NSRange</code>的转换，关于swift的<code>Range</code>个人感觉比以前难用了，但是更加通用了吧，说下转换：</p>
+<figure class="highlight nimrod"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">let</span> optionsRange = changeString.<span class="built_in">string</span>.<span class="built_in">range</span>(<span class="keyword">of</span>: options) &#123;</span><br><span class="line">    <span class="keyword">let</span> <span class="built_in">range</span> = <span class="type">NSRange</span>(optionsRange, <span class="keyword">in</span>: options)</span><br><span class="line">    changeString.replaceCharacters(<span class="keyword">in</span>: <span class="built_in">range</span>, <span class="keyword">with</span>: optionString)</span><br><span class="line">    self.optionsRange = <span class="built_in">range</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    self.optionsRange = <span class="type">NSRange</span>(location: <span class="number">0</span>, length: <span class="number">0</span>)</span><br><span class="line">&#125;</span><br><span class="line">//这里我把发生替换的部分用变量保存了下来</span><br></pre></td></tr></table></figure>
+<h3 id="也许还可以替换图片"><a href="#也许还可以替换图片" class="headerlink" title="也许还可以替换图片"></a>也许还可以替换图片</h3><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//添加富文本图片</span></span><br><span class="line"><span class="comment">// originString 原始字符串</span></span><br><span class="line"><span class="comment">// replaceRange 要替换的文字范围</span></span><br><span class="line"><span class="comment">// size 替换图片大小</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">replacePictureForText</span><span class="params">(originString: NSAttributedString, replaceRange: NSRange, size: CGSize)</span></span> -&gt; <span class="type">NSAttributedString</span> &#123;</span><br><span class="line">    <span class="keyword">let</span> attachment = <span class="type">NSTextAttachment</span>()</span><br><span class="line">    attachment.image = <span class="type">UIImage</span>.<span class="keyword">init</span>(named: <span class="string">"study_select_words"</span>)</span><br><span class="line">    attachment.bounds = <span class="type">CGRect</span>(x: <span class="number">0</span>, y: <span class="number">0</span>, width: size.width, height: size.height)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//最终结果</span></span><br><span class="line">    <span class="keyword">let</span> originMutiString = <span class="type">NSMutableAttributedString</span>.<span class="keyword">init</span>(attributedString: originString)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//生成图片</span></span><br><span class="line">    <span class="keyword">let</span> attachString = <span class="type">NSAttributedString</span>(attachment: attachment)</span><br><span class="line">    <span class="keyword">let</span> mutiAttachString = <span class="type">NSMutableAttributedString</span>(attributedString: attachString)</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//替换成图片</span></span><br><span class="line">    originMutiString.replaceCharacters(<span class="keyword">in</span>: replaceRange, with: mutiAttachString)</span><br><span class="line">    <span class="keyword">return</span> originMutiString</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>无他，仍然只是需要找到一个替换区域，替换成想要的可支持的富文本属性；</p>
+<h3 id="别人不会告诉你的事"><a href="#别人不会告诉你的事" class="headerlink" title="别人不会告诉你的事"></a>别人不会告诉你的事</h3><p>最后想告诉你我们可以通过<code>NSRange</code>来得到所在区域的坐标，这是个无意中谷歌到的东西，如下：<br><figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> rect = <span class="keyword">self</span>.problem.textContainer.layoutManager?.boundingRect(forGlyphRange: <span class="keyword">self</span>.problem.optionsRange!,<span class="keyword">in</span>: <span class="keyword">self</span>.problem.textContainer)</span><br><span class="line"></span><br><span class="line"><span class="keyword">self</span>.problem.scrollRangeToVisible(<span class="keyword">self</span>.problem.optionsRange!)</span><br></pre></td></tr></table></figure></p>
+<p>找到目标区域，并定位到该区域；</p>
+<h2 id="以上。。。"><a href="#以上。。。" class="headerlink" title="以上。。。"></a>以上。。。</h2>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/iOS/" rel="tag"># iOS</a>
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/21/为你的UIView添加一个动画Layer/" rel="next" title="为你的UIView添加一个动画Layer">
+                <i class="fa fa-chevron-left"></i> 为你的UIView添加一个动画Layer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">45</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">33</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#先搞清楚族谱"><span class="nav-number">1.</span> <span class="nav-text">先搞清楚族谱</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#再搞清楚架构"><span class="nav-number">2.</span> <span class="nav-text">再搞清楚架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#这张图很直观"><span class="nav-number">3.</span> <span class="nav-text">这张图很直观</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们来做点事情"><span class="nav-number">4.</span> <span class="nav-text">我们来做点事情</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#NSAttributedString"><span class="nav-number">4.1.</span> <span class="nav-text">NSAttributedString</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#那传一段文本进来吧"><span class="nav-number">4.2.</span> <span class="nav-text">那传一段文本进来吧</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#我想改变一段文字"><span class="nav-number">4.3.</span> <span class="nav-text">我想改变一段文字</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#也许还可以替换图片"><span class="nav-number">4.4.</span> <span class="nav-text">也许还可以替换图片</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#别人不会告诉你的事"><span class="nav-number">4.5.</span> <span class="nav-text">别人不会告诉你的事</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#以上。。。"><span class="nav-number">5.</span> <span class="nav-text">以上。。。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>
