@@ -1,0 +1,910 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="swift,cocos2dx,js," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta name="keywords" content="swift,cocos2dx,js">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你swift项目集成cocos2dx-js模块">
+<meta property="og:url" content="http://charlesblog.site/2018/06/06/手把手教你swift项目集成cocos2dx-js模块/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/yqrdvidd7epqxjltfvrgtysf/image_1cf9dr09f7f8urifpm3pa4bg9.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/u8yfh2zybhytwrsgqvf6e1xh/image_1cf9g35u31c6chvamcu1idd3ntm.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/i5z30x4o549nw7mmtahlxoa0/image_1cf9geajn1792k431mvi2kg9j313.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/wwurwri3ebcrx05xifr0qjbo/image_1cf9gt11812enkm0d3c99c3qk1g.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/rp9h61z9a4x1sc4hv9yfgkc5/image_1cf9h3npfmmhmhd9ii1v0ama41t.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/qnh2f78lggzej9eb7szdpeab/image_1cf9hjta01op51vs51bgg1dspc0f2a.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/28hogjpi5vd1mv4zo9ure6cf/image_1cf9hr2oj1i831c80hac1e8fo12n.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/zs8ni480pwkcue4rk166s83u/image_1cf9huoo9go8e6rokaqau5c034.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/rf8zn4sz6wixtn3wwutxb9x9/image_1cf9shqh9a82edna2otdgp79p.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/9y76gy2qcdo22c3dwfuzb8p7/image_1cf9ib072nr61qafeku190k25o4h.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/dyf807hcs0z74z34y60wp9cr/image_1cf9igoo21m72vai10771bts3hu4u.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/b3nb4j8migx2fl5tijy59bq5/image_1cf9ijkqiqjmjcoqhcgsiqr5r.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/1sz3tj86m6ymblkc20v1yr1u/image_1cf9se04j17hf1nnek1lu48lne7s.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/pp6tlmwat1zmh5hbc0ay2uft/image_1cf9k76sq1vjq1vve165k6u11n7g7f.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/bdqt1d7a6faf38vnkihztfrn/image_1cf9ioqa1cu4kud2l1gj1n4f6l.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/lltp9d8slxs5bdnm29869o6b/image_1cf9k5th5vef1t4tsjvtib1f1772.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/j17pj8orqs1xcahjyds5em6n/image_1cf9sn6t8qqr6n61lma1l50luna6.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/8aput74ae6gwq7axtqmsrjto/image_1cf9sqhc1v0k7fr1r3a1o1obs7aj.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/u0ks9mrt4znuz1me2weo0413/image_1cf9t8m9c170liqf873i228b8b0.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/f90ncmtsewljse3xyjw3cwl6/image_1cf9t9bq9r5i17qqu80s25f7gbd.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/w0wl0yqcq34qx246h7zfk2p9/image_1cf9v50dlcfn13h1n2c1e2d1ggucq.png">
+<meta property="og:updated_time" content="2018-06-06T07:28:37.979Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你swift项目集成cocos2dx-js模块">
+<meta name="twitter:description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/yqrdvidd7epqxjltfvrgtysf/image_1cf9dr09f7f8urifpm3pa4bg9.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2018/06/06/手把手教你swift项目集成cocos2dx-js模块/"/>
+
+
+
+
+
+  <title>手把手教你swift项目集成cocos2dx-js模块 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/06/06/手把手教你swift项目集成cocos2dx-js模块/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手把手教你swift项目集成cocos2dx-js模块</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-06T12:00:00+08:00">
+                2018-06-06
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,526
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文所用各版本信息：<br>Xcode9.2 + swift4版本<br>cocos2d-x v3.17 <a href="http://www.cocos.com/?v=CN" target="_blank" rel="noopener">中文官方网站</a></p>
+</blockquote>
+<a id="more"></a>
+<p>前几天在swift项目中集成了Lua模块，使得在swift工程中用Lua写游戏逻辑成为了可能，具体工程及配置见<a href="https://github.com/usiege/CocosLua" target="_blank" rel="noopener">手把手教你swift项目添加cocos2dx-lua</a>，由于公司最近要把js做的小游戏集成到iOS原生应用中，于是我们将解锁另外一个场景，好了，下面开始；</p>
+<h2 id="同样的，首先你得有一个swift项目"><a href="#同样的，首先你得有一个swift项目" class="headerlink" title="同样的，首先你得有一个swift项目"></a>同样的，首先你得有一个swift项目</h2><p>我们从头开始，建立一个swift项目；我们默认你已经可以自己创建一个全新的swift项目了，这很简单，不是么？<br><img src="http://static.zybuluo.com/usiege/yqrdvidd7epqxjltfvrgtysf/image_1cf9dr09f7f8urifpm3pa4bg9.png" alt="swift项目结构"></p>
+<h2 id="我们用Cocos2dx创建一个JS的项目"><a href="#我们用Cocos2dx创建一个JS的项目" class="headerlink" title="我们用Cocos2dx创建一个JS的项目"></a>我们用Cocos2dx创建一个JS的项目</h2><p>这里我们给出两种方式创建，无论哪一种，我们的集成过程都大致相同，你可以选择任何一种你认为可用的方式；</p>
+<h3 id="CocosCreator方法集成"><a href="#CocosCreator方法集成" class="headerlink" title="CocosCreator方法集成"></a>CocosCreator方法集成</h3><p>我们最终需要的是如图下的这种目录结构，如果你已经知道这些东西是怎么弄出来的，那么，请跳过本段：<br><img src="http://static.zybuluo.com/usiege/u8yfh2zybhytwrsgqvf6e1xh/image_1cf9g35u31c6chvamcu1idd3ntm.png" alt="JS项目结构"></p>
+<p>新建一个CocosCreator项目，在里面完成所有JS的逻辑，你也可以先设置一个空的项目，我们先把工程集成完成；<br><img src="http://static.zybuluo.com/usiege/i5z30x4o549nw7mmtahlxoa0/image_1cf9geajn1792k431mvi2kg9j313.png" alt="CocosCreator工程"></p>
+<p>成功后我们点击项目—&gt;构建发布：<br><img src="http://static.zybuluo.com/usiege/wwurwri3ebcrx05xifr0qjbo/image_1cf9gt11812enkm0d3c99c3qk1g.png" alt="构建发布"></p>
+<p>发布平台选择iOS，选择一个本地发布路径；模板选择deafault，这个模式下会生成需要的cocos2dx文件夹，我们需要这个库文件夹；暂时不要勾选加密，加密的没有经过实践；</p>
+<p><img src="http://static.zybuluo.com/usiege/rp9h61z9a4x1sc4hv9yfgkc5/image_1cf9h3npfmmhmhd9ii1v0ama41t.png" alt="构建选项，划重点"></p>
+<p>构建好了就会生成上面的JS项目类似结构；</p>
+<h3 id="命令行方式集成"><a href="#命令行方式集成" class="headerlink" title="命令行方式集成"></a>命令行方式集成</h3><p>这种方式类似于Lua集成方式，具体请参照<a href="https://github.com/usiege/CocosLua" target="_blank" rel="noopener">手把手教你swift项目添加cocos2dx-lua</a>中的<strong>创建一个cocos2dx-lua项目</strong>部分，只需要将命令行中的语言改为js就可以了：<br><figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./cocos new Nothing-lua -<span class="selector-tag">p</span> com<span class="selector-class">.charles</span><span class="selector-class">.nothing</span> -l js -d /Users/dizi/Desktop</span><br></pre></td></tr></table></figure></p>
+<h2 id="开始集成"><a href="#开始集成" class="headerlink" title="开始集成"></a>开始集成</h2><ol>
+<li><p>拷贝cocos2dx<br>我们需要将<code>frameworks---&gt;cocos2d-x</code>拷贝到swift目录下，注意，gitignore（自行google）：<br><img src="http://static.zybuluo.com/usiege/qnh2f78lggzej9eb7szdpeab/image_1cf9hjta01op51vs51bgg1dspc0f2a.png" alt="拷贝cocos2d-x"></p>
+</li>
+<li><p>拷贝Classes<br>我们需要将<code>frameworks/runtime-src/Classes</code>拷贝到swift目录下:<br><img src="http://static.zybuluo.com/usiege/28hogjpi5vd1mv4zo9ure6cf/image_1cf9hr2oj1i831c80hac1e8fo12n.png" alt="拷贝Classes"></p>
+</li>
+<li><p>Resources<br>swift项目下建立<code>Resources</code>文件夹，将js项目资源拷贝到该目录下，如图：<br><img src="http://static.zybuluo.com/usiege/zs8ni480pwkcue4rk166s83u/image_1cf9huoo9go8e6rokaqau5c034.png" alt="拷贝资源"><br>还有一件重要的事情，这里有一个JS依赖文件夹，需要被引入，如图：<br><img src="http://static.zybuluo.com/usiege/rf8zn4sz6wixtn3wwutxb9x9/image_1cf9shqh9a82edna2otdgp79p.png" alt="JS依赖"></p>
+</li>
+<li><p>建立工程依赖<br>打开swift项目，引入资源：<br><img src="http://static.zybuluo.com/usiege/9y76gy2qcdo22c3dwfuzb8p7/image_1cf9ib072nr61qafeku190k25o4h.png" alt="不要问我那些蓝色文件与黄色文件的区别"><br>添加依赖工程，打开swift项目，找到我们上面拷贝的cocos2d-x，在<code>cocos2d-x/build</code>下找到<code>cocos2d_libs.xcodeproj</code>，拖到工程中；<br><img src="http://static.zybuluo.com/usiege/dyf807hcs0z74z34y60wp9cr/image_1cf9igoo21m72vai10771bts3hu4u.png" alt="cocos2d_libs.xcodeproj"><br>在<code>cocos2d-x/cocos/scripting/js-bindings/proj.ios_mac/</code>下找到<code>cocos2d_js_bindings.xcodeproj</code>拖到工程中；<br><img src="http://static.zybuluo.com/usiege/b3nb4j8migx2fl5tijy59bq5/image_1cf9ijkqiqjmjcoqhcgsiqr5r.png" alt="cocos2d_js_bindings.xcodeproj"><br>完成后如图：<br><img src="http://static.zybuluo.com/usiege/1sz3tj86m6ymblkc20v1yr1u/image_1cf9se04j17hf1nnek1lu48lne7s.png" alt="JS依赖"></p>
+</li>
+<li><p>配置参数<br>这项也很重要：<br><img src="http://static.zybuluo.com/usiege/pp6tlmwat1zmh5hbc0ay2uft/image_1cf9k76sq1vjq1vve165k6u11n7g7f.png" alt="Enable Bitcode"><br>在工程<code>Build Phases</code>添加依赖：<br><img src="http://static.zybuluo.com/usiege/bdqt1d7a6faf38vnkihztfrn/image_1cf9ioqa1cu4kud2l1gj1n4f6l.png" alt="添加依赖"><br>差点忘了一步，添加依赖库：<br><img src="http://static.zybuluo.com/usiege/lltp9d8slxs5bdnm29869o6b/image_1cf9k5th5vef1t4tsjvtib1f1772.png" alt="frameworks"><br>在工程<code>Build Settings---&gt;Header search paths</code>中添加路径:<br><img src="http://static.zybuluo.com/usiege/j17pj8orqs1xcahjyds5em6n/image_1cf9sn6t8qqr6n61lma1l50luna6.png" alt="Be patient!"><br>在添加路径的过程中你需要非常的耐心，因为有可能由于cocos2dx不同的版本会出现需要不同的文件的情况，所以，请仔细查找添加到里面就可以了；</p>
+</li>
+<li><p>build成功，我需要一张图来庆祝一下！！！<br><img src="http://static.zybuluo.com/usiege/8aput74ae6gwq7axtqmsrjto/image_1cf9sqhc1v0k7fr1r3a1o1obs7aj.png" alt="Congratulations!"></p>
+</li>
+</ol>
+<h2 id="我们来写点代码跑我们的JS"><a href="#我们来写点代码跑我们的JS" class="headerlink" title="我们来写点代码跑我们的JS"></a>我们来写点代码跑我们的JS</h2><p>首先我们需要一个桥接文件把C++的初始化操作完成；这里我们需要用OC的桥接类来完成这个任务，我自己创建了一个叫做<code>CocosBridge</code>的类，成生后我们<strong>把.m改为.mm</strong>，这个过程会自动生成一个桥接文件，如果没有自动生成，那么你需要再添加一个<code>CocosJS-Bridge-Header.h</code>的头文件，并把该文件的路径设置到<code>build settings</code>，如下：<br><img src="http://static.zybuluo.com/usiege/u0ks9mrt4znuz1me2weo0413/image_1cf9t8m9c170liqf873i228b8b0.png" alt="CocosBridge"><br><img src="http://static.zybuluo.com/usiege/f90ncmtsewljse3xyjw3cwl6/image_1cf9t9bq9r5i17qqu80s25f7gbd.png" alt="CocosJS-Bridge-Header.h"></p>
+<p>下面我直接上代码了，具体过程自己体会，之后我们一起来研究；</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;Foundation/Foundation.h&gt;</span><br><span class="line">#import &quot;CocosViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface CocosBridge : NSObject</span><br><span class="line"></span><br><span class="line">+ (instancetype)shared;</span><br><span class="line"></span><br><span class="line">@property(nonatomic) CocosViewController* viewController;</span><br><span class="line"></span><br><span class="line">- (void)detoryCocos;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;CocosBridge.h&quot;</span><br><span class="line"></span><br><span class="line">#import &quot;cocos2d.h&quot;</span><br><span class="line">#import &quot;AppDelegate.h&quot;</span><br><span class="line">#import &quot;CocosViewController.h&quot;</span><br><span class="line"></span><br><span class="line">@interface CocosBridge()</span><br><span class="line">&#123;</span><br><span class="line">    cocos2d::Application *_app;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">static AppDelegate* _cocosDelegate = nil;</span><br><span class="line">@implementation CocosBridge</span><br><span class="line"></span><br><span class="line">- (instancetype)init</span><br><span class="line">&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        _cocosDelegate = new AppDelegate();</span><br><span class="line">        </span><br><span class="line">        //cocos2d initiatial</span><br><span class="line">        self.setupCocos;</span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static CocosBridge* _bridge = nil;</span><br><span class="line"></span><br><span class="line">+ (instancetype)shared &#123;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        _bridge = [[CocosBridge alloc] init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return _bridge;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">- (void)setupCocos &#123;</span><br><span class="line">    </span><br><span class="line">    cocos2d::Application *app = cocos2d::Application::getInstance();</span><br><span class="line">    </span><br><span class="line">    // Initialize the GLView attributes</span><br><span class="line">    app-&gt;initGLContextAttrs();</span><br><span class="line">    cocos2d::GLViewImpl::convertAttrs();</span><br><span class="line">    </span><br><span class="line">    CocosViewController* cocosvc = [[CocosViewController alloc] init];</span><br><span class="line">    cocosvc.wantsFullScreenLayout = YES;</span><br><span class="line">    </span><br><span class="line">    cocos2d::GLView *glview = cocos2d::GLViewImpl::createWithEAGLView((__bridge void *)cocosvc.view);</span><br><span class="line">    cocos2d::Director::getInstance()-&gt;setOpenGLView(glview);</span><br><span class="line">    </span><br><span class="line">    app-&gt;run();</span><br><span class="line">    </span><br><span class="line">    self.viewController = cocosvc;</span><br><span class="line">    _app = app;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)detoryCocos &#123;</span><br><span class="line">    _app-&gt;destroyInstance();</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">#import &lt;UIKit/UIKit.h&gt;</span><br><span class="line"></span><br><span class="line">@interface CocosViewController : UIViewController &#123;</span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line">- (BOOL) prefersStatusBarHidden;</span><br><span class="line"></span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">#import &quot;CocosViewController.h&quot;</span><br><span class="line">#import &quot;cocos2d.h&quot;</span><br><span class="line">#import &quot;platform/ios/CCEAGLView-ios.h&quot;</span><br><span class="line"></span><br><span class="line">#import &quot;CocosBridge.h&quot;</span><br><span class="line"></span><br><span class="line">@implementation CocosViewController</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// Implement loadView to create a view hierarchy programmatically, without using a nib.</span><br><span class="line">- (void)loadView &#123;</span><br><span class="line">    // Initialize the CCEAGLView</span><br><span class="line">    CCEAGLView *eaglView = [CCEAGLView viewWithFrame: [UIScreen mainScreen].bounds</span><br><span class="line">                                         pixelFormat: (__bridge NSString *)cocos2d::GLViewImpl::_pixelFormat</span><br><span class="line">                                         depthFormat: cocos2d::GLViewImpl::_depthFormat</span><br><span class="line">                                  preserveBackbuffer: NO</span><br><span class="line">                                          sharegroup: nil</span><br><span class="line">                                       multiSampling: NO</span><br><span class="line">                                     numberOfSamples: 0 ];</span><br><span class="line">    </span><br><span class="line">    // Enable or disable multiple touches</span><br><span class="line">    [eaglView setMultipleTouchEnabled:NO];</span><br><span class="line">    </span><br><span class="line">    // Set EAGLView as view of RootViewController</span><br><span class="line">    self.view = eaglView;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Implement viewDidLoad to do additional setup after loading the view, typically from a nib.</span><br><span class="line">- (void)viewDidLoad &#123;</span><br><span class="line">    [super viewDidLoad];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)viewWillAppear:(BOOL)animated &#123;</span><br><span class="line">    [super viewWillAppear:animated];</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)viewDidDisappear:(BOOL)animated &#123;</span><br><span class="line">    [super viewDidDisappear:animated];</span><br><span class="line">    CocosBridge* cb = CocosBridge.shared;</span><br><span class="line">//    cb.detoryCocos;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">// For ios6, use supportedInterfaceOrientations &amp; shouldAutorotate instead</span><br><span class="line">#ifdef __IPHONE_6_0</span><br><span class="line">- (NSUInteger) supportedInterfaceOrientations&#123;</span><br><span class="line">    return UIInterfaceOrientationMaskAllButUpsideDown;</span><br><span class="line">&#125;</span><br><span class="line">#endif</span><br><span class="line"></span><br><span class="line">- (BOOL) shouldAutorotate &#123;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)didRotateFromInterfaceOrientation:(UIInterfaceOrientation)fromInterfaceOrientation &#123;</span><br><span class="line">    [super didRotateFromInterfaceOrientation:fromInterfaceOrientation];</span><br><span class="line"></span><br><span class="line">    auto glview = cocos2d::Director::getInstance()-&gt;getOpenGLView();</span><br><span class="line"></span><br><span class="line">    if (glview)</span><br><span class="line">    &#123;</span><br><span class="line">        CCEAGLView *eaglview = (__bridge CCEAGLView *)glview-&gt;getEAGLView();</span><br><span class="line"></span><br><span class="line">        if (eaglview)</span><br><span class="line">        &#123;</span><br><span class="line">            CGSize s = CGSizeMake([eaglview getWidth], [eaglview getHeight]);</span><br><span class="line">            cocos2d::Application::getInstance()-&gt;applicationScreenSizeChanged((int) s.width, (int) s.height);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">//fix not hide status on ios7</span><br><span class="line">- (BOOL)prefersStatusBarHidden &#123;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">// Controls the application&apos;s preferred home indicator auto-hiding when this view controller is shown.</span><br><span class="line">- (BOOL)prefersHomeIndicatorAutoHidden &#123;</span><br><span class="line">    return YES;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">- (void)didReceiveMemoryWarning &#123;</span><br><span class="line">    // Releases the view if it doesn&apos;t have a superview.</span><br><span class="line">    [super didReceiveMemoryWarning];</span><br><span class="line"></span><br><span class="line">    // Release any cached data, images, etc that aren&apos;t in use.</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>然后我们在<code>ViewController</code>里添加一个按钮，推出我们的JS页面，上图吧：</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@IBAction</span> <span class="function"><span class="keyword">func</span> <span class="title">testAction</span><span class="params">(<span class="number">_</span> sender: Any)</span></span> &#123;</span><br><span class="line">    <span class="keyword">let</span> cocosbridge = <span class="type">CocosBridge</span>.shared()</span><br><span class="line">    <span class="keyword">let</span> cocosvc = cocosbridge?.viewController</span><br><span class="line">    navigationController?.pushViewController(cocosvc!, animated: <span class="literal">true</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.zybuluo.com/usiege/w0wl0yqcq34qx246h7zfk2p9/image_1cf9v50dlcfn13h1n2c1e2d1ggucq.png" alt="完成！！！"></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+            <a href="/tags/cocos2dx/" rel="tag"># cocos2dx</a>
+          
+            <a href="/tags/js/" rel="tag"># js</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/06/03/手把手教你swift项目添加cocos2dx-lua/" rel="next" title="手把手教你swift项目添加cocos2dx-lua">
+                <i class="fa fa-chevron-left"></i> 手把手教你swift项目添加cocos2dx-lua
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#同样的，首先你得有一个swift项目"><span class="nav-number">1.</span> <span class="nav-text">同样的，首先你得有一个swift项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们用Cocos2dx创建一个JS的项目"><span class="nav-number">2.</span> <span class="nav-text">我们用Cocos2dx创建一个JS的项目</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#CocosCreator方法集成"><span class="nav-number">2.1.</span> <span class="nav-text">CocosCreator方法集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#命令行方式集成"><span class="nav-number">2.2.</span> <span class="nav-text">命令行方式集成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开始集成"><span class="nav-number">3.</span> <span class="nav-text">开始集成</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#我们来写点代码跑我们的JS"><span class="nav-number">4.</span> <span class="nav-text">我们来写点代码跑我们的JS</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

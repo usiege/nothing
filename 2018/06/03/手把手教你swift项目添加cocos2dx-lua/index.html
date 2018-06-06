@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="swift,lua,cocos2dx," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta name="keywords" content="swift,lua,cocos2dx">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你swift项目添加cocos2dx-lua">
+<meta property="og:url" content="http://charlesblog.site/2018/06/03/手把手教你swift项目添加cocos2dx-lua/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/uevib9k48ouoh5tzfcdsuco2/image_1cf0chaibo2h1okm1gb01n031lna9.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/pbbigdacwd8wt5dfgj5n1dh1/image_1cf0ck09i8q81o3a1edd16k01n42m.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/gaqy8723btnkzhb00sy41cuo/image_1cf2g3usa1ojcb531vik14mcq0d13.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/8ne4u18l390hg8tyb6rirgrh/image_1cf2g61423hj8ks12ngn544ov1g.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/5d9md3gqr7g6mbctjg5xkyj9/image_1cf2h2kvq7381eho18ieh5v1s5o1t.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/jcs6xlchdkv5153hmba0mczo/image_1cf2mkgfu1m1uk0i13ppv7jieh3h.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/6re1nikuq5yi42grr3llcyp2/image_1cf2mm4hr2387mi1snp1iv51gtb3u.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/g32j6k9a6u3k8n8u8bdon702/image_1cf2n16id1lfp13phripbgh13ta4b.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/ekm9ac1ee3lvxobwy2nw0e50/image_1cf2n2esh15vo18se12q01i7dih54o.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/slid6pe7k8nhx6nqcgik1lan/image_1cf2ni2nnkpq1pmrsbd1iippri55.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/a2dz2qu36yco9mctyogm3p2x/image_1cf2o45re1ahs1lvjn8mca14be5i.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/3jj0oybm87eqo5gyf1t4s8nl/image_1cf2o6cm9rhe1tj416tl1acf8285v.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/0jirzqr476njjw7mnn9pa0wc/image_1cf2obieh1vrtujma7ucml86d6c.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/ibrq5jlvye4djt47bz2x8p5b/image_1cf2ogs2gai2rj01e701jks1q2h79.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/wm1ea7a5s5kj4sgmci64atfh/image_1cf2pbtk51lrv1kek18me1i5brlh8j.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/pzv7pmmzyqhfgxprukdom5g2/image_1cf2vge2nmebc02hcgk8k1a199g.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/grjzsjx2vtnbhq1814kzd1m2/image_1cf2vjknh14co12bq15jqahuh0a9t.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/6ph26ry963spcimacjhgmrnc/image_1cf2vl0kf1skll42p86qi11k16aa.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/f24ifjqb73s2qw6kk92ddnmo/image_1cf2vs1jffgj8avof61vg11iuaan.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/v9m64x38qh0k224c0wgot4v2/image_1cf304l9cja61nu71r9h1l8b539b4.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/yvan9ltqx99nggchr66yvkz0/image_1cf309lts1b921oan4rhvkd1svebh.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/fzjz3bofezeaed0u9adg16lf/image_1cf30d889rs6173d8s411e0i5jbu.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/48wj5plpail9zyyz1p4nf23g/image_1cf30ekpb1omd1rj61m56qo1eracb.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/lzykomwd0fpqyrypl5atgg39/image_1cf30m5opf41hq513ib1eekflbco.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/bkt68q28zl1nn42kbivw3xzv/image_1cf30qh2sddp1mi95kj89o1725d5.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/3d0dh82hc2f1izglc03j0e19/image_1cf30sk2o1211j4t88f11lt172dff.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/lrxbyw47jmdpd4tnr8sg9i5t/image_1cf31g68atfq3l31v3uf4n1nm6fs.png">
+<meta property="og:updated_time" content="2018-06-06T07:21:08.286Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你swift项目添加cocos2dx-lua">
+<meta name="twitter:description" content="本文所用各版本信息：Xcode9.2 + swift4版本cocos2d-x v3.17 中文官方网站">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/uevib9k48ouoh5tzfcdsuco2/image_1cf0chaibo2h1okm1gb01n031lna9.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2018/06/03/手把手教你swift项目添加cocos2dx-lua/"/>
+
+
+
+
+
+  <title>手把手教你swift项目添加cocos2dx-lua | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/06/03/手把手教你swift项目添加cocos2dx-lua/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手把手教你swift项目添加cocos2dx-lua</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-03T08:46:00+08:00">
+                2018-06-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,491
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>本文所用各版本信息：<br>Xcode9.2 + swift4版本<br>cocos2d-x v3.17 <a href="http://www.cocos.com/?v=CN" target="_blank" rel="noopener">中文官方网站</a></p>
+</blockquote>
+<a id="more"></a>
+<h2 id="集成思路"><a href="#集成思路" class="headerlink" title="集成思路"></a>集成思路</h2><p>首先网上给出一个C系的思路，本人未亲测，并且以C调用lua，绕过了cocos2d-x的调用思路，不觉得这种方式很好，所以弃之；</p>
+<p><img src="http://static.zybuluo.com/usiege/uevib9k48ouoh5tzfcdsuco2/image_1cf0chaibo2h1okm1gb01n031lna9.png" alt="C语言调用思路"></p>
+<p>本文思路如图：<br><img src="http://static.zybuluo.com/usiege/pbbigdacwd8wt5dfgj5n1dh1/image_1cf0ck09i8q81o3a1edd16k01n42m.png" alt="swift-&gt;objective-c-&gt;c++-&gt;lua"><br>首先swift与objective-c的互相调用非常方便，其次oc只需要将.m文件写成.mm就可以在实现中直接调用c++方法，并且c++可以直接绑定lua，这样一来，就实现了，ios系语言写主框架，lua写游戏逻辑，直接通过<code>ViewController</code>展现就可以了；并且lua脚本可以像资源添加的方式直接在文件夹中替换，非常方便；基于以上思路，说干就干；</p>
+<h2 id="首先你需要一个swift项目"><a href="#首先你需要一个swift项目" class="headerlink" title="首先你需要一个swift项目"></a>首先你需要一个swift项目</h2><p>新建一个swift语言写的工程，我们默认你已经会用Xcode做这件事了，于是，工程的结构先大致看一下；</p>
+<p><img src="http://static.zybuluo.com/usiege/gaqy8723btnkzhb00sy41cuo/image_1cf2g3usa1ojcb531vik14mcq0d13.png" alt="Nothing项目结构"></p>
+<p><img src="http://static.zybuluo.com/usiege/8ne4u18l390hg8tyb6rirgrh/image_1cf2g61423hj8ks12ngn544ov1g.png" alt="image_1cf2g61423hj8ks12ngn544ov1g.png-122.4kB"></p>
+<p>这里是我自己的swift工程，上面的是总结构，下面的是内部工程结构，我们这里只关注一下<strong>bridge</strong>，首先创建一个<code>CocosViewController</code>的控制器，这里的控制器可以是OC类型的，也可以使用swift类型的（由于我们需要用OC做桥接文件，所以需要我们创建一个OC的类，我这里自己写了一个单例用来做桥接，所以控制器就无所谓是OC还是swift了），用来呈现我们用cocos2dx-lua展现的游戏页面；在swift工程中添加OC文件会自动生成桥接文件，名字如图；另外还需要注意一点，<code>CocosViewController</code>的.m文件要修改成.mm类型，这样就可以在实现中直接调用C++的类了；</p>
+<p>创建好后先不要动，我们再来创建一个OC类型的单例，用来进行引擎的初始化操作，以及对lua游戏操作进行封装，我自己命名为<code>LuaBridge</code>；<br><img src="http://static.zybuluo.com/usiege/5d9md3gqr7g6mbctjg5xkyj9/image_1cf2h2kvq7381eho18ieh5v1s5o1t.png" alt="image_1cf2h2kvq7381eho18ieh5v1s5o1t.png-12kB"></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line">#import &quot;LuaBridge.h&quot;</span><br><span class="line">#include &quot;CocosLua.hpp&quot;</span><br><span class="line"></span><br><span class="line">@interface LuaBridge()</span><br><span class="line">&#123;</span><br><span class="line">    CocosLua _cocosLua;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">@end</span><br><span class="line"></span><br><span class="line">@implementation LuaBridge</span><br><span class="line"></span><br><span class="line">- (instancetype)init</span><br><span class="line">&#123;</span><br><span class="line">    self = [super init];</span><br><span class="line">    if (self) &#123;</span><br><span class="line">        _cocosLua = CocosLua();</span><br><span class="line">        </span><br><span class="line">    &#125;</span><br><span class="line">    return self;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">static LuaBridge* _bridge = nil;</span><br><span class="line"></span><br><span class="line">+ (instancetype)shared &#123;</span><br><span class="line">    static dispatch_once_t onceToken;</span><br><span class="line">    dispatch_once(&amp;onceToken, ^&#123;</span><br><span class="line">        _bridge = [[LuaBridge alloc] init];</span><br><span class="line">    &#125;);</span><br><span class="line">    return _bridge;</span><br><span class="line">&#125;</span><br><span class="line">@end</span><br></pre></td></tr></table></figure>
+<p>上面出现的<code>CocosLua</code>是一个c++的类，在工程中自己创建的；创建它的目的是用来封装cocos2dx-lua的操作，这个类直接被隐藏在<code>LuaBridge</code>单例中，在实际应用过程中可能用的不是很多，我们这里出现它只是为了说明本文的类型结构；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> CocosLua_hpp</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> CocosLua_hpp</span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;iostream&gt;</span></span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CocosLua</span> &#123;</span></span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    CocosLua();</span><br><span class="line">    ~CocosLua();</span><br><span class="line">    </span><br><span class="line"><span class="keyword">public</span>:</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">cocos_lua</span><span class="params">()</span></span>;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span> <span class="comment">/* CocosLua_hpp */</span></span></span><br></pre></td></tr></table></figure>
+<h2 id="创建一个cocos2dx-lua项目"><a href="#创建一个cocos2dx-lua项目" class="headerlink" title="创建一个cocos2dx-lua项目"></a>创建一个cocos2dx-lua项目</h2><p>首先我们需要去cocos官网上下载cocos2dx源码，链接在本文开始，我自己下载的是v3.17版本，下载的是zip包，解压后如下图：</p>
+<p><img src="http://static.zybuluo.com/usiege/jcs6xlchdkv5153hmba0mczo/image_1cf2mkgfu1m1uk0i13ppv7jieh3h.png" alt="image_1cf2mkgfu1m1uk0i13ppv7jieh3h.png-77.4kB"></p>
+<p>接下来打开终端，我们创建一个lua项目；</p>
+<p><img src="http://static.zybuluo.com/usiege/6re1nikuq5yi42grr3llcyp2/image_1cf2mm4hr2387mi1snp1iv51gtb3u.png" alt="image_1cf2mm4hr2387mi1snp1iv51gtb3u.png-82.5kB"></p>
+<p>一路cd到我们下载的cocos2dx文件夹下，然后：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> <span class="built_in">cd</span> tools/cocos2d-console/bin/</span></span><br></pre></td></tr></table></figure></p>
+<p>到上面的这个目录下新建工程，使用下面的命令格式：<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">cocos new <span class="tag">&lt;<span class="name">game</span> <span class="attr">name</span>&gt;</span> -p <span class="tag">&lt;<span class="name">package</span> <span class="attr">identifier</span>&gt;</span> -l <span class="tag">&lt;<span class="name">language</span>&gt;</span> -d <span class="tag">&lt;<span class="name">location</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">game</span> <span class="attr">name</span>&gt;</span> 工程名</span><br><span class="line"><span class="tag">&lt;<span class="name">package</span> <span class="attr">identifier</span>&gt;</span> 包名，bundle id</span><br><span class="line"><span class="tag">&lt;<span class="name">language</span>&gt;</span> 所用语言 cpp lua js</span><br><span class="line"><span class="tag">&lt;<span class="name">location</span>&gt;</span> 项目创建路径</span><br></pre></td></tr></table></figure></p>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ ./cocos new Nothing-lua -<span class="selector-tag">p</span> com<span class="selector-class">.charles</span><span class="selector-class">.nothing</span> -l lua -d /Users/dizi/Desktop</span><br></pre></td></tr></table></figure>
+<p><img src="http://static.zybuluo.com/usiege/g32j6k9a6u3k8n8u8bdon702/image_1cf2n16id1lfp13phripbgh13ta4b.png" alt="image_1cf2n16id1lfp13phripbgh13ta4b.png-153.7kB"></p>
+<p><img src="http://static.zybuluo.com/usiege/ekm9ac1ee3lvxobwy2nw0e50/image_1cf2n2esh15vo18se12q01i7dih54o.png" alt="image_1cf2n2esh15vo18se12q01i7dih54o.png-29kB"></p>
+<h2 id="整合swift项目与lua项目"><a href="#整合swift项目与lua项目" class="headerlink" title="整合swift项目与lua项目"></a>整合swift项目与lua项目</h2><p>如果你做到这一步，那么我们离成功不远了；接下来我们要把lua项目里的资源拷贝到swift项目中，具体跟着我一步一步做；</p>
+<ol>
+<li><p>把lua项目下<code>frameworks/cocos2d-x</code>文件夹拖动到swift目录下：<br><img src="http://static.zybuluo.com/usiege/slid6pe7k8nhx6nqcgik1lan/image_1cf2ni2nnkpq1pmrsbd1iippri55.png" alt="image_1cf2ni2nnkpq1pmrsbd1iippri55.png-160.2kB"><br>这里说一点，如果工程是用git管理，因为cocos2d-x下文件比较多，而且是cocos2dx代码文件，所以不必要上传，可添加.gitignore文件：<br><img src="http://static.zybuluo.com/usiege/a2dz2qu36yco9mctyogm3p2x/image_1cf2o45re1ahs1lvjn8mca14be5i.png" alt="image_1cf2o45re1ahs1lvjn8mca14be5i.png-16.3kB"></p>
+</li>
+<li><p>把lua项目下<code>frameworks/runtime-src/Classes</code>文件夹拖动到swift目录下：<br><img src="http://static.zybuluo.com/usiege/3jj0oybm87eqo5gyf1t4s8nl/image_1cf2o6cm9rhe1tj416tl1acf8285v.png" alt="image_1cf2o6cm9rhe1tj416tl1acf8285v.png-197.8kB"></p>
+</li>
+<li><p>在swift项目目录下新建<code>Resources</code>文件夹，将lua项目中的如图三项拷贝进该文件夹下，这样以后lua的所有资源则将全部在该目录下替换，不需要修改工程中其他地方：<br><img src="http://static.zybuluo.com/usiege/0jirzqr476njjw7mnn9pa0wc/image_1cf2obieh1vrtujma7ucml86d6c.png" alt="image_1cf2obieh1vrtujma7ucml86d6c.png-112.3kB"></p>
+</li>
+<li><p>将刚刚添加的文件引用到工程项目中：<br><img src="http://static.zybuluo.com/usiege/ibrq5jlvye4djt47bz2x8p5b/image_1cf2ogs2gai2rj01e701jks1q2h79.png" alt="image_1cf2ogs2gai2rj01e701jks1q2h79.png-75.4kB"><br><img src="http://static.zybuluo.com/usiege/wm1ea7a5s5kj4sgmci64atfh/image_1cf2pbtk51lrv1kek18me1i5brlh8j.png" alt="image_1cf2pbtk51lrv1kek18me1i5brlh8j.png-68.5kB"><br>注意我们的coco2d-x目录并不需要一并引入到工程中，我们不会用到它（不引用它并不说不会用到，不要删掉，不要删掉，不要删掉！！！）；<br>PS：这里注意蓝色文件夹和黄色文件夹的区别；</p>
+</li>
+</ol>
+<h2 id="工程环境配置"><a href="#工程环境配置" class="headerlink" title="工程环境配置"></a>工程环境配置</h2><p>接下来到了重头戏，工程环境配置，这个部分我们需要耐心一点，因为有很多路径需要我们自己去找，还要搞清楚几个不同的工程项目配置，我们一步一步来；</p>
+<ol>
+<li><p>引入工程文件，这几个工程文件分别生成cocos-lib以及调拭用.a库，以下依次：<br><img src="http://static.zybuluo.com/usiege/pzv7pmmzyqhfgxprukdom5g2/image_1cf2vge2nmebc02hcgk8k1a199g.png" alt="image_1cf2vge2nmebc02hcgk8k1a199g.png-241.5kB"><br><img src="http://static.zybuluo.com/usiege/grjzsjx2vtnbhq1814kzd1m2/image_1cf2vjknh14co12bq15jqahuh0a9t.png" alt="image_1cf2vjknh14co12bq15jqahuh0a9t.png-103.2kB"><br><img src="http://static.zybuluo.com/usiege/6ph26ry963spcimacjhgmrnc/image_1cf2vl0kf1skll42p86qi11k16aa.png" alt="image_1cf2vl0kf1skll42p86qi11k16aa.png-156.1kB"></p>
+</li>
+<li><p>接下来配置资源库，点击工程TARGETS-&gt;Build Phases，在Target Dependencies中添加：<br><img src="http://static.zybuluo.com/usiege/f24ifjqb73s2qw6kk92ddnmo/image_1cf2vs1jffgj8avof61vg11iuaan.png" alt="image_1cf2vs1jffgj8avof61vg11iuaan.png-85.6kB"><br>在Link Binary With Libraries中添加如下支持库，其中lib文件需要打开Add other添加，按shift + command + G，在其中输入<code>/usr/lib</code>；<br><img src="http://static.zybuluo.com/usiege/v9m64x38qh0k224c0wgot4v2/image_1cf304l9cja61nu71r9h1l8b539b4.png" alt="image_1cf304l9cja61nu71r9h1l8b539b4.png-118.7kB"><br><img src="http://static.zybuluo.com/usiege/yvan9ltqx99nggchr66yvkz0/image_1cf309lts1b921oan4rhvkd1svebh.png" alt="image_1cf309lts1b921oan4rhvkd1svebh.png-110.7kB"></p>
+</li>
+<li><p>cocos2dx不支持bitcode，在buildsetting中<code>Enable Bitcode</code>改为NO；<br><img src="http://static.zybuluo.com/usiege/fzjz3bofezeaed0u9adg16lf/image_1cf30d889rs6173d8s411e0i5jbu.png" alt="image_1cf30d889rs6173d8s411e0i5jbu.png-21.7kB"><br>C++编译器部分：<br><img src="http://static.zybuluo.com/usiege/48wj5plpail9zyyz1p4nf23g/image_1cf30ekpb1omd1rj61m56qo1eracb.png" alt="image_1cf30ekpb1omd1rj61m56qo1eracb.png-26.4kB"></p>
+</li>
+<li><p><code>Header Search Paths</code>中添加：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">(inherited)</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/cocos</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/external/lua/tolua</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/external/lua/lua</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/external/lua</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/external</span></span><br><span class="line"><span class="meta">$</span><span class="bash">(PROJECT_DIR)/cocos2d-x/Classes</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<p><img src="http://static.zybuluo.com/usiege/lzykomwd0fpqyrypl5atgg39/image_1cf30m5opf41hq513ib1eekflbco.png" alt="image_1cf30m5opf41hq513ib1eekflbco.png-130.9kB"></p>
+<ol start="5">
+<li>引入工程配置：<br><code>cocos2d_libs.xcodeproj</code>工程配置中，确保以下架构都支持；<br><img src="http://static.zybuluo.com/usiege/bkt68q28zl1nn42kbivw3xzv/image_1cf30qh2sddp1mi95kj89o1725d5.png" alt="image_1cf30qh2sddp1mi95kj89o1725d5.png-52.8kB"><br><code>cocos2d_lua_bindings.xcodeproj</code>工程配置中，确保以下支持平台为iOS；<br><img src="http://static.zybuluo.com/usiege/3d0dh82hc2f1izglc03j0e19/image_1cf30sk2o1211j4t88f11lt172dff.png" alt="image_1cf30sk2o1211j4t88f11lt172dff.png-98.9kB"></li>
+<li>好了，开始编译你的工程吧！</li>
+</ol>
+<h2 id="去倒杯水吧，这个过程会很久。。。"><a href="#去倒杯水吧，这个过程会很久。。。" class="headerlink" title="去倒杯水吧，这个过程会很久。。。"></a>去倒杯水吧，这个过程会很久。。。</h2><p><img src="http://static.zybuluo.com/usiege/lrxbyw47jmdpd4tnr8sg9i5t/image_1cf31g68atfq3l31v3uf4n1nm6fs.png" alt="image_1cf31g68atfq3l31v3uf4n1nm6fs.png-8.4kB"><br>Congratulations! 至此，工程已经全部配置完毕，你已经解决一个大Boss了；<br>今天就到这里吧，之后我们再续如何用swift调用lua <a href="http://" target="_blank" rel="noopener">手把手教你swift项目添加cocos2dx-lua(2)</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+            <a href="/tags/lua/" rel="tag"># lua</a>
+          
+            <a href="/tags/cocos2dx/" rel="tag"># cocos2dx</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/05/23/用TextKit搞点事情/" rel="next" title="用TextKit搞点事情">
+                <i class="fa fa-chevron-left"></i> 用TextKit搞点事情
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/06/手把手教你swift项目集成cocos2dx-js模块/" rel="prev" title="手把手教你swift项目集成cocos2dx-js模块">
+                手把手教你swift项目集成cocos2dx-js模块 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">47</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#集成思路"><span class="nav-number">1.</span> <span class="nav-text">集成思路</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#首先你需要一个swift项目"><span class="nav-number">2.</span> <span class="nav-text">首先你需要一个swift项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#创建一个cocos2dx-lua项目"><span class="nav-number">3.</span> <span class="nav-text">创建一个cocos2dx-lua项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#整合swift项目与lua项目"><span class="nav-number">4.</span> <span class="nav-text">整合swift项目与lua项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工程环境配置"><span class="nav-number">5.</span> <span class="nav-text">工程环境配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#去倒杯水吧，这个过程会很久。。。"><span class="nav-number">6.</span> <span class="nav-text">去倒杯水吧，这个过程会很久。。。</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>
