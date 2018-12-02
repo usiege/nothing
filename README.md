@@ -1,6 +1,9 @@
 # usiege.github.io
 github personal pages
 
+# 2018.12.02
+站点作他用，所有文章均在简书和CSDN上维；
+
 # 2018.05.07
 使用新站点 [charlesblog.site](http://charlesblog.site)
 
