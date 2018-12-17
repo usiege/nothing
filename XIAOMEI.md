@@ -1,9 +1,16 @@
 # 与大哥的日常
 
+<p align='center'>
+<img src='bg.png'>
+</p>
 
+## 2018.12.17
 
+[不会离开](https://www.jianshu.com/p/423ef9c62a00)
 
 ## 2018.12.16
+
+[怕你不在](https://www.jianshu.com/p/8ff977b4b0a2)
 
 [土情话](https://www.jianshu.com/p/e094397a34f6)
 
@@ -22,6 +29,8 @@
 ## 2018.12.08
 
 [下雪和想你](https://www.jianshu.com/p/bd367580861b)
+
+[蠢吧](https://www.jianshu.com/p/474a74e00e8c)
 
 ## 2018.12.07
 
