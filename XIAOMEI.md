@@ -4,6 +4,16 @@
 <img src='bg.png'>
 </p>
 
+## 2018.12.20
+
+[不需要我](https://www.jianshu.com/p/6c31b51857c8)
+
+[不去想你](https://www.jianshu.com/p/e70c6b45fa9f)
+
+## 2018.12.19
+
+[成为且仅成为](https://www.jianshu.com/p/d2666d7d9778)
+
 ## 2018.12.17
 
 [不会离开](https://www.jianshu.com/p/423ef9c62a00)
@@ -59,7 +69,7 @@
 
 他： 你愿意做我女朋友吗？
 
-她： 一点也不正式，你欠我一个当面的对白！
+她： 一点也不正式，你欠我一个当面的告白！
 
 [惩罚](https://www.jianshu.com/p/fee7007fe065)
 
