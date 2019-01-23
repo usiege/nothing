@@ -7,9 +7,7 @@
 
 ## 2019.01.23
 
-《椿》。
-
-<iframe frameborder="no" border="0" marginwidth="0" marginheight="0" width=330 height=86 src="http://music.163.com/#/m/song?id=479598964"></iframe>
+[《椿》。](http://music.163.com/#/m/song?id=479598964)
 
 
 ## 2019.01.22
@@ -34,9 +32,7 @@
 
 ## 2019.01.16
 
-- 不许凶小美！
-- 不许态度不好！
-- 不许不理小美！
+[《早餐》。](http://music.163.com/#/m/song?id=1323301524)
 
 ## 2019.01.15
 
