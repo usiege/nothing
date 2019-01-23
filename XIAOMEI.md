@@ -9,6 +9,9 @@
 
 [《椿》。](http://music.163.com/#/m/song?id=479598964)
 
+<audio id="audio" controls="" preload="none">
+      <source id="mp3" src="http://music.163.com/#/m/song?id=479598964">
+</audio>
 
 ## 2019.01.22
 
