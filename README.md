@@ -4,7 +4,7 @@ github personal pages
 
 ## 2019.01.24
 
-App。
+Answer.
 
 ## 2019.01.01
 
