@@ -6,10 +6,6 @@ github personal pages
 
 Answer.
 
-## 2019.01.01
-
-[与小美的日常](https://github.com/usiege/usiege.github.io/blob/master/XIAOMEI.md)
-
 ## 2018.12.02
 站点作他用，所有文章均在 [简书](https://www.jianshu.com/u/8a7d7e6876ab) 和 [CSDN](https://blog.csdn.net/jianin45) 上维护；
 
