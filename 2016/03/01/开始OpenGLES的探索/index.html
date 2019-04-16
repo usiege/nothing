@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="opengles,GLKit," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="Summary: 本系列文章是学习《OpenGL ES应用开发实践指南 iOS卷》的过程，学习过程中参照书中给出的例子运行并记录笔记，此篇是开篇，书中的例子可以从本文给出的地址下载。">
+<meta name="keywords" content="opengles,GLKit">
+<meta property="og:type" content="article">
+<meta property="og:title" content="开始OpenGLES的探索">
+<meta property="og:url" content="http://charlesblog.site/2016/03/01/开始OpenGLES的探索/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="Summary: 本系列文章是学习《OpenGL ES应用开发实践指南 iOS卷》的过程，学习过程中参照书中给出的例子运行并记录笔记，此篇是开篇，书中的例子可以从本文给出的地址下载。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.736Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="开始OpenGLES的探索">
+<meta name="twitter:description" content="Summary: 本系列文章是学习《OpenGL ES应用开发实践指南 iOS卷》的过程，学习过程中参照书中给出的例子运行并记录笔记，此篇是开篇，书中的例子可以从本文给出的地址下载。">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2016/03/01/开始OpenGLES的探索/"/>
+
+
+
+
+
+  <title>开始OpenGLES的探索 | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2016/03/01/开始OpenGLES的探索/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">开始OpenGLES的探索</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2016-03-01T10:20:00+08:00">
+                2016-03-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  1,472
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  7
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Summary: 本系列文章是学习《OpenGL ES应用开发实践指南 iOS卷》的过程，学习过程中参照书中给出的例子运行并记录笔记，此篇是开篇，书中的例子可以从本文给出的地址下载。</p>
+<a id="more"></a>
+<p>##先介绍几个概念：</p>
+<blockquote>
+<p>渲染：用3D数据生成一个2D图像的过程就叫做渲染；</p>
+<p>像素：计算机显示矩形的颜色点叫做像素；</p>
+<p>缓存：是指图形处理器能够控制和管理的连续RAM（原来就是内存）；</p>
+<p>帧缓存：内存中接收2D结果数据的缓冲区；</p>
+<p>上下文：是用于配置OpenGL ES的特定的软件平台的数据结构信息；</p>
+</blockquote>
+<p>##开始我们的OGE之旅：</p>
+<p>首先是添加两个框架，一个是用于调用OpenGL ES进行渲染的<strong>OpenGLES.framework</strong>，另外一个是用于对接iOS系统和OpenGLES的<strong>GLKit.framework</strong>，后者开放了一套方便OpenGLES环境设置的接口，方便iOS程序进行OpenGLES编程；</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">OpenGLESViewController</span> : <span class="title">GLKViewController</span></span></span><br><span class="line">&#123;</span><br><span class="line">   GLuint vertexBufferID; <span class="comment">//该值实际上是一个无符号整形，看名字可以看的出来</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">@property</span> (<span class="keyword">strong</span>, <span class="keyword">nonatomic</span>) GLKBaseEffect *baseEffect;</span><br><span class="line"><span class="keyword">@end</span></span><br></pre></td></tr></table></figure>
+<p>下面这个结构体用来保存一个坐标，它是一个起始于坐标系原点的矢量（X,Y,Z）</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//This data type is used to store information for each vertex</span></span><br><span class="line"><span class="keyword">typedef</span> <span class="class"><span class="keyword">struct</span> &#123;</span></span><br><span class="line">    GLKVector3  positionCoords;</span><br><span class="line">&#125;SceneVertex;</span><br></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//用来定义三角形，以下空白部分是最后在屏幕上显示的结果，纯属娱乐</span></span><br><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment"> *************</span></span><br><span class="line"><span class="comment"> **** ********</span></span><br><span class="line"><span class="comment"> ****  *******</span></span><br><span class="line"><span class="comment"> ****   ******</span></span><br><span class="line"><span class="comment"> ****    *****</span></span><br><span class="line"><span class="comment"> ****     ****</span></span><br><span class="line"><span class="comment"> *************</span></span><br><span class="line"><span class="comment"> *************</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="comment">// Define vertex data for a triangle to use in example</span></span><br><span class="line"><span class="keyword">static</span> <span class="keyword">const</span> SceneVertex vertices[] =</span><br><span class="line">&#123;</span><br><span class="line">    &#123;&#123;<span class="number">-0.5f</span>, <span class="number">-0.5f</span>, <span class="number">0.0</span>&#125;&#125;, <span class="comment">// lower left corner</span></span><br><span class="line">    &#123;&#123; <span class="number">0.5f</span>, <span class="number">-0.5f</span>, <span class="number">0.0</span>&#125;&#125;, <span class="comment">// lower right corner</span></span><br><span class="line">    &#123;&#123;<span class="number">-0.5f</span>,  <span class="number">0.5f</span>, <span class="number">0.0</span>&#125;&#125;  <span class="comment">// upper left corner</span></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+<p>##viewDidLoad</p>
+<p>先要将Controller的view强制转换成GLKView，GLKView提供了针对OpenGLES2.0版本的上下文，新建该类的上下文并将它设置为当前的上下文；</p>
+<figure class="highlight cos"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Verify the type of view created automatically by the</span></span><br><span class="line"><span class="comment">// Interface Builder storyboard</span></span><br><span class="line">GLKView *<span class="keyword">view</span> = (GLKView *)self.<span class="keyword">view</span><span class="comment">;</span></span><br><span class="line">NSAssert([<span class="keyword">view</span> isKindOfClass:[GLKView <span class="keyword">class</span>]],</span><br><span class="line">   		   @<span class="string">"View controller's view is not a GLKView"</span>)<span class="comment">;</span></span><br></pre></td></tr></table></figure>
+<p>OpenGL ES的上下文不仅会保存它的状态，还会控制GPU去执行渲染运算,EAGLContext会封装一个特定于某个平台的上下文，一个应用可以使用多个上下文;</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Create an OpenGL ES 2.0 context and provide it to the</span></span><br><span class="line"><span class="comment">// view</span></span><br><span class="line">view.context = [[EAGLContext alloc]</span><br><span class="line">					initWithAPI:kEAGLRenderingAPIOpenGLES2];</span><br><span class="line"></span><br><span class="line"><span class="comment">//设置成当前上下文</span></span><br><span class="line"><span class="comment">// Make the new context current</span></span><br><span class="line">[EAGLContext setCurrentContext:view.context];</span><br></pre></td></tr></table></figure>
+<p>GLKBaseEffect类提供了不依赖OGE版本的渲染方法，它会在需要的时候自动构建一个GPU程序,该实例使用恒定不变的白色来渲染像素;</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">self.baseEffect = [[GLKBaseEffect alloc] init];</span><br><span class="line">self.baseEffect.useConstantColor = GL_TRUE;</span><br><span class="line">self.baseEffect.constantColor = GLKVector4Make(</span><br><span class="line">								     <span class="number">1.0f</span>, <span class="comment">// Red</span></span><br><span class="line">								     <span class="number">1.0f</span>, <span class="comment">// Green</span></span><br><span class="line">								     <span class="number">1.0f</span>, <span class="comment">// Blue</span></span><br><span class="line">								     <span class="number">1.0f</span>);<span class="comment">// Alpha</span></span><br><span class="line"><span class="comment">//设置当前OGE上下文为不透明黑色，该黑色由RGBA颜色元素值组成，用于在上下文帧缓存被清除时对每个像素进行初始化</span></span><br><span class="line">glClearColor(<span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">0.0f</span>, <span class="number">1.0f</span>); <span class="comment">// background color</span></span><br></pre></td></tr></table></figure>
+<p>以下代码用于定义三角形的数据必须要发送到GPU来进行渲染，创建三角形数据数组缓存的前三个步骤，对应以下步骤：</p>
+<p>1.为缓存生成一个唯一的标志符；</p>
+<p>2.为运算绑定缓存；</p>
+<p>3.复制数据到缓存；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Generate, bind, and initialize contents of a buffer to be</span></span><br><span class="line"><span class="comment">// stored in GPU memory</span></span><br><span class="line">glGenBuffers(<span class="number">1</span>,                <span class="comment">// STEP 1</span></span><br><span class="line">      &amp;vertexBufferID);</span><br><span class="line">NSLog(@<span class="string">"vertexBufferID = %p"</span>,vertexBufferID);</span><br><span class="line"><span class="comment">//该结果是一个指针，指向所生成标志符的内存保存位置；</span></span><br><span class="line"><span class="comment">//缓存标志符在文档中叫做 "names"</span></span><br><span class="line"></span><br><span class="line">glBindBuffer(GL_ARRAY_BUFFER,  <span class="comment">// STEP 2</span></span><br><span class="line">      vertexBufferID);</span><br><span class="line"><span class="comment">//保存不同类型的标志符到OGE的不同位置，同一时刻只能绑定一个缓存，即使它们是相同类型的；</span></span><br><span class="line"><span class="comment">//OpenGLES2.0只支持绑定两种类型，GL_ARRAY_BUFFER GL_ELEMENT_ARRAY_BUFFER；</span></span><br><span class="line"></span><br><span class="line">glBufferData(                  <span class="comment">// STEP 3</span></span><br><span class="line">      GL_ARRAY_BUFFER,  <span class="comment">// Initialize buffer contents</span></span><br><span class="line">      <span class="keyword">sizeof</span>(vertices), <span class="comment">// Number of bytes to copy</span></span><br><span class="line">      vertices,         <span class="comment">// Address of bytes to copy</span></span><br><span class="line">      GL_STATIC_DRAW);  <span class="comment">// Hint: cache in GPU memory</span></span><br><span class="line"><span class="comment">//第四个参数提示缓存在未来运算中可能会被怎样使用</span></span><br><span class="line"><span class="comment">//GL_STATIC_DRAW 提示缓存内容适合复制到内存中，而很少对其进行修改；</span></span><br><span class="line"><span class="comment">//GL_DYNAMIC_DRAW 缓存数据会频繁改变，提示OGE上下文用不同方式处理</span></span><br></pre></td></tr></table></figure>
+<p>##glkView:drawInRect:</p>
+<p>每当一个GLKView需要重绘时，保存在视图中的上下文都会成为当前上下文；如需要，它还会保存一个来自Core Animation层的帧缓存，并调用下面的方法；</p>
+<p>此处接上面使用缓存的前三步；</p>
+<p>4.启动；</p>
+<p>5.设置指针；</p>
+<p>6.绘图；</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)glkView:(GLKView *)view drawInRect:(CGRect)rect</span><br><span class="line">&#123;</span><br><span class="line">    [self.baseEffect prepareToDraw];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Clear Frame Buffer (erase previous drawing)</span></span><br><span class="line">    <span class="comment">//它的值是前面glClearColor()设置的；</span></span><br><span class="line">    glClear(GL_COLOR_BUFFER_BIT);</span><br><span class="line">    </span><br><span class="line"></span><br><span class="line">    <span class="comment">// Enable use of positions from bound vertex buffer</span></span><br><span class="line">    glEnableVertexAttribArray(      <span class="comment">// STEP 4</span></span><br><span class="line">      GLKVertexAttribPosition);</span><br><span class="line"></span><br><span class="line">    glVertexAttribPointer(          <span class="comment">// STEP 5</span></span><br><span class="line">      GLKVertexAttribPosition,</span><br><span class="line">      <span class="number">3</span>,                   <span class="comment">// three components per vertex</span></span><br><span class="line">      GL_FLOAT,            <span class="comment">// data is floating point</span></span><br><span class="line">      GL_FALSE,            <span class="comment">// no fixed point scaling</span></span><br><span class="line">      <span class="keyword">sizeof</span>(SceneVertex), <span class="comment">// no gaps in data</span></span><br><span class="line">      <span class="literal">NULL</span>);               <span class="comment">// NULL tells GPU to start at</span></span><br><span class="line">                           <span class="comment">// beginning of bound buffer</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Draw triangles using the first three vertices in the</span></span><br><span class="line">    <span class="comment">// currently bound vertex buffer</span></span><br><span class="line">    glDrawArrays(GL_TRIANGLES,      <span class="comment">// STEP 6</span></span><br><span class="line">     		 <span class="number">0</span>,  <span class="comment">// Start with first vertex in currently bound buffer</span></span><br><span class="line">     		 <span class="number">3</span>); <span class="comment">// Use three vertices from currently bound buffer</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>glDrawArrays函数调用完成，此时所需要显示的场景已经完全显示或者GPU处理完成后会完全显示;</p>
+<p>CPU运算和GPU运算是异步的，这个例子的所有代码都是运行在CPU上的，需要进一步处理时会向GPU发送命令；GPU可能也会处理Core Animation层的命令，所以GPU总执行次数不一定；</p>
+<p>##viewDidUnload</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">- (<span class="keyword">void</span>)viewDidUnload</span><br><span class="line">&#123;</span><br><span class="line">    [super viewDidUnload];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Make the view's context current</span></span><br><span class="line">    GLKView *view = (GLKView *)self.view;</span><br><span class="line">    [EAGLContext setCurrentContext:view.context];</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Delete buffers that aren't needed when view is unloaded</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="number">0</span> != vertexBufferID)</span><br><span class="line">    &#123;</span><br><span class="line">       glDeleteBuffers (<span class="number">1</span>,          <span class="comment">// STEP 7</span></span><br><span class="line">                        &amp;vertexBufferID);</span><br><span class="line">       vertexBufferID = <span class="number">0</span>;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Stop using the context created in -viewDidLoad</span></span><br><span class="line">    ((GLKView *)self.view).context = nil;</span><br><span class="line">    [EAGLContext setCurrentContext:nil];</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p><a href="https://github.com/usiege/OpenGLES/tree/master/OpenGLES_Ch2/OpenGLES_Ch_2_1" target="_blank" rel="noopener">点击此处下载本文例子</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/opengles/" rel="tag"># opengles</a>
+          
+            <a href="/tags/GLKit/" rel="tag"># GLKit</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/12/11/Python-pelican搭建个人博客/" rel="next" title="Python-pelican搭建个人博客">
+                <i class="fa fa-chevron-left"></i> Python-pelican搭建个人博客
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2016/04/27/Mac下Android Studio环境搭建/" rel="prev" title="Mac下Android Studio环境搭建">
+                Mac下Android Studio环境搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

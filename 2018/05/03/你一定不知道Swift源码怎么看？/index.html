@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="swift,UTC," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="我想你一定是在开玩笑。源码怎么看，打开看呗！说这话的时候请收下我的轻蔑，哈哈。不过就这个问题我今天在知乎搜索了一通。不要问我为什么在知乎搜索，鬼知道知乎什么都有。那么，请收下我的提问：">
+<meta name="keywords" content="swift,UTC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="你一定不知道Swift源码怎么看？">
+<meta property="og:url" content="http://charlesblog.site/2018/05/03/你一定不知道Swift源码怎么看？/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="我想你一定是在开玩笑。源码怎么看，打开看呗！说这话的时候请收下我的轻蔑，哈哈。不过就这个问题我今天在知乎搜索了一通。不要问我为什么在知乎搜索，鬼知道知乎什么都有。那么，请收下我的提问：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429775-225ee3ef5a38e747.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:image" content="https://upload-images.jianshu.io/upload_images/1429775-04ff650284a51b6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.734Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="你一定不知道Swift源码怎么看？">
+<meta name="twitter:description" content="我想你一定是在开玩笑。源码怎么看，打开看呗！说这话的时候请收下我的轻蔑，哈哈。不过就这个问题我今天在知乎搜索了一通。不要问我为什么在知乎搜索，鬼知道知乎什么都有。那么，请收下我的提问：">
+<meta name="twitter:image" content="https://upload-images.jianshu.io/upload_images/1429775-225ee3ef5a38e747.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2018/05/03/你一定不知道Swift源码怎么看？/"/>
+
+
+
+
+
+  <title>你一定不知道Swift源码怎么看？ | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2018/05/03/你一定不知道Swift源码怎么看？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">你一定不知道Swift源码怎么看？</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-05-03T23:19:00+08:00">
+                2018-05-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  2,139
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  9
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我想你一定是在开玩笑。<br>源码怎么看，打开看呗！说这话的时候请收下我的轻蔑，哈哈。不过就这个问题我今天在知乎搜索了一通。不要问我为什么在知乎搜索，鬼知道知乎什么都有。<br>那么，请收下我的提问：<br><a id="more"></a></p>
+<blockquote>
+<p><a href="https://www.zhihu.com/question/38215419" target="_blank" rel="noopener">如何阅读Swift源码</a></p>
+</blockquote>
+<p>知乎果然没有让我失望，结果教程如下；</p>
+<blockquote>
+<p><a href="http://swift.gg/2016/12/30/how-to-read-the-swift-standard-libray-source/" target="_blank" rel="noopener"># <a href="http://swift.gg/2016/12/30/how-to-read-the-swift-standard-libray-source/" title="如何阅读 Swift 标准库中的源码" target="_blank" rel="noopener">如何阅读 Swift 标准库中的源码</a>
+</a></p>
+</blockquote>
+<p>顺便提一下，这次搜索还让我发现了一个比较不错的swift网站，有心的同学请收下：<a href="http://swift.gg" target="_blank" rel="noopener">swift.gg</a></p>
+<p>于是今天搞了下源码的编译，并了解到一个叫做 <em>GYB</em> 的东西，这个东西今天先放一下。源碼編譯的過程無非就是用 <em>brew</em> 下了一些命令行軟件，然後使用 <em>build</em> 腳本跑一下過程，在此也不多說。但是今天的重點當然是我們要從源碼出發搞一些事情。<br>续：今天又build，发现也并没有得出什么重要的东西，只是把gyb文件生成为swift文件，其他过程不知道它经历了什么，对我想看源码没有任何作用，还跑了整整一个下午；对于只是想看代码的同学，还是用官网给出的gyb.py脚本做处理吧；</p>
+<ol>
+<li>hashable</li>
+</ol>
+<p>前两天写Dictionary时发现想用枚举做key，自定义一个Dictionary，value是#selector，但是在写的过程中发现说key值需要遵循hashable协议。可以看源码来理解一下。<br>首先要找到Hashable文件，发现swift的标准核心库被放在 <strong>stdlib/public/core</strong> 下，有一个 <strong>Hashable.swift</strong> 文件，打开文件先是一大段的描述，大体内容就是hashable协议作用的场景，以及给出了一个小例子；</p>
+<p>一个Hash类型，提供了一个 hashValue 的属性，它是一个整型常量， 如果有两个相同类型的a，b，如果 a == b，那么 a.hashValue == b.hashValue；但是反过来，如果两个hash值相同，并不表示a 就一定等于 b；<br>还有一点非常重要，就是在两次不同的程序执行中hash值并不保证相等，所以不要把hash值用在你的程序中；<br>Hashable协议可用于struct, enum, class，它继承于 Equatable，所以遵循Hashable协议需要同时实现Hashable协议方法，以及 Equatable 协议方法；</p>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/// A point in an x-y coordinate system.</span></span><br><span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">GridPoint</span> </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> x: <span class="type">Int</span></span><br><span class="line">        <span class="keyword">var</span> y: <span class="type">Int</span></span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">     <span class="class"><span class="keyword">extension</span> <span class="title">GridPoint</span>: <span class="title">Hashable</span> </span>&#123;</span><br><span class="line">         <span class="keyword">var</span> hashValue: <span class="type">Int</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> x.hashValue ^ y.hashValue &amp;* <span class="number">16777619</span></span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(lhs: GridPoint, rhs: GridPoint)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> lhs.x == rhs.x &amp;&amp; lhs.y == rhs.y</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">       <span class="keyword">var</span> tappedPoints: <span class="type">Set</span> = [<span class="type">GridPoint</span>(x: <span class="number">2</span>, y: <span class="number">3</span>), <span class="type">GridPoint</span>(x: <span class="number">4</span>, y: <span class="number">1</span>)]</span><br><span class="line">       <span class="keyword">let</span> nextTap = <span class="type">GridPoint</span>(x: <span class="number">0</span>, y: <span class="number">1</span>)</span><br><span class="line">       <span class="keyword">if</span> tappedPoints.<span class="built_in">contains</span>(nextTap) &#123;</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">"Already tapped at (\(nextTap.x), \(nextTap.y))."</span>)</span><br><span class="line">       &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          tappedPoints.insert(nextTap)</span><br><span class="line">          <span class="built_in">print</span>(<span class="string">"New tap detected at (\(nextTap.x), \(nextTap.y))."</span>)</span><br><span class="line">       &#125;</span><br><span class="line">      <span class="comment">// Prints "New tap detected at (0, 1).")</span></span><br></pre></td></tr></table></figure>
+<p>在实现的代码里有一些奇怪的符号，暂时还有点摸不清头脑，有些是一些编译符号，大体能看懂点意思，但有些像<code>@_silgen_name(&quot;_swift_stdlib_Hashable_isEqual_indirect&quot;)</code>就完全看不懂，回头找人再请教；<br>这里还要说的一个就是一个<code>UnsafePointer&lt;T&gt;</code>:</p>
+<blockquote>
+<p>在 Swift 中，指针都使用一个特殊的类型来表示，那就是 UnsafePointer<t>。遵循了 Cocoa 的一贯不可变原则，UnsafePointer<t> 也是不可变的。当然对应地，它还有一个可变变体，UnsafeMutablePointer<t>。绝大部分时间里，C 中的指针都会被以这两种类型引入到 Swift 中：C 中 const 修饰的指针对应 UnsafePointer (最常见的应该就是 C 字符串的 const char * 了)，而其他可变的指针则对应 UnsafeMutablePointer。除此之外，Swift 中存在表示一组连续数据指针的 UnsafeBufferPointer<t>，表示非完整结构的不透明指针 COpaquePointer 等等。另外你可能已经注意到了，能够确定指向内容的指针类型都是泛型的 struct，我们可以通过这个泛型来对指针指向的类型进行约束以提供一定安全性。</t></t></t></t></p>
+</blockquote>
+<p>需要具体了解的看这篇：<a href="https://onevcat.com/2015/01/swift-pointer/" target="_blank" rel="noopener">UnsafePointe<t></t></a></p>
+<p>顺便吐槽句哈，apple的代码也还有这种东西，也不知道是修改过的没有；<br><img src="https://upload-images.jianshu.io/upload_images/1429775-225ee3ef5a38e747.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="FIXME"></p>
+<ol start="2">
+<li>Equatable</li>
+</ol>
+<ul>
+<li>它是一种可用于值比较的类型；</li>
+<li>在序列和集合操作中，可以将一个遵循了<code>Equatable</code>协议的对象传递给<code>contaions(_:)</code>方法，来确定是否包含，用法如下：</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">let</span> students = [<span class="string">"Nora"</span>, <span class="string">"Fern"</span>, <span class="string">"Ryan"</span>, <span class="string">"Rainer"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> nameToCheck = <span class="string">"Ryan"</span></span><br><span class="line"><span class="keyword">if</span> students.<span class="built_in">contains</span>(nameToCheck) &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"\(nameToCheck) is signed up!"</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">"No record of \(nameToCheck)."</span>)</span><br><span class="line">&#125;</span><br><span class="line">   <span class="comment">// Prints "Ryan is signed up!"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">/// Conforming to the Equatable Protocol</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>本地类型继承自<code>Equatable</code>协议需要注意：<ol>
+<li>对于一个<code>struct</code>类型，它的所有存储属性都需要遵循<code>Equatable</code>协议；</li>
+<li>对于一个<code>enum</code>类型，它的所有关联值都需要遵循<code>Equatable</code>协议；</li>
+<li>如果上述标准不符合，需要在扩展中实现<code>==</code>静态方法；<br>例如：</li>
+</ol>
+</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">StreetAddress</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> number: <span class="type">String</span></span><br><span class="line">    <span class="keyword">let</span> street: <span class="type">String</span></span><br><span class="line">    <span class="keyword">let</span> unit: <span class="type">String</span>?</span><br><span class="line">    <span class="keyword">init</span>(<span class="number">_</span> number: <span class="type">String</span>, <span class="number">_</span> street: <span class="type">String</span>, unit: <span class="type">String</span>? = <span class="literal">nil</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.number = number</span><br><span class="line">        <span class="keyword">self</span>.street = street</span><br><span class="line">        <span class="keyword">self</span>.unit = unit</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">extension</span> <span class="title">StreetAddress</span>: <span class="title">Equatable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(lhs: StreetAddress, rhs: StreetAddress)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">            lhs.number == rhs.number &amp;&amp;</span><br><span class="line">            lhs.street == rhs.street &amp;&amp;</span><br><span class="line">            lhs.unit == rhs.unit</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">let</span> addresses = [<span class="type">StreetAddress</span>(<span class="string">"1490"</span>, <span class="string">"Grove Street"</span>),</span><br><span class="line">                 <span class="type">StreetAddress</span>(<span class="string">"2119"</span>, <span class="string">"Maple Avenue"</span>),</span><br><span class="line">                 <span class="type">StreetAddress</span>(<span class="string">"1400"</span>, <span class="string">"16th Street"</span>)]</span><br><span class="line"><span class="keyword">let</span> home = <span class="type">StreetAddress</span>(<span class="string">"1400"</span>, <span class="string">"16th Street"</span>)</span><br><span class="line"><span class="built_in">print</span>(addresses[<span class="number">0</span>] == home)</span><br><span class="line"><span class="comment">// Prints "false"</span></span><br><span class="line"><span class="built_in">print</span>(addresses.<span class="built_in">contains</span>(home))</span><br><span class="line"><span class="comment">// Prints "true"</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>另外我在这个实现里面看到了以前数学课知识的身影：</li>
+</ul>
+<ul>
+<li><code>a == a</code> is always <code>true</code> (Reflexivity)   # 自反性</li>
+<li><code>a == b</code> implies <code>b == a</code> (Symmetry)  # 对称性</li>
+<li><code>a == b</code> and <code>b == c</code> implies <code>a == c</code> (Transitivity)  # 传递性<br>所以我们定义的<code>==</code>(两对象相等)完全取决于我们自己实现的静态方法：</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">IntegerRef</span>: <span class="title">Equatable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">let</span> value: <span class="type">Int</span></span><br><span class="line">    <span class="keyword">init</span>(<span class="number">_</span> value: <span class="type">Int</span>) &#123;</span><br><span class="line">        <span class="keyword">self</span>.value = value</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(lhs: IntegerRef, rhs: IntegerRef)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">        <span class="keyword">return</span> lhs.value == rhs.value</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">let</span> a = <span class="type">IntegerRef</span>(<span class="number">100</span>)</span><br><span class="line"><span class="keyword">let</span> b = <span class="type">IntegerRef</span>(<span class="number">100</span>)</span><br><span class="line"><span class="built_in">print</span>(a == a, a == b, separator: <span class="string">", "</span>)</span><br><span class="line"><span class="comment">// Prints "true, true"</span></span><br></pre></td></tr></table></figure>
+<p>而不相等的定义则完全是，自实现的相等操作取反：</p>
+<figure class="highlight less"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="selector-tag">extension</span> <span class="selector-tag">Equatable</span> &#123;</span><br><span class="line">  <span class="comment">/// Returns a Boolean value indicating whether two values are not equal.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// Inequality is the inverse of equality. For any values `a` and `b`, `a != b`</span></span><br><span class="line">  <span class="comment">/// implies that `a == b` is `false`.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// This is the default implementation of the not-equal-to operator (`!=`)</span></span><br><span class="line">  <span class="comment">/// for any type that conforms to `Equatable`.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// - Parameters:</span></span><br><span class="line">  <span class="comment">///   - lhs: A value to compare.</span></span><br><span class="line">  <span class="comment">///   - rhs: Another value to compare.</span></span><br><span class="line">  <span class="variable">@inlinable</span> <span class="comment">// FIXME(sil-serialize-all)</span></span><br><span class="line">  <span class="variable">@_transparent</span></span><br><span class="line">  public static func != (<span class="attribute">lhs</span>: Self, <span class="attribute">rhs</span>: Self) -&gt; Bool &#123;</span><br><span class="line">    <span class="selector-tag">return</span> !(lhs == rhs)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个实现是已经定义好的！！!</p>
+<ul>
+<li><code>==</code>与<code>===</code>的区别<br>看一下这两者的区别：</li>
+</ul>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">protocol</span> <span class="title">Equatable</span> </span>&#123;</span><br><span class="line">  <span class="comment">/// Returns a Boolean value indicating whether two values are equal.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// Equality is the inverse of inequality. For any values `a` and `b`,</span></span><br><span class="line">  <span class="comment">/// `a == b` implies that `a != b` is `false`.</span></span><br><span class="line">  <span class="comment">///</span></span><br><span class="line">  <span class="comment">/// - Parameters:</span></span><br><span class="line">  <span class="comment">///   - lhs: A value to compare.</span></span><br><span class="line">  <span class="comment">///   - rhs: Another value to compare.</span></span><br><span class="line">  <span class="keyword">static</span> <span class="function"><span class="keyword">func</span> == <span class="params">(lhs: <span class="keyword">Self</span>, rhs: <span class="keyword">Self</span>)</span></span> -&gt; <span class="type">Bool</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight swift"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">@inlinable <span class="comment">// FIXME(sil-serialize-all)</span></span><br><span class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">func</span> === <span class="params">(lhs: AnyObject?, rhs: AnyObject?)</span></span> -&gt; <span class="type">Bool</span> &#123;</span><br><span class="line">  <span class="keyword">switch</span> (lhs, rhs) &#123;</span><br><span class="line">  <span class="keyword">case</span> <span class="keyword">let</span> (l?, r?):</span><br><span class="line">    <span class="keyword">return</span> <span class="type">ObjectIdentifier</span>(l) == <span class="type">ObjectIdentifier</span>(r)</span><br><span class="line">  <span class="keyword">case</span> (<span class="literal">nil</span>, <span class="literal">nil</span>):</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span></span><br><span class="line">  <span class="keyword">default</span>:</span><br><span class="line">    <span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>从以上可以看出，<code>==</code>只是由实现好的静态函数决定，而<code>===</code>则是可以判断两个对象是否完全相等，这有点像判断两个指针相等一样，同样，我们要注意，如果两个可选对象都是nil，则也是<code>===</code>的；</p>
+<ol start="3">
+<li>搞清楚两个问题</li>
+</ol>
+<ul>
+<li><p>UTC 与 GMT<br>UTC(Coordinated Universal Time)标准时间参照，协调时间时，世界标准时间;<br>GMT(Greenwich Mean Time)时区，即格林尼治时间，位于本初子午线的标界处时间，世界计算时间和经度的起点，GMT是个时区，等同于世界时，所以GMT = UTC + 0，我们国家所在时间均以北京时间计算，北京位于东八区，所以时区为GMT + 8；</p>
+</li>
+<li><p>Locale<br>网上找了一圈，最后还是swift源码文档里给出的解释最靠谱：<code>Locale</code>封装了有关语言，文化和技术规范和标准的信息。由语言环境封装的信息示例包括，用于数字中小数点分隔符的符号以及格式化日期的方式。区域设置通常用于根据用户的习俗和偏好提供，格式化和解释信息。它们经常与格式化程序一起使用。虽然可以使用很多语言环境，但通常使用与当前用户关联的语言环境。<br>语言环境跟系统的环境设置有关，会涉及到操作系统语言环境设置，个人理解就是一个国际化的东西。<br>区域设置中的概念 LANGID &amp; LCID：<br><img src="https://upload-images.jianshu.io/upload_images/1429775-04ff650284a51b6c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240" alt="LANGID &amp; LCID"></p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/swift/" rel="tag"># swift</a>
+          
+            <a href="/tags/UTC/" rel="tag"># UTC</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/04/27/本行三件事：猎龙 训龙 调教龙/" rel="next" title="本行三件事：猎龙 训龙 调教龙">
+                <i class="fa fa-chevron-left"></i> 本行三件事：猎龙 训龙 调教龙
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/05/07/hello-world/" rel="prev" title="Hello World">
+                Hello World <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>

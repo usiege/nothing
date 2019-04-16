@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-CN">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="jenkins," />
+
+
+
+
+
+  <link rel="alternate" href="/atom.xml" title="NOTHING" type="application/atom+xml" />
+
+
+
+
+
+
+<meta name="description" content="接上篇，继续踩坑，下面到构建触发器环节：">
+<meta name="keywords" content="jenkins">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Jenkins 100次构建失败踩坑全录（二）">
+<meta property="og:url" content="http://charlesblog.site/2017/12/10/Jenkins 100次构建失败踩坑全录（二）/index.html">
+<meta property="og:site_name" content="NOTHING">
+<meta property="og:description" content="接上篇，继续踩坑，下面到构建触发器环节：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/it14w81rja3zme63xykjxy5o/image_1c0qnmug31v0hvkf1pp1kqf1bir9.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/pjeg3kt1s3cb0rxb2l1dfsfr/image_1c0qooi0dkg7ls9abefu71n77p.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/cjtc66sg8991c5ulj3uib8dq/image_1c0qosdhm132q23k103kckp1dok16.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/li5lfp7spsd6c3bw435besbb/image_1c0qovfpn1n431vc7n8qonb8o51j.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/1s0il4bxtsop1ame15pbq0ul/image_1c0qprhce18lu1vjb1pd1aakjv20.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/rxby0iwous3ppc63wyn1c83y/image_1c0qqc2ubcfq5tvuui19m3oi89.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/eceobb4arpah1xacmv2lmxrr/image_1c0qqnucp1np81vaj3rs1l7p1otdm.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/xhxhseh11fwg4wnbt8gpj95y/image_1c0qr7dli1unv1s7s1vu2ugm1fuh13.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/r85b8hxub85tfinbuzue1svp/image_1c0qs83ul1baipc04otg331geb1g.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/tlotqzvjbjlqk2ms1u43w2yd/image_1c0r0aqt33tdthopme188a2kk1t.png">
+<meta property="og:image" content="http://static.zybuluo.com/usiege/1y4937ijhbvifle7jfgjg3ac/image_1c0r0eai5f09qj47rs134c1upu2a.png">
+<meta property="og:updated_time" content="2018-05-07T02:17:42.729Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Jenkins 100次构建失败踩坑全录（二）">
+<meta name="twitter:description" content="接上篇，继续踩坑，下面到构建触发器环节：">
+<meta name="twitter:image" content="http://static.zybuluo.com/usiege/it14w81rja3zme63xykjxy5o/image_1c0qnmug31v0hvkf1pp1kqf1bir9.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://charlesblog.site/2017/12/10/Jenkins 100次构建失败踩坑全录（二）/"/>
+
+
+
+
+
+  <title>Jenkins 100次构建失败踩坑全录（二） | NOTHING</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-CN">
+
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <a href="https://github.com/usiege"><img style="position: absolute; top: 0; left: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_left_orange_ff7600.png" alt="Fork me on GitHub"></a>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">NOTHING</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">NOTHING IS EVERYTHING.</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            About
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            Tags
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            Categories
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://charlesblog.site/2017/12/10/Jenkins 100次构建失败踩坑全录（二）/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Charles">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/monk.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="NOTHING">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Jenkins 100次构建失败踩坑全录（二）</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2017-12-10T20:53:00+08:00">
+                2017-12-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/coder/" itemprop="url" rel="index">
+                    <span itemprop="name">coder</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                  <span class="post-meta-divider">|</span>
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Words count in article&#58;</span>
+                
+                <span title="Words count in article">
+                  814
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>接上篇，继续踩坑，下面到构建触发器环节：<br><a id="more"></a></p>
+<ul>
+<li><p>构建触发器<br><img src="http://static.zybuluo.com/usiege/it14w81rja3zme63xykjxy5o/image_1c0qnmug31v0hvkf1pp1kqf1bir9.png" alt="image_1c0qnmug31v0hvkf1pp1kqf1bir9.png-91.5kB"><br>能用到的发图所示，说明在下方，自行研究，需要注意的一点是图中的*号之间是有空格的；</p>
+</li>
+<li><p>构建环境<br>这里又有一个超时，与上面的无关，这个是构建过程中的，根据需要添加，下面那个选项是时间戳；<br><img src="http://static.zybuluo.com/usiege/pjeg3kt1s3cb0rxb2l1dfsfr/image_1c0qooi0dkg7ls9abefu71n77p.png" alt="image_1c0qooi0dkg7ls9abefu71n77p.png-38.6kB"></p>
+</li>
+</ul>
+<p>接下来是Keychains和Mobile PP，必填项；<br><img src="http://static.zybuluo.com/usiege/cjtc66sg8991c5ulj3uib8dq/image_1c0qosdhm132q23k103kckp1dok16.png" alt="image_1c0qosdhm132q23k103kckp1dok16.png-8kB"></p>
+<p>逐个击破：<br>Keychains部分<br><img src="http://static.zybuluo.com/usiege/li5lfp7spsd6c3bw435besbb/image_1c0qovfpn1n431vc7n8qonb8o51j.png" alt="image_1c0qovfpn1n431vc7n8qonb8o51j.png-83.2kB"><br>这个部分也是选择题，因为之前你已经上传了，但是这里会出现无法选择的bug，点保存刷新下页面就可以选了，Variables部分填如下：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;KEYCHAIN_PATH&#125; <span class="variable">$&#123;KEYCHAIN_PASSWORD&#125;</span> <span class="variable">$&#123;CODE_SIGNING_IDENTITY&#125;</span></span></span><br></pre></td></tr></table></figure></p>
+<p>Mobile Provisioning Profiles部分<br><img src="http://static.zybuluo.com/usiege/1s0il4bxtsop1ame15pbq0ul/image_1c0qprhce18lu1vjb1pd1aakjv20.png" alt="image_1c0qprhce18lu1vjb1pd1aakjv20.png-47.6kB"><br>这个部分同上，请选择你确定的PP文件，一定要对应好：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash">&#123;PROVISIONING_PROFILE&#125;</span></span><br></pre></td></tr></table></figure></p>
+<ul>
+<li>构建</li>
+</ul>
+<p>整个配置过程最重要的部分，大多数问题都出在这里，我这里目前到了Archive阶段，也就是说归档成功，然后归档结果可以用xcode进行ipa打包，具体打包还要设置一个shell脚本，网上好多，有的可以用有的不可以，所以打算研究下这个脚本，自己写一个再上传，之后会在博客中跟进，现在先继续把已完成的部分写下来；</p>
+<p>首先是先要加一个结束后的脚本，这个脚本不做打包操作，只是设置一下环境，以及配置一下有pod依赖的情况，如下：<br><figure class="highlight routeros"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash -l</span></span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">LANG</span>=en_US.UTF-8</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">LANGUAGE</span>=en_US.UTF-8</span><br><span class="line"><span class="builtin-name">export</span> <span class="attribute">LC_ALL</span>=en_US.UTF-8</span><br><span class="line"></span><br><span class="line">pod install --verbose --no-repo-update</span><br><span class="line">open LeWaiJiao.xcworkspace</span><br></pre></td></tr></table></figure></p>
+<p><img src="http://static.zybuluo.com/usiege/rxby0iwous3ppc63wyn1c83y/image_1c0qqc2ubcfq5tvuui19m3oi89.png" alt="image_1c0qqc2ubcfq5tvuui19m3oi89.png-47.4kB"></p>
+<p>下面的那个<strong>Pack application,build and sign</strong> .ipa项就是打ipa的功能，暂时没有搞通，后续会补上来，先跳过；</p>
+<p><img src="http://static.zybuluo.com/usiege/eceobb4arpah1xacmv2lmxrr/image_1c0qqnucp1np81vaj3rs1l7p1otdm.png" alt="image_1c0qqnucp1np81vaj3rs1l7p1otdm.png-97.4kB"></p>
+<p><strong>Code signing &amp; OS X keychain options</strong></p>
+<p>下面的bundleID是你要进行打包的bundleID，info.plist是workspace下的路径，注意一下下面的Development Team ID这个ID是你的钥匙串上的证书名称，后面括号里的那一串字符，由字母和数字组成的，需要你自己做对应，下面的照着抄就行了，password填你电脑用户的密码，不要填错了；</p>
+<p><img src="http://static.zybuluo.com/usiege/xhxhseh11fwg4wnbt8gpj95y/image_1c0qr7dli1unv1s7s1vu2ugm1fuh13.png" alt="image_1c0qr7dli1unv1s7s1vu2ugm1fuh13.png-102.7kB"></p>
+<h1 id="贴几个Error："><a href="#贴几个Error：" class="headerlink" title="贴几个Error："></a>贴几个Error：</h1><figure class="highlight vhdl"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Code Signing <span class="literal">Error</span>: Code signing <span class="keyword">is</span> required <span class="keyword">for</span> product <span class="keyword">type</span> <span class="symbol">'Application</span>' <span class="keyword">in</span> SDK <span class="symbol">'iOS</span> <span class="number">11.1</span>'</span><br></pre></td></tr></table></figure>
+<p>需要你在xcode中设置，然后上传到你们的Git服务器再构建：<br><img src="http://static.zybuluo.com/usiege/r85b8hxub85tfinbuzue1svp/image_1c0qs83ul1baipc04otg331geb1g.png" alt="image_1c0qs83ul1baipc04otg331geb1g.png-35.4kB"></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">No <span class="keyword">global</span> development team <span class="keyword">or</span> <span class="keyword">local</span> team ID was configured.</span><br></pre></td></tr></table></figure>
+<p>就是之前说的<strong>Development Team ID</strong>部分，填了就解决了；<br><a href="http://www.jianshu.com/p/8b2fc2da0466" target="_blank" rel="noopener">http://www.jianshu.com/p/8b2fc2da0466</a></p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xcodebuild: <span class="keyword">error</span>: The flag -scheme <span class="keyword">is</span> required when specifying -archivePath <span class="keyword">but</span> <span class="keyword">not</span> -exportArchive.</span><br></pre></td></tr></table></figure>
+<p>这个问题也是个大坑，找了好久，也是搜狗找到的：<br><a href="http://www.jianshu.com/p/8967e4e27e9b" target="_blank" rel="noopener">http://www.jianshu.com/p/8967e4e27e9b</a><br><a href="https://www.tuicool.com/articles/zQ73Q3Q" target="_blank" rel="noopener">https://www.tuicool.com/articles/zQ73Q3Q</a><br><a href="https://github.com/jenkinsci/clang-scanbuild-plugin/commit/b970f5280a9c1929e9cd9d3b4d2b76a7d6cbc0dc" target="_blank" rel="noopener">https://github.com/jenkinsci/clang-scanbuild-plugin/commit/b970f5280a9c1929e9cd9d3b4d2b76a7d6cbc0dc</a></p>
+<p>解决方法最直接的就是指定scheme和xcode workspace file，分别填你xcode工程中的scheme和pod生成的xcworkspace的名字；<br><img src="http://static.zybuluo.com/usiege/tlotqzvjbjlqk2ms1u43w2yd/image_1c0r0aqt33tdthopme188a2kk1t.png" alt="image_1c0r0aqt33tdthopme188a2kk1t.png-87.3kB"></p>
+<p>有些同学不知道scheme在什么地方，如下图所示：<br><img src="http://static.zybuluo.com/usiege/1y4937ijhbvifle7jfgjg3ac/image_1c0r0eai5f09qj47rs134c1upu2a.png" alt="image_1c0r0eai5f09qj47rs134c1upu2a.png-145.6kB"></p>
+<p>如上，能保证构建可以成功在Archive过程完成，如遇其他问题，欢迎评论区讨论；<br>之后会再继续完成打包ipa以及上传平台，同时之前提过的SSH部分会持续跟近，因为SSH与本文所讨论的内容并不十分吻合，所以这里不作讨论。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/jenkins/" rel="tag"># jenkins</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/12/09/Jenkins 100次构建失败踩坑全录（一）/" rel="next" title="Jenkins 100次构建失败踩坑全录（一）">
+                <i class="fa fa-chevron-left"></i> Jenkins 100次构建失败踩坑全录（一）
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/12/12/Jenkins 构建之脚本篇/" rel="prev" title="Jenkins 构建之脚本篇">
+                Jenkins 构建之脚本篇 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/monk.png"
+                alt="Charles" />
+            
+              <p class="site-author-name" itemprop="name">Charles</p>
+              <p class="site-description motion-element" itemprop="description">Nothing is true, everything is permitted.</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">48</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-name">categories</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">35</span>
+                  <span class="site-state-item-name">tags</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+            <div class="feed-link motion-element">
+              <a href="/atom.xml" rel="alternate">
+                <i class="fa fa-rss"></i>
+                RSS
+              </a>
+            </div>
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/usiege" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://www.jianshu.com/u/8a7d7e6876ab" target="_blank" title="Jianshu">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Jianshu</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="https://blog.csdn.net/jianin45" target="_blank" title="CSDN">
+                      
+                        <i class="fa fa-fw fa-globe"></i>CSDN</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://weibo.com/jianin45" target="_blank" title="weibo">
+                      
+                        <i class="fa fa-fw fa-globe"></i>weibo</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="http://blog.sina.com.cn/tjfcg45" target="_blank" title="Blog">
+                      
+                        <i class="fa fa-fw fa-globe"></i>Blog</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+            <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+              <div class="links-of-blogroll-title">
+                <i class="fa  fa-fw fa-link"></i>
+                Links
+              </div>
+              <ul class="links-of-blogroll-list">
+                
+                  <li class="links-of-blogroll-item">
+                    <a href="https://music.163.com/#/user/home?id=86590096" title="😆网易云音乐😆" target="_blank">😆网易云音乐😆</a>
+                  </li>
+                
+              </ul>
+            </div>
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#贴几个Error："><span class="nav-number">1.</span> <span class="nav-text">贴几个Error：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; 2015 &mdash; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Charles</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Mist</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+
+  
+    <script type="text/javascript"
+      color="0,0,255" opacity='0.7' zIndex="-2" count="10" 
+      src="//cdn.bootcss.com/canvas-nest.js/1.0.0/canvas-nest.min.js">
+    </script>
+  
+
+</body>
+</html>
