@@ -4,6 +4,9 @@ github personal pages
 > 2018.05.15日，突发奇想记录每天遇到的问题，从下至上
 
 
+## 2019.07-09
+
+- [git lfs使用](https://git-lfs.github.com)
 
 
 ## 2019.05.22
