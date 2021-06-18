@@ -4,7 +4,13 @@ github personal pages
 > 2018.05.15日，突发奇想记录每天遇到的问题，从下至上
 
 
-## 2019.07-09
+## 2021.06.18
+
+- [TingFeng的魔兽库](https://github.com/usiege/TingFeng)
+
+- [魔兽世界单机版GM命令](https://www.cnblogs.com/suwei/archive/2011/05/25/2057300.html)
+
+## 2019.07.09
 
 - [git lfs使用](https://git-lfs.github.com)
 
