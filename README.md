@@ -8,6 +8,8 @@ github personal pages
 
 - [TingFeng的魔兽库](https://github.com/usiege/TingFeng)
 
+- [魔兽世界单机源码](https://www.xspio.com/?page=2)
+
 - [魔兽世界单机版GM命令](https://www.cnblogs.com/suwei/archive/2011/05/25/2057300.html)
 
 ## 2019.07.09
