@@ -1,7 +1,28 @@
 # usiege.github.io
 github personal pages
 
-> 2018.05.15日，突发奇想记录每天遇到的问题，从下至上
+> 2018.05.15日起，记录每天遇到的问题，从下至上
+
+
+## 2021.07.06
+
+- [Cocos jsb auto binding](https://docs.cocos.com/creator/manual/zh/advanced-topics/jsb-auto-binding.html)
+
+- [Cocos jsb manual binding](https://docs.cocos.com/creator/manual/zh/advanced-topics/jsb-manual-binding.html)
+
+## 2021.07.05
+
+- [地图编辑器 Tile Map Editor](https://www.mapeditor.org)
+
+- [Spine For Swift](https://github.com/jsonapi-ios/Spine)
+
+## 2021.07.02
+
+- [Cocos JSB](https://docs.cocos.com/creator/manual/zh/advanced-topics/jsb-manual-binding.html)
+
+## 2021.07.01
+
+- [PaintCode 图片转代码工具](https://www.paintcodeapp.com)
 
 
 ## 2021.06.30
