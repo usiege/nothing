@@ -3,6 +3,9 @@ github personal pages
 
 > 2018.05.15日起，记录每天遇到的问题，从下至上
 
+## 2023.10.26
+
+- [win11解决文件管理卡死问题](https://zyc420.com/4387.html)
 
 
 
