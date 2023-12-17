@@ -1,7 +1,20 @@
 # usiege.github.io
 github personal pages
 
+
+> 2023.11.13起，外链使用记录
 > 2018.05.15日起，记录每天遇到的问题，从下至上
+
+
+## 2023.12.17
+
+- [WOW 插件的加载顺序](https://wowpedia.fandom.com/wiki/AddOn_loading_process#AddOn_loading_order)
+
+
+## 2023.11.25
+
+- [FF14 UI](https://wago.io/p/MojiTheMonk)
+
 
 ## 2023.10.26
 
@@ -10,7 +23,6 @@ github personal pages
 ## 2022.03.07
 
 - [做空机构Hindenburg Research](https://hindenburgresearch.com/)
-
 
 ## 2021.09.09
 
