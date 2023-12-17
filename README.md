@@ -10,6 +10,7 @@ github personal pages
 
 - [WOW 插件的加载顺序](https://wowpedia.fandom.com/wiki/AddOn_loading_process#AddOn_loading_order)
 
+- [NGA TeX排版](https://ngabbs.com/read.php?tid=25395019)
 
 ## 2023.11.25
 
@@ -19,8 +20,6 @@ github personal pages
 ## 2023.10.26
 
 - [win11解决文件管理卡死问题](https://zyc420.com/4387.html)
-
-
 
 
 ## 2022.03.07
@@ -144,8 +143,8 @@ Answer iOS项目养成中；
 
 站点作他用，所有文章均在:
 
-- [简书](https://www.jianshu.com/u/8a7d7e6876ab) 
-- [CSDN](https://blog.csdn.net/jianin45) 
+- [简书](https://www.jianshu.com/u/8a7d7e6876ab)
+- [CSDN](https://blog.csdn.net/jianin45)
 
 ## 2018.11.26
 
@@ -199,10 +198,10 @@ Answer iOS项目养成中；
 ## 2018.05.16
   - [我们来探讨一下函数式编程](https://github.com/usiege/Charles/blob/master/blog/source/_posts/我们来探讨一下函数式编程.md)
 
-## 2018.05.08 
+## 2018.05.08
   - [添加了Cocos2d-js-H5游戏](https://github.com/usiege/Charles/tree/master/code/cocos)；
 
-## 2018.05.08 
+## 2018.05.08
   - [添加了Python Crawler Django](https://github.com/usiege/Python)；
 
 ## 2018.05.07
@@ -214,5 +213,3 @@ Answer iOS项目养成中；
 改版声明，博客原使用Python/Pelican进行发布；
 今天起转投Hexo，日志未迁移，所有日志均可以在简书上找到；
 [简书](https://www.jianshu.com/u/8a7d7e6876ab)
-
-
