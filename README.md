@@ -5,6 +5,9 @@ github personal pages
 > 2023.11.13起，外链使用记录
 > 2018.05.15日起，记录每天遇到的问题，从下至上
 
+## 2024.01.24
+
+- [Quixel Bridge无法登录的问题](https://www.youtube.com/watch?v=OZl9otUsLmc)
 
 ## 2024.01.23
 
