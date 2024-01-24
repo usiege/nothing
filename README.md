@@ -6,6 +6,10 @@ github personal pages
 > 2018.05.15日起，记录每天遇到的问题，从下至上
 
 
+## 2024.01.23
+
+- [快速用metahuman做个自己并导入ue5面部捕捉](https://www.bilibili.com/video/BV1w14y1J7Y4/?spm_id_from=333.788&vd_source=e3e40dca081372854e345bb6a1e2d1f6)
+
 ## 2023.12.17
 
 - [WOW 插件的加载顺序](https://wowpedia.fandom.com/wiki/AddOn_loading_process#AddOn_loading_order)
